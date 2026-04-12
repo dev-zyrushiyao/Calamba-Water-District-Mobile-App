@@ -10,6 +10,7 @@ class DesignSystem {
     ).copyWith(
       primary: Color(0xFF2E3092), // Deep Sea
       onPrimary: Color(0xFF242424), //Orca - Text Primary
+      onPrimaryFixedVariant: Color(0xFF616161), //Placeholder Text and Border
       onSecondary: Color(0xFFE6D7D7), //Pearl Horizon - Text Secondary
       surface: Color(0xFFF8F9FA), //Cloud White
       tertiary: Color(0xFFFFC107), //Sunny Yellow
