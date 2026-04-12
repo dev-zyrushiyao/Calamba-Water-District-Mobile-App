@@ -155,23 +155,26 @@ class _LoginPageState extends State<LoginPage> {
                         children: [
                           Expanded(
                             child: Divider(
-                              color: Color(0xFF6C6C6C),
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.onPrimaryFixedVariant,
                               thickness: 2.0, // Height of the line
                             ),
                           ),
                           Text(
-                            style: TextStyle(
-                              color: Color(0xFF6C6C6C),
-                              fontSize: 13.00,
-                              fontFamily: DesignSystem().primaryFont.fontFamily,
-                              letterSpacing: DesignSystem()
-                                  .letterSpacingConverter(13.00, 1.5),
-                            ),
+                            style: Theme.of(context).textTheme.labelSmall!
+                                .copyWith(
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onPrimaryFixedVariant,
+                                ),
                             'OR',
                           ),
                           Expanded(
                             child: Divider(
-                              color: Color(0xFF6C6C6C),
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.onPrimaryFixedVariant,
                               thickness: 2.0, // Height of the line
                             ),
                           ),
