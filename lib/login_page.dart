@@ -27,7 +27,7 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SafeArea(
-        //Logo Email & Password TextField - ADJUST TO TextFormField
+        //Logo Email & Password TextField
         child: Container(
           padding: const EdgeInsetsDirectional.only(top: 50.00),
           color: Theme.of(context).colorScheme.surface,

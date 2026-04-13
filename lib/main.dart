@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'design_system.dart';
 import 'login_page.dart';
 import 'signup_page.dart';
@@ -24,8 +25,17 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         appBarTheme: AppBarTheme(
-          backgroundColor: Theme.of(context).colorScheme.surface,
+          backgroundColor: designSystem.cwdThemeColor().surface,
           foregroundColor: designSystem.cwdThemeColor().onPrimary,
+          scrolledUnderElevation: 4.0,
+          shadowColor: designSystem.cwdThemeColor().primary,
+          surfaceTintColor: designSystem.cwdThemeColor().primary,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadiusGeometry.directional(
+              bottomStart: Radius.circular(15.0),
+              bottomEnd: Radius.circular(15.0),
+            ),
+          ),
         ),
         useMaterial3: true,
         textTheme: designSystem.cwdTypography(
