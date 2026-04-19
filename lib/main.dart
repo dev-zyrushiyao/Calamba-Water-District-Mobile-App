@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'design_system.dart';
-import 'login_page.dart';
-import 'signup_page.dart';
+import 'pages/design_system.dart';
+import 'pages/login_page.dart';
+import 'pages/signup_page.dart';
 
 void main() {
   //RunApp calling the myApp Class
@@ -30,12 +29,12 @@ class MyApp extends StatelessWidget {
           scrolledUnderElevation: 4.0,
           shadowColor: designSystem.cwdThemeColor().primary,
           surfaceTintColor: designSystem.cwdThemeColor().primary,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadiusGeometry.directional(
-              bottomStart: Radius.circular(15.0),
-              bottomEnd: Radius.circular(15.0),
-            ),
-          ),
+          // shape: RoundedRectangleBorder(
+          //   borderRadius: BorderRadiusGeometry.directional(
+          //     bottomStart: Radius.circular(15.0),
+          //     bottomEnd: Radius.circular(15.0),
+          //   ),
+          // ),
         ),
         useMaterial3: true,
         textTheme: designSystem.cwdTypography(
@@ -44,9 +43,11 @@ class MyApp extends StatelessWidget {
         ),
         colorScheme: designSystem.cwdThemeColor(),
       ),
-      home: LoginPage(),
-
-      routes: {'/signup': (context) => const SignupPage()},
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const LoginPage(),
+        '/signup': (context) => const SignupPage(),
+      },
     );
   }
 }

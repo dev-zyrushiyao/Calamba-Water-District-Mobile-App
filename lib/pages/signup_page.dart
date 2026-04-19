@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/custom-widgets/headline.dart';
+import 'package:myapp/custom-widgets/primary_button.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -22,41 +24,22 @@ class _SignupPageState extends State<SignupPage> {
       // resizeToAvoidBottomInset: false,
       appBar: AppBar(title: Text('Sign up'), centerTitle: true),
       body: ListView(
-        // crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           //spacing
           SizedBox(height: 29),
 
-          //header
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-
-            child: Column(
-              // mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                    color: Theme.of(context).colorScheme.onPrimary,
-                  ),
-                  'Create Account',
-                ),
-                Text(
-                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                    color: Theme.of(context).colorScheme.onPrimary,
-                  ),
-                  'Sign up to get started',
-                ),
-              ],
-            ),
+          //header text
+          Headline(
+            headline: 'Create Account',
+            subHeadline: 'Sign up to get started',
           ),
 
           //spacing
           SizedBox(height: 42),
 
-          //TO-MAKE SCROLLVIEW TOMORROW
+          //Form
           Container(
-            width: double.infinity,
+            width: 356.0,
             padding: const EdgeInsets.symmetric(horizontal: 30.00),
             child: Column(
               spacing: 35.00,
@@ -68,20 +51,15 @@ class _SignupPageState extends State<SignupPage> {
                     Text(
                       style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                         fontWeight: FontWeight.bold,
-                        color: Theme.of(context).colorScheme.onPrimary,
                       ),
                       'Nickname',
                     ),
                     TextFormField(
-                      textInputAction: TextInputAction.next,
                       keyboardType: TextInputType.name,
                       decoration: InputDecoration(
                         prefixIcon: Icon(Icons.person),
                         helperText: 'Please input alphabet characters only',
-                        helperStyle: Theme.of(context).textTheme.labelSmall!
-                            .copyWith(
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
+                        helperStyle: Theme.of(context).textTheme.labelSmall,
                         hintText: 'Enter your nickname',
                         hintStyle: TextStyle(
                           color: Theme.of(
@@ -100,7 +78,6 @@ class _SignupPageState extends State<SignupPage> {
                         // code when the user saves the form.
                       },
                       maxLength: 15,
-                      autofocus: true,
                       enableSuggestions: true,
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       validator: (String? value) {
@@ -118,22 +95,17 @@ class _SignupPageState extends State<SignupPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
+                      'Email',
                       style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                         fontWeight: FontWeight.bold,
-                        color: Theme.of(context).colorScheme.onPrimary,
                       ),
-                      'Email',
                     ),
 
                     TextFormField(
-                      textInputAction: TextInputAction.next,
                       keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(
                         prefixIcon: Icon(Icons.mail),
-                        helperStyle: Theme.of(context).textTheme.labelSmall!
-                            .copyWith(
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
+                        helperStyle: Theme.of(context).textTheme.labelSmall,
                         hintText: 'Enter valid E-mail',
                         hintStyle: TextStyle(
                           color: Theme.of(
@@ -174,14 +146,12 @@ class _SignupPageState extends State<SignupPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
+                      'Password',
                       style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                         fontWeight: FontWeight.bold,
-                        color: Theme.of(context).colorScheme.onPrimary,
                       ),
-                      'Password',
                     ),
                     TextFormField(
-                      textInputAction: TextInputAction.next,
                       keyboardType: TextInputType.visiblePassword,
                       obscureText: isHidden,
                       decoration: InputDecoration(
@@ -197,10 +167,7 @@ class _SignupPageState extends State<SignupPage> {
                             isHidden ? Icons.visibility_off : Icons.visibility,
                           ),
                         ),
-                        helperStyle: Theme.of(context).textTheme.labelSmall!
-                            .copyWith(
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
+                        helperStyle: Theme.of(context).textTheme.labelSmall,
                         hintText: 'Enter password',
                         hintStyle: TextStyle(
                           color: Theme.of(
@@ -224,37 +191,29 @@ class _SignupPageState extends State<SignupPage> {
                 //TextField - Mobile Number
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  spacing: 35,
                   children: [
                     Text(
+                      'Mobile No.',
                       style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                         fontWeight: FontWeight.bold,
-                        color: Theme.of(context).colorScheme.onPrimary,
                       ),
-                      'Mobile No.',
                     ),
                     Row(
-                      spacing: 10.00,
+                      spacing: 20.00,
                       children: [
                         Text(
-                          style: Theme.of(context).textTheme.bodyLarge!
-                              .copyWith(
-                                color: Theme.of(context).colorScheme.onPrimary,
-                              ),
                           '+63',
+                          style: Theme.of(context).textTheme.bodyLarge!
+                              .copyWith(fontWeight: FontWeight(700)),
                         ),
                         Flexible(
                           child: TextFormField(
-                            textInputAction: TextInputAction.done,
                             keyboardType: TextInputType.phone,
                             decoration: InputDecoration(
-                              helperStyle: Theme.of(context)
-                                  .textTheme
-                                  .labelSmall!
-                                  .copyWith(
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.primary,
-                                  ),
+                              helperStyle: Theme.of(
+                                context,
+                              ).textTheme.labelSmall!,
                               hintText: '9123456789',
                               hintStyle: TextStyle(
                                 color: Theme.of(
@@ -278,6 +237,12 @@ class _SignupPageState extends State<SignupPage> {
                       ],
                     ),
                   ],
+                ),
+                PrimaryButton(
+                  width: 356.00,
+                  height: 60,
+                  label: 'Create Account',
+                  onPressed: () => debugPrint('Pressed from Sign up Page'),
                 ),
               ],
             ),

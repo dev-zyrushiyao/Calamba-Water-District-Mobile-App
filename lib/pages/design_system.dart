@@ -41,30 +41,35 @@ class DesignSystem {
         fontSize: 28,
         fontWeight: FontWeight.bold,
         letterSpacing: 0.0,
+        color: cwdThemeColor().onPrimary,
       ), //H1
       headlineMedium: TextStyle(
         fontFamily: primaryFont.fontFamily,
         fontSize: 22,
         fontWeight: semiBold,
         letterSpacing: 0.0,
+        color: cwdThemeColor().onPrimary,
       ), //H2
       headlineSmall: TextStyle(
         fontFamily: primaryFont.fontFamily,
         fontSize: 20,
         fontWeight: semiBold,
         letterSpacing: letterSpacingConverter(20.00, 1.5),
+        color: cwdThemeColor().onPrimary,
       ), //H3
       titleLarge: TextStyle(
         fontFamily: primaryFont.fontFamily,
         fontSize: 17,
         fontWeight: semiBold,
         letterSpacing: letterSpacingConverter(17.00, 1.5),
+        color: cwdThemeColor().onPrimary,
       ), //Headline
       titleMedium: TextStyle(
         fontFamily: primaryFont.fontFamily,
         fontSize: 15,
         fontWeight: FontWeight.normal,
         letterSpacing: letterSpacingConverter(15.00, 1.5),
+        color: cwdThemeColor().onPrimary,
       ), //Subhead
       labelSmall: TextStyle(
         fontFamily: primaryFont.fontFamily,
@@ -72,6 +77,7 @@ class DesignSystem {
         fontWeight: FontWeight.normal,
         letterSpacing: letterSpacingConverter(13.00, 1.5),
         height: lineHeightConverter(13.00, 20.00),
+        color: cwdThemeColor().onPrimary,
       ), //Caption
       //SecondaryFont (Body , Link , CTA)
       bodyLarge: TextStyle(
@@ -80,18 +86,21 @@ class DesignSystem {
         fontWeight: FontWeight.normal,
         letterSpacing: letterSpacingConverter(17, 5.0),
         height: lineHeightConverter(17.00, 25.00),
+        color: cwdThemeColor().onPrimary,
       ), //Body
       bodySmall: TextStyle(
         fontFamily: primaryFont.fontFamily,
         fontSize: 17,
         fontWeight: FontWeight.bold,
         letterSpacing: 0.0,
+        color: cwdThemeColor().onPrimary,
       ), //Link
       labelLarge: TextStyle(
         fontFamily: primaryFont.fontFamily,
         fontSize: 17,
         fontWeight: semiBold,
         letterSpacing: 0.0,
+        color: cwdThemeColor().onPrimary,
       ), //Call-to-Action
     );
   }

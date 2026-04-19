@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:myapp/custom-widgets/secondary_button.dart';
 import 'design_system.dart'; //home-widget
 import 'signup_page.dart';
 
@@ -21,6 +22,11 @@ class _LoginPageState extends State<LoginPage> {
   //login textbox consistent size
   static const double _textFieldWidth = 288.00;
   static const double _textFieldHeight = 56.00;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -99,7 +105,6 @@ class _LoginPageState extends State<LoginPage> {
                   width: _textFieldWidth,
                   child: Text(
                     textAlign: TextAlign.right,
-
                     //Custom TextStyle for 'Forgot Password?' link
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.outlineVariant,
@@ -107,40 +112,19 @@ class _LoginPageState extends State<LoginPage> {
                       fontSize: 15.00,
                       fontFamily: DesignSystem().primaryFont.fontFamily,
                     ),
-
                     'Forgot Password?',
                   ),
                 ),
 
+                //spacing
                 SizedBox(height: 5.0),
 
                 //login CTA
-                SizedBox(
-                  height: 60,
+                SecondaryButton(
+                  label: 'Login',
+                  height: _textFieldHeight,
                   width: _textFieldWidth,
-                  child: FilledButton(
-                    onPressed: () {},
-                    style: FilledButton.styleFrom(
-                      backgroundColor: Theme.of(
-                        context,
-                      ).colorScheme.secondaryContainer,
-                      foregroundColor: Theme.of(
-                        context,
-                      ).colorScheme.onSecondary,
-                      textStyle: Theme.of(context).textTheme.labelLarge,
-                      elevation: 8.0,
-                      shadowColor: Theme.of(
-                        context,
-                      ).colorScheme.primaryContainer,
-                      shape: RoundedRectangleBorder(
-                        side: BorderSide.none,
-                        borderRadius: BorderRadiusGeometry.all(
-                          Radius.circular(4.0),
-                        ),
-                      ),
-                    ),
-                    child: Text('Login'),
-                  ),
+                  onPressed: () {},
                 ),
 
                 //other methods
