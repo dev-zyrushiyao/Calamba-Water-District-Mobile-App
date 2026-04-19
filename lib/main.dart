@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'pages/design_system.dart';
+import 'package:myapp/pages/account_verification_page.dart';
+import 'design-system/design_system.dart';
 import 'pages/login_page.dart';
 import 'pages/signup_page.dart';
 
@@ -17,9 +18,6 @@ class MyApp extends StatelessWidget {
     //Figma Design System
     final DesignSystem designSystem = DesignSystem();
 
-    //Pages
-    //LoginPage();
-
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -29,12 +27,6 @@ class MyApp extends StatelessWidget {
           scrolledUnderElevation: 4.0,
           shadowColor: designSystem.cwdThemeColor().primary,
           surfaceTintColor: designSystem.cwdThemeColor().primary,
-          // shape: RoundedRectangleBorder(
-          //   borderRadius: BorderRadiusGeometry.directional(
-          //     bottomStart: Radius.circular(15.0),
-          //     bottomEnd: Radius.circular(15.0),
-          //   ),
-          // ),
         ),
         useMaterial3: true,
         textTheme: designSystem.cwdTypography(
@@ -43,10 +35,11 @@ class MyApp extends StatelessWidget {
         ),
         colorScheme: designSystem.cwdThemeColor(),
       ),
-      initialRoute: '/',
+      initialRoute: '/login',
       routes: {
-        '/': (context) => const LoginPage(),
+        '/login': (context) => const LoginPage(),
         '/signup': (context) => const SignupPage(),
+        '/accountverification': (context) => const AccountVerificationPage(),
       },
     );
   }

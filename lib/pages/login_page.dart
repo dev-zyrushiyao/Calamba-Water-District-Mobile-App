@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:myapp/custom-widgets/secondary_button.dart';
-import 'design_system.dart'; //home-widget
-import 'signup_page.dart';
+import '../design-system/design_system.dart'; //home-widget
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -17,7 +16,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   //controller variable
   final TextEditingController _textController = TextEditingController();
-  bool isHidden = true;
+  bool _isHidden = true;
 
   //login textbox consistent size
   static const double _textFieldWidth = 288.00;
@@ -32,6 +31,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: SafeArea(
         //Logo Email & Password TextField
         child: Container(
@@ -77,7 +77,7 @@ class _LoginPageState extends State<LoginPage> {
                   height: _textFieldHeight,
                   child: TextFormField(
                     style: Theme.of(context).textTheme.bodyLarge,
-                    obscureText: isHidden,
+                    obscureText: _isHidden,
                     decoration: InputDecoration(
                       // border: OutlineInputBorder(),
                       label: Text('Password'),
@@ -85,15 +85,15 @@ class _LoginPageState extends State<LoginPage> {
                       suffixIcon: IconButton(
                         onPressed: () {
                           setState(() {
-                            if (isHidden == true) {
-                              isHidden = false;
+                            if (_isHidden == true) {
+                              _isHidden = false;
                             } else {
-                              isHidden = true;
+                              _isHidden = true;
                             }
                           });
                         },
                         icon: Icon(
-                          isHidden ? Icons.visibility_off : Icons.visibility,
+                          _isHidden ? Icons.visibility_off : Icons.visibility,
                         ),
                       ),
                     ),
@@ -273,12 +273,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => SignupPage(),
-                              ),
-                            );
+                            Navigator.pushNamed(context, '/signup');
                           },
                         text: 'Sign Up',
                       ),

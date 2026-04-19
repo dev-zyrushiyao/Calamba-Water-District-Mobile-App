@@ -16,12 +16,12 @@ class SignupPage extends StatefulWidget {
 // Mobile no. section container-column (text (row[text-textfield]))
 
 class _SignupPageState extends State<SignupPage> {
-  bool isHidden = true;
+  bool _isHidden = true;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // resizeToAvoidBottomInset: false,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(title: Text('Sign up'), centerTitle: true),
       body: ListView(
         children: [
@@ -153,18 +153,18 @@ class _SignupPageState extends State<SignupPage> {
                     ),
                     TextFormField(
                       keyboardType: TextInputType.visiblePassword,
-                      obscureText: isHidden,
+                      obscureText: _isHidden,
                       decoration: InputDecoration(
                         prefixIcon: Icon(Icons.lock),
                         suffixIcon: IconButton(
                           onPressed: () {
                             setState(() {
-                              isHidden = !isHidden;
-                              debugPrint(isHidden.toString());
+                              _isHidden = !_isHidden;
+                              debugPrint(_isHidden.toString());
                             });
                           },
                           icon: Icon(
-                            isHidden ? Icons.visibility_off : Icons.visibility,
+                            _isHidden ? Icons.visibility_off : Icons.visibility,
                           ),
                         ),
                         helperStyle: Theme.of(context).textTheme.labelSmall,
@@ -242,7 +242,8 @@ class _SignupPageState extends State<SignupPage> {
                   width: 356.00,
                   height: 60,
                   label: 'Create Account',
-                  onPressed: () => debugPrint('Pressed from Sign up Page'),
+                  onPressed: () =>
+                      Navigator.pushNamed(context, '/accountverification'),
                 ),
               ],
             ),
