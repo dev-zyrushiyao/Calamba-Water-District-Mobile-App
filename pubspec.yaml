@@ -68,7 +68,7 @@ flutter:
     - assets/mobile-app/signin-assets/signin-assets/Android/svg/
     - assets/mobile-app/signin-assets/
     - assets/mobile-app/signin-assets/signin-assets/Android/png@1x/neutral/
-
+    - assets/mobile-app/onboarding/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 

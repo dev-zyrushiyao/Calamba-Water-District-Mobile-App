@@ -4,8 +4,8 @@ class SecondaryButton extends StatelessWidget {
   const SecondaryButton({
     super.key,
     required this.label,
-    required this.height,
-    required this.width,
+    this.width = 375.00,
+    this.height = 60.00,
     this.onPressed,
   });
 
@@ -26,7 +26,7 @@ class SecondaryButton extends StatelessWidget {
         textStyle: Theme.of(context).textTheme.labelLarge,
         shape: RoundedRectangleBorder(
           side: BorderSide.none,
-          borderRadius: BorderRadius.all(Radius.circular(4.0)),
+          borderRadius: BorderRadius.all(Radius.circular(8.0)),
         ),
       ),
       child: Text(label),

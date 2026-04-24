@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 class PrimaryButton extends StatelessWidget {
   const PrimaryButton({
     super.key,
-    required this.width,
-    required this.height,
+    this.width = 375.00,
+    this.height = 60.00,
     required this.label,
     this.onPressed,
   });
@@ -44,9 +44,7 @@ class PrimaryButton extends StatelessWidget {
         ),
         child: Container(
           alignment: Alignment.center,
-          // width: double.infinity,
-          // height: double.infinity,
-          child: Text('Create Account', textAlign: TextAlign.center),
+          child: Text(label, textAlign: TextAlign.center),
         ),
       ),
     );

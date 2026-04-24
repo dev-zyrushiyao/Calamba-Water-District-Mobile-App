@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/pages/account_verification_page.dart';
-import 'design-system/design_system.dart';
-import 'pages/login_page.dart';
-import 'pages/signup_page.dart';
+import 'package:myapp/pages/01-login/login_page.dart';
+import 'package:myapp/pages/02-signup/signup_page.dart';
+import 'package:myapp/pages/02-signup/account_verification_page.dart';
+import 'package:myapp/pages/02-signup/register_result_page.dart';
+import 'package:myapp/pages/03-forgot-password/forgot_password_page.dart';
+import 'package:myapp/pages/03-forgot-password/recovery_result_page.dart';
+import 'package:myapp/pages/04-on-boarding/boarding_page_one.dart';
+import 'package:myapp/design-system/design_system.dart';
 
 void main() {
   //RunApp calling the myApp Class
@@ -40,6 +44,10 @@ class MyApp extends StatelessWidget {
         '/login': (context) => const LoginPage(),
         '/signup': (context) => const SignupPage(),
         '/accountverification': (context) => const AccountVerificationPage(),
+        '/signupresult': (context) => const RegisterResultPage(),
+        '/forgotpassword': (context) => const ForgotPasswordPage(),
+        '/forgotpasswordresult': (context) => const RecoveryResultPage(),
+        '/boarding_page_one': (context) => const BoardingPageOne(),
       },
     );
   }
