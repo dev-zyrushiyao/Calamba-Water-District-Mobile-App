@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:myapp/custom-widgets/boarding_caption.dart';
 import 'package:myapp/custom-widgets/primary_button.dart';
 import 'package:myapp/custom-widgets/scoop_border.dart';
+import 'package:myapp/custom-widgets/secondary_button_outlined.dart';
 import 'package:myapp/custom-widgets/shrinking_divider.dart';
 
 class BoardingPageOne extends StatefulWidget {
@@ -122,15 +123,13 @@ class _BoardingPageOneState extends State<BoardingPageOne> {
 
           const SizedBox(height: 70),
 
+          //divider
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             spacing: 23.00,
             children: [
-              //divider-1
               ShrinkingDivider(activeDivider: _currentPageActive == 1),
-
               ShrinkingDivider(activeDivider: _currentPageActive == 2),
-
               ShrinkingDivider(activeDivider: _currentPageActive == 3),
             ],
           ),
@@ -141,6 +140,24 @@ class _BoardingPageOneState extends State<BoardingPageOne> {
             mainAxisAlignment: MainAxisAlignment.center,
             spacing: 20,
             children: [
+              AnimatedOpacity(
+                duration: Duration(milliseconds: 300),
+                curve: Curves.linear,
+                opacity: _currentPageActive == 1 ? 0 : 1,
+                child: SecondaryButtonOutlined(
+                  label: 'Previous',
+                  onPressed: _currentPageActive != 1
+                      ? () {
+                          if (_currentPageActive > 1) {
+                            setState(() {
+                              _currentPageActive--;
+                            });
+                          }
+                        }
+                      : null,
+                ),
+              ),
+
               PrimaryButton(
                 width: 180,
                 label: _currentPageActive == 3 ? 'Dashboard' : 'Next',
@@ -151,26 +168,6 @@ class _BoardingPageOneState extends State<BoardingPageOne> {
                     });
                   }
                 },
-              ),
-
-              OutlinedButton(
-                onPressed: () {},
-                style: OutlinedButton.styleFrom(
-                  minimumSize: Size(180.0, 60.0),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                  ),
-                  side: BorderSide(
-                    width: 1,
-                    color: Theme.of(context).colorScheme.secondaryContainer,
-                  ),
-                ),
-                child: Text(
-                  'Skip',
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.secondaryContainer,
-                  ),
-                ),
               ),
             ],
           ),

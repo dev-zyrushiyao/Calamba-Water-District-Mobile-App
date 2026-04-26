@@ -7,6 +7,7 @@ import 'package:myapp/pages/03-forgot-password/forgot_password_page.dart';
 import 'package:myapp/pages/03-forgot-password/recovery_result_page.dart';
 import 'package:myapp/pages/04-on-boarding/boarding_page_one.dart';
 import 'package:myapp/design-system/design_system.dart';
+import 'package:myapp/pages/home_page.dart';
 
 void main() {
   //RunApp calling the myApp Class
@@ -39,7 +40,7 @@ class MyApp extends StatelessWidget {
         ),
         colorScheme: designSystem.cwdThemeColor(),
       ),
-      initialRoute: '/login',
+      initialRoute: '/home',
       routes: {
         '/login': (context) => const LoginPage(),
         '/signup': (context) => const SignupPage(),
@@ -48,6 +49,7 @@ class MyApp extends StatelessWidget {
         '/forgotpassword': (context) => const ForgotPasswordPage(),
         '/forgotpasswordresult': (context) => const RecoveryResultPage(),
         '/boarding_page_one': (context) => const BoardingPageOne(),
+        '/home': (context) => const HomePage(),
       },
     );
   }
