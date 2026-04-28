@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter_svg/svg.dart';
 import 'package:myapp/custom-widgets/dashboard_account.dart';
-import 'package:myapp/custom-widgets/headline.dart';
+import 'package:myapp/pages/05-home-page/index/home_index.dart';
 import 'package:myapp/custom-widgets/primary_button.dart';
+import 'package:myapp/pages/05-home-page/index/news_index.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -14,6 +14,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<Widget> accounts = [];
+  int _currentPageIndex = 0;
 
   void addAccount() {
     accounts.addAll([
@@ -91,105 +92,104 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    int _currentPageIndex = 1;
+    final themeData = Theme.of(context);
+
+    final List<Widget> pages = [
+      HomeIndex(accounts: accounts),
+      NewsIndex(),
+      Text('Account'),
+      Text('Support'),
+      Text('Profile'),
+    ];
 
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          debugPrint('Floating has been pressed, add new account');
-        },
-        backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
-        child: Icon(
-          Icons.add,
-          color: Theme.of(context).colorScheme.onSecondary,
-        ),
-      ),
+      floatingActionButton: _currentPageIndex > 0
+          ? null
+          : FloatingActionButton(
+              onPressed: () {
+                debugPrint('Floating has been pressed, add new account');
+              },
+              backgroundColor: themeData.colorScheme.secondaryContainer,
+              child: Icon(Icons.add, color: themeData.colorScheme.onSecondary),
+            ),
       bottomNavigationBar: NavigationBar(
+        onDestinationSelected: (index) {
+          setState(() {
+            _currentPageIndex = index;
+          });
+        },
         labelTextStyle: WidgetStateProperty<TextStyle>.fromMap(
           <WidgetStatesConstraint, TextStyle>{
             WidgetState.selected: TextStyle(
               fontWeight: FontWeight.bold,
-              color: Theme.of(context).colorScheme.onSecondary,
+              color: themeData.colorScheme.onSecondary,
             ),
             WidgetState.any: TextStyle(
               fontWeight: FontWeight.normal,
-              color: Theme.of(context).colorScheme.onSecondary,
+              color: themeData.colorScheme.onSecondary,
             ),
           },
         ),
-        overlayColor: WidgetStateColor.fromMap(<WidgetStatesConstraint, Color>{
-          WidgetState.any: Colors.blueGrey,
-        }),
-        indicatorColor: Theme.of(context).colorScheme.onSecondary,
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        animationDuration: Duration(seconds: 1),
-        destinations: const <Widget>[
+        indicatorColor: themeData.colorScheme.onSecondary,
+        selectedIndex: _currentPageIndex,
+        backgroundColor: themeData.colorScheme.primary,
+        animationDuration: Duration(milliseconds: 500),
+        destinations: <Widget>[
           NavigationDestination(
             selectedIcon: Icon(Icons.home),
-            icon: Icon(Icons.home_outlined),
+            icon: Icon(
+              Icons.home_outlined,
+              color: themeData.colorScheme.onSecondary,
+            ),
             label: 'Home',
           ),
-          NavigationDestination(icon: Icon(Icons.newspaper), label: 'News'),
           NavigationDestination(
-            icon: Icon(Icons.water_drop_outlined),
+            selectedIcon: Icon(
+              Icons.newspaper,
+              color: themeData.colorScheme.onPrimary,
+            ),
+            icon: Icon(
+              Icons.newspaper,
+              color: themeData.colorScheme.onSecondary,
+            ),
+            label: 'News',
+          ),
+          NavigationDestination(
+            selectedIcon: Icon(
+              Icons.water_drop,
+              color: themeData.colorScheme.onPrimary,
+            ),
+            icon: Icon(
+              Icons.water_drop_outlined,
+              color: themeData.colorScheme.onSecondary,
+            ),
             label: 'Account',
           ),
           NavigationDestination(
-            icon: Icon(Icons.build_outlined),
+            selectedIcon: Icon(
+              Icons.build,
+              color: themeData.colorScheme.onPrimary,
+            ),
+            icon: Icon(
+              Icons.build_outlined,
+              color: themeData.colorScheme.onSecondary,
+            ),
             label: 'Support',
           ),
           NavigationDestination(
-            icon: Icon(Icons.account_circle_outlined),
+            selectedIcon: Icon(
+              Icons.account_circle,
+              color: themeData.colorScheme.onPrimary,
+            ),
+            icon: Icon(
+              Icons.account_circle_outlined,
+              color: themeData.colorScheme.onSecondary,
+            ),
             label: 'Profile',
           ),
         ],
       ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Column(
-            children: [
-              SvgPicture.asset('assets/home-logo.svg', fit: BoxFit.cover),
-
-              SizedBox(height: 28.0),
-
-              Align(
-                alignment: Alignment.bottomLeft,
-                child: Headline(
-                  headline: 'Hi, Zyrus!',
-                  subHeadline:
-                      'Ready to settle your dues? We\'ve made it easy.',
-                  spacing: 5.0,
-                ),
-              ),
-
-              SizedBox(height: 26.0),
-
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  'Dashboard',
-                  style: Theme.of(context).textTheme.headlineMedium,
-                ),
-              ),
-
-              SizedBox(height: 13.0),
-
-              Expanded(
-                child: ListView(
-                  children: [
-                    if (accounts.isNotEmpty)
-                      for (var item in accounts) ...[
-                        item,
-                        SizedBox(height: 26),
-                      ],
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
+      body: SafeArea(child: pages[_currentPageIndex]),
     );
   }
 }

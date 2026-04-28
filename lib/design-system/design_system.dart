@@ -6,23 +6,25 @@ class DesignSystem {
   ColorScheme cwdThemeColor() {
     return ColorScheme.fromSeed(
       //Deep Sea Theme - 2E3092
-      seedColor: Color(0xFF2E3092),
+      seedColor: const Color(0xFF2E3092),
     ).copyWith(
-      primary: Color(0xFF2E3092), // Deep Sea
-      onPrimary: Color(0xFF242424), //Orca - Text Primary
-      onPrimaryFixedVariant: Color(0xFF616161), //Placeholder Text and Border
-      onSecondary: Color(0xFFE6D7D7), //Pearl Horizon - Text Secondary
-      surface: Color(0xFFF8F9FA), //Cloud White
-      tertiary: Color(0xFFFFC107), //Sunny Yellow
-      primaryContainer: Color(0xFF80D8FF), //Ocean Pulse - CTA Primary
-      secondaryContainer: Color(0xFF1A5B79), //Tidal Slate - Secondary CTA
-      outlineVariant: Color(0xFF2E3092), //Azure Tide - text Link
+      primary: const Color(0xFF2E3092), // Deep Sea
+      onPrimary: const Color(0xFF242424), //Orca - Text Primary
+      onPrimaryFixedVariant: const Color(
+        0xFF616161,
+      ), //Placeholder Text and Border
+      onSecondary: const Color(0xFFE6D7D7), //Pearl Horizon - Text Secondary
+      surface: const Color(0xFFF8F9FA), //Cloud White
+      tertiary: const Color(0xFFFFC107), //Sunny Yellow
+      primaryContainer: const Color(0xFF80D8FF), //Ocean Pulse - CTA Primary
+      secondaryContainer: const Color(0xFF1A5B79), //Tidal Slate - Secondary CTA
+      outlineVariant: const Color(0xFF2E3092), //Azure Tide - text Link
     );
   }
 
   //TYPOGRAPHY FIGMA
-  TextStyle primaryFont = GoogleFonts.montserrat();
-  TextStyle secondaryFont = GoogleFonts.openSans();
+  final TextStyle primaryFont = GoogleFonts.montserrat();
+  final TextStyle secondaryFont = GoogleFonts.openSans();
 
   double letterSpacingConverter(double fontSize, double percentage) =>
       fontSize * (percentage / 100);

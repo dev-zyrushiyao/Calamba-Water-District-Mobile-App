@@ -7,7 +7,7 @@ import 'package:myapp/pages/03-forgot-password/forgot_password_page.dart';
 import 'package:myapp/pages/03-forgot-password/recovery_result_page.dart';
 import 'package:myapp/pages/04-on-boarding/boarding_page_one.dart';
 import 'package:myapp/design-system/design_system.dart';
-import 'package:myapp/pages/home_page.dart';
+import 'package:myapp/pages/05-home-page/home_page.dart';
 
 void main() {
   //RunApp calling the myApp Class
