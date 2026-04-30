@@ -63,36 +63,32 @@ class RecoveryResultPage extends StatelessWidget {
 
                 SizedBox(height: 20),
 
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Text(
-                    'Check your email',
-                    textAlign: TextAlign.left,
-                    style: Theme.of(context).textTheme.headlineMedium,
-                  ),
-                ),
-
-                SizedBox(height: 20),
-
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Text.rich(
-                    TextSpan(
-                      style: Theme.of(context).textTheme.bodyLarge,
-                      children: [
-                        TextSpan(text: 'We’ve sent a '),
-                        TextSpan(
-                          text: 'verification code to m*****@email.com** ',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        TextSpan(
-                          text:
-                              'Please follow the instruction to reset your password.',
-                        ),
-                      ],
+                Column(
+                  spacing: 20.0,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Check your email',
+                      textAlign: TextAlign.left,
+                      style: Theme.of(context).textTheme.headlineMedium,
                     ),
-                  ),
+                    Text.rich(
+                      TextSpan(
+                        style: Theme.of(context).textTheme.bodyLarge,
+                        children: [
+                          TextSpan(text: 'We’ve sent a '),
+                          TextSpan(
+                            text: 'verification code to m*****@email.com** ',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          TextSpan(
+                            text:
+                                'Please follow the instruction to reset your password.',
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
 
                 const SizedBox(height: 235),

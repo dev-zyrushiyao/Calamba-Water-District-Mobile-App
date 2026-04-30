@@ -13,7 +13,10 @@ class HomeIndex extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Column(
         children: [
-          SvgPicture.asset('assets/home-logo.svg', fit: BoxFit.cover),
+          Align(
+            alignment: AlignmentGeometry.centerStart,
+            child: SvgPicture.asset('assets/home-logo.svg', fit: BoxFit.cover),
+          ),
 
           SizedBox(height: 28.0),
 

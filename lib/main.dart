@@ -8,6 +8,7 @@ import 'package:myapp/pages/03-forgot-password/recovery_result_page.dart';
 import 'package:myapp/pages/04-on-boarding/boarding_page_one.dart';
 import 'package:myapp/design-system/design_system.dart';
 import 'package:myapp/pages/05-home-page/home_page.dart';
+import 'package:myapp/pages/05-home-page/index/news_content.dart';
 
 void main() {
   //RunApp calling the myApp Class
@@ -50,6 +51,7 @@ class MyApp extends StatelessWidget {
         '/forgotpasswordresult': (context) => const RecoveryResultPage(),
         '/boarding_page_one': (context) => const BoardingPageOne(),
         '/home': (context) => const HomePage(),
+        '/newscontent': (context) => const NewsContentPage(),
       },
     );
   }

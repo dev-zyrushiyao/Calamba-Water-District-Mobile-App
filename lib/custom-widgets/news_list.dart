@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/custom-widgets/news_information.dart';
 
 class NewsList extends StatelessWidget {
-  const NewsList({super.key, required this.date, required this.title});
+  const NewsList({super.key, required this.newsInformation});
 
-  final String date;
-  final String title;
+  final NewsInformation newsInformation;
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,7 @@ class NewsList extends StatelessWidget {
         SizedBox(
           width: 100,
           child: Text(
-            date,
+            newsInformation.dateWord!,
             textAlign: TextAlign.center,
             style: theme.textTheme.bodyLarge!.copyWith(
               fontWeight: FontWeight.bold,
@@ -26,10 +26,17 @@ class NewsList extends StatelessWidget {
           ),
         ),
         Expanded(
-          child: Text(
-            title,
-            style: theme.textTheme.bodyLarge,
-            overflow: TextOverflow.clip,
+          child: GestureDetector(
+            onTap: () => Navigator.pushNamed(
+              context,
+              '/newscontent',
+              arguments: newsInformation,
+            ),
+            child: Text(
+              newsInformation.title!,
+              style: theme.textTheme.bodyLarge,
+              overflow: TextOverflow.clip,
+            ),
           ),
         ),
       ],

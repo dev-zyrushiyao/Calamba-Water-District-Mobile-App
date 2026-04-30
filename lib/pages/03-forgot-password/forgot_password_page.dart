@@ -13,7 +13,8 @@ class ForgotPasswordPage extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+
             children: [
               SizedBox(height: 150),
 
@@ -28,11 +29,14 @@ class ForgotPasswordPage extends StatelessWidget {
 
               SizedBox(height: 45),
 
-              Text(
-                'Email',
-                style: Theme.of(
-                  context,
-                ).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
+              SizedBox(
+                width: double.infinity,
+                child: Text(
+                  'Email',
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
+                ),
               ),
               TextFormField(
                 keyboardType: TextInputType.name,
@@ -78,15 +82,22 @@ class ForgotPasswordPage extends StatelessWidget {
 
               SizedBox(height: 160),
 
-              Text(
-                'Quick Reminder:',
-                style: Theme.of(
-                  context,
-                ).textTheme.labelSmall!.copyWith(fontWeight: FontWeight.bold),
-              ),
-              Text(
-                'If it doesn\'t appear in your inbox within a few minutes, it might be in your Spam folder.',
-                style: Theme.of(context).textTheme.labelSmall,
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Quick Reminder:',
+                    textAlign: TextAlign.left,
+                    style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                      fontWeight: FontWeight.bold,
+                      // backgroundColor: Colors.blue[200],
+                    ),
+                  ),
+                  Text(
+                    'If it doesn\'t appear in your inbox within a few minutes, it might be in your Spam folder.',
+                    style: Theme.of(context).textTheme.labelSmall,
+                  ),
+                ],
               ),
             ],
           ),

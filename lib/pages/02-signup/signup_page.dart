@@ -25,6 +25,7 @@ class _SignupPageState extends State<SignupPage> {
       backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(title: Text('Sign up')),
       body: ListView(
+        padding: EdgeInsets.symmetric(horizontal: 16.0),
         children: [
           //spacing
           SizedBox(height: 29),
