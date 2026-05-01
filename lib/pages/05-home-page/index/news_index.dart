@@ -25,6 +25,7 @@ class _NewsIndexState extends State<NewsIndex> {
   @override
   void initState() {
     super.initState();
+    //starter data
     chosenValue = currentYear;
     addNews(chosenValue!);
   }
@@ -37,7 +38,7 @@ class _NewsIndexState extends State<NewsIndex> {
             dateNum: '03-25-2026',
             dateWord: 'March-25',
             title: 'Notice of Scheduled Interconnection: Brgy. Mayapa Area',
-            status: status['ongoing'],
+            status: status['resolved'],
             paragraph1: [
               'The Calamba Water District (CWD) has issued an urgent advisory following a major pipe burst reported early this morning at the Main Entrance of Lakeview Subdivision.',
               'The rupture was identified in a primary 8-inch distribution line, causing significant water loss and localized flooding near the subdivision gates.',
@@ -60,7 +61,7 @@ class _NewsIndexState extends State<NewsIndex> {
                   "CWD engineers estimate that repairs will be completed and water pressure will begin to normalize by 6:00 PM today, March 12, 2026.",
             },
             headLine3: {
-              "headline": "Advice for Residents,",
+              "headline": "Advice for Residents",
               "subheadline": null,
             },
             bulletList3: [
@@ -184,27 +185,33 @@ class _NewsIndexState extends State<NewsIndex> {
           ),
 
           SizedBox(height: 33),
+          Expanded(
+            child: RefreshIndicator(
+              onRefresh: () async {
+                await Future.delayed(Duration(seconds: 2));
+                setState(() {
+                  addNews(chosenValue!);
+                });
+              },
 
-          if (newsList.isEmpty)
-            Expanded(
-              child: Container(
-                alignment: AlignmentGeometry.center,
-                child: Text(
-                  'No news to show',
-                  style: theme.textTheme.bodyLarge,
-                ),
-              ),
-            )
-          else
-            Flexible(
-              child: ListView.separated(
-                separatorBuilder: (context, index) => SizedBox(height: 35),
-                itemCount: newsList.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return newsList[index];
-                },
-              ),
+              child: newsList.isEmpty
+                  ? Container(
+                      alignment: AlignmentGeometry.center,
+                      child: Text(
+                        'No news to show',
+                        style: theme.textTheme.bodyLarge,
+                      ),
+                    )
+                  : ListView.separated(
+                      separatorBuilder: (context, index) =>
+                          SizedBox(height: 35),
+                      itemCount: newsList.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return newsList[index];
+                      },
+                    ),
             ),
+          ),
         ],
       ),
     );

@@ -10,10 +10,15 @@ class NewsHeadline extends StatelessWidget {
     String? headline = data["headline"];
     String? subheadline = data["subheadline"];
 
+    final ThemeData theme = Theme.of(context);
+
     return Column(
+      spacing: 7.0,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (headline != null) Text(headline),
-        if (subheadline != null) Text(subheadline),
+        if (headline != null) Text(headline, style: theme.textTheme.titleLarge),
+        if (subheadline != null)
+          Text(subheadline, style: theme.textTheme.bodyLarge),
       ],
     );
   }

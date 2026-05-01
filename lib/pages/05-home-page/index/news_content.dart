@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/custom-widgets/news_bullet.dart';
 import 'package:myapp/custom-widgets/news_headline.dart';
 import 'package:myapp/custom-widgets/news_information.dart';
 import 'package:myapp/custom-widgets/news_header.dart';
@@ -27,10 +28,36 @@ class NewsContentPage extends StatelessWidget {
     }
 
     return Scaffold(
-      appBar: AppBar(title: Text('News')),
+      appBar: AppBar(
+        title: Text('News'),
+        surfaceTintColor: theme.colorScheme.primary,
+        scrolledUnderElevation: 1,
+        actions: [
+          Container(
+            padding: EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(topLeft: Radius.circular(13.0)),
+            ),
+
+            child: IconButton(
+              onPressed: () {},
+              alignment: Alignment.center,
+              tooltip: 'share',
+              icon: Icon(Icons.share),
+              color: theme.colorScheme.onPrimary,
+              style: ButtonStyle(
+                backgroundColor: WidgetStateColor.fromMap(
+                  <WidgetStatesConstraint, Color>{
+                    WidgetState.any: Color(0xFF80D8FF),
+                  },
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
       body: ListView(
         padding: EdgeInsets.symmetric(horizontal: 16.0),
-
         children: [
           //News Header
           NewsHeader(data: data),
@@ -40,11 +67,11 @@ class NewsContentPage extends StatelessWidget {
           Divider(color: Color(0xFF6C6C6C), radius: BorderRadius.circular(6.0)),
 
           SizedBox(height: 10),
+
           Text(
             formatList(items: data.paragraph1, bulletFormat: false),
             style: theme.textTheme.bodyLarge,
           ),
-
           if (data.imageDirectory != null)
             Container(
               clipBehavior: Clip.hardEdge,
@@ -55,26 +82,28 @@ class NewsContentPage extends StatelessWidget {
               child: Image.asset('${data.imageDirectory}', fit: BoxFit.contain),
             ),
 
+          SizedBox(height: 20),
+
           if (data.headLine1 != null) NewsHeadline(data: data.headLine1!),
+
+          SizedBox(height: 10),
+
           if (data.bulletList1 != null)
-            Text(
-              formatList(items: data.bulletList1!, bulletFormat: true),
-              style: theme.textTheme.bodyLarge,
-            ),
+            NewsBullet(bulletList: data.bulletList1!, bulletFormat: true),
 
           if (data.headLine2 != null) NewsHeadline(data: data.headLine2!),
+          SizedBox(height: 10),
+
           if (data.bulletList2 != null)
-            Text(
-              formatList(items: data.bulletList2!, bulletFormat: true),
-              style: theme.textTheme.bodyLarge,
-            ),
+            NewsBullet(bulletList: data.bulletList2!, bulletFormat: true),
+
+          SizedBox(height: 10),
 
           if (data.headLine3 != null) NewsHeadline(data: data.headLine3!),
+          SizedBox(height: 10),
+
           if (data.bulletList3 != null)
-            Text(
-              formatList(items: data.bulletList3!, bulletFormat: true),
-              style: theme.textTheme.bodyLarge,
-            ),
+            NewsBullet(bulletList: data.bulletList3!, bulletFormat: true),
         ],
       ),
     );

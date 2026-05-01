@@ -27,11 +27,13 @@ class NewsList extends StatelessWidget {
         ),
         Expanded(
           child: GestureDetector(
-            onTap: () => Navigator.pushNamed(
-              context,
-              '/newscontent',
-              arguments: newsInformation,
-            ),
+            onTap: () {
+              Navigator.pushNamed(
+                context,
+                '/newscontent',
+                arguments: newsInformation,
+              );
+            },
             child: Text(
               newsInformation.title!,
               style: theme.textTheme.bodyLarge,

@@ -30,7 +30,7 @@ class NewsHeader extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('${data.dateNum}', style: theme.textTheme.labelSmall),
+        Text('Date: ${data.dateNum}', style: theme.textTheme.labelSmall),
         Text('${data.title}', style: theme.textTheme.titleLarge),
         Row(
           spacing: 7.0,
