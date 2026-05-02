@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+
 import 'package:myapp/pages/01-login/login_page.dart';
 import 'package:myapp/pages/02-signup/signup_page.dart';
 import 'package:myapp/pages/02-signup/account_verification_page.dart';
 import 'package:myapp/pages/02-signup/register_result_page.dart';
 import 'package:myapp/pages/03-forgot-password/forgot_password_page.dart';
 import 'package:myapp/pages/03-forgot-password/recovery_result_page.dart';
-import 'package:myapp/pages/04-on-boarding/boarding_page_one.dart';
+import 'package:myapp/pages/04-on-boarding/boarding_page.dart';
 import 'package:myapp/design-system/design_system.dart';
 import 'package:myapp/pages/05-home-page/home_page.dart';
 import 'package:myapp/pages/05-home-page/index/news_content.dart';
@@ -49,7 +50,7 @@ class MyApp extends StatelessWidget {
         '/signupresult': (context) => const RegisterResultPage(),
         '/forgotpassword': (context) => const ForgotPasswordPage(),
         '/forgotpasswordresult': (context) => const RecoveryResultPage(),
-        '/boarding_page_one': (context) => const BoardingPageOne(),
+        '/boarding': (context) => const BoardingPageOne(),
         '/home': (context) => const HomePage(),
         '/newscontent': (context) => const NewsContentPage(),
       },

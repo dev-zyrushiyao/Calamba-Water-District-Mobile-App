@@ -130,7 +130,7 @@ class _LoginPageState extends State<LoginPage> {
                   height: _textFieldHeight,
                   width: _textFieldWidth,
                   onPressed: () {
-                    Navigator.popAndPushNamed(context, '/boarding_page_one');
+                    Navigator.popAndPushNamed(context, '/boarding');
                   },
                 ),
 

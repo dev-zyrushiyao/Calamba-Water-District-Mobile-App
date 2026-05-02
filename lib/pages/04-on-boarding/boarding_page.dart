@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/custom-widgets/boarding_caption.dart';
 import 'package:myapp/custom-widgets/primary_button.dart';
-import 'package:myapp/custom-widgets/scoop_border.dart';
+import 'package:myapp/custom-shapes/scoop_border.dart';
 import 'package:myapp/custom-widgets/secondary_button_outlined.dart';
 import 'package:myapp/custom-widgets/shrinking_divider.dart';
 
@@ -15,48 +15,8 @@ class BoardingPageOne extends StatefulWidget {
 class _BoardingPageOneState extends State<BoardingPageOne> {
   int _currentPageActive = 1;
 
-  // void updateDividers() {
-  //   debugPrint('pageTransition method invoked!');
-  //   debugPrint('PAGE wheninvoked $_currentPageActive');
-  //   if (_currentPageActive == 1) {
-  //     setState(() {
-  //       _isDivider1Active = false;
-  //       _isDivider2Active = true;
-  //       _isDivider3Active = false;
-  //       debugPrint('Current page: $_currentPageActive');
-  //     });
-  //   }
-
-  //   if (_currentPageActive == 2) {
-  //     setState(() {
-  //       _isDivider1Active = false;
-  //       _isDivider2Active = false;
-  //       _isDivider3Active = true;
-  //       debugPrint('Current page: $_currentPageActive');
-  //     });
-  //   }
-
-  //   if (_currentPageActive == 3) {
-  //     setState(() {
-  //       _isDivider1Active = true;
-  //       _isDivider2Active = false;
-  //       _isDivider3Active = false;
-  //       debugPrint('DashBoard button pressed');
-  //       debugPrint('Current page: $_currentPageActive');
-  //     });
-  //     debugPrint('HEY');
-  //   }
-
-  //   if (_currentPageActive > 3) {
-  //     debugPrint('Beyond the Limits');
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
-    // Get the actual screen height
-    final double screenWeight = MediaQuery.of(context).size.width;
-
     const List<AssetImage> boardingImage = [
       AssetImage('assets/mobile-app/onboarding/boarding-1.jpg'),
       AssetImage('assets/mobile-app/onboarding/boarding-2.jpg'),
@@ -70,7 +30,7 @@ class _BoardingPageOneState extends State<BoardingPageOne> {
             clipper: ScoopBorder(),
             child: Container(
               height: 545,
-              width: screenWeight,
+              width: MediaQuery.of(context).size.width,
               padding: EdgeInsets.only(top: 180),
               alignment: Alignment.center,
               color: Theme.of(context).colorScheme.primary,

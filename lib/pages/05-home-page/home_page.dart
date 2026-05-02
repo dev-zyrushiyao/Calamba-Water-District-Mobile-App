@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-
-import 'package:myapp/custom-widgets/dashboard_account.dart';
 import 'package:myapp/pages/05-home-page/index/home_index.dart';
-import 'package:myapp/custom-widgets/primary_button.dart';
 import 'package:myapp/pages/05-home-page/index/news_index.dart';
+import 'package:myapp/pages/05-home-page/index/profile_index.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -13,81 +11,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<Widget> accounts = [];
   int _currentPageIndex = 0;
-
-  void addAccount() {
-    accounts.addAll([
-      DashboardAccount(
-        accountName: 'Zyrus Hiyao',
-        accountNumber: '591-482-637',
-        isActive: true,
-        previousBill: 373.25,
-        lastReading: 124.0,
-        dueDay: 3,
-        balance: 346.00,
-        primaryButton: PrimaryButton(
-          label: 'Pay Bill',
-          width: 92,
-          height: 43,
-          onPressed: () {},
-        ),
-      ),
-
-      DashboardAccount(
-        accountName: 'Apartment - A',
-        accountNumber: '415-882-361',
-        isActive: true,
-        previousBill: 289.25,
-        lastReading: 110.0,
-        dueDay: 12,
-        balance: 235.00,
-        primaryButton: PrimaryButton(
-          label: 'Pay Bill',
-          width: 92,
-          height: 43,
-          onPressed: () {},
-        ),
-      ),
-
-      DashboardAccount(
-        accountName: 'Apartment - A',
-        accountNumber: '415-882-361',
-        isActive: true,
-        previousBill: 289.25,
-        lastReading: 110.0,
-        dueDay: 12,
-        balance: 235.00,
-        primaryButton: PrimaryButton(
-          label: 'Pay Bill',
-          width: 92,
-          height: 43,
-          onPressed: () {},
-        ),
-      ),
-
-      DashboardAccount(
-        accountName: 'Apartment - A',
-        accountNumber: '415-882-361',
-        isActive: true,
-        previousBill: 289.25,
-        lastReading: 110.0,
-        dueDay: 12,
-        balance: 235.00,
-        primaryButton: PrimaryButton(
-          label: 'Pay Bill',
-          width: 92,
-          height: 43,
-          onPressed: () {},
-        ),
-      ),
-    ]);
-  }
 
   @override
   void initState() {
     super.initState();
-    addAccount();
   }
 
   @override
@@ -95,11 +23,11 @@ class _HomePageState extends State<HomePage> {
     final themeData = Theme.of(context);
 
     final List<Widget> pages = [
-      HomeIndex(accounts: accounts),
+      HomeIndex(),
       NewsIndex(),
       Text('Account'),
       Text('Support'),
-      Text('Profile'),
+      ProfileIndex(),
     ];
 
     return Scaffold(
@@ -189,7 +117,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      body: SafeArea(child: pages[_currentPageIndex]),
+      body: pages[_currentPageIndex],
     );
   }
 }

@@ -80,6 +80,6 @@ class ScoopBorder extends CustomClipper<Path> {
 
   @override
   bool shouldReclip(covariant CustomClipper<Path> oldClipper) {
-    return true;
+    return false;
   }
 }

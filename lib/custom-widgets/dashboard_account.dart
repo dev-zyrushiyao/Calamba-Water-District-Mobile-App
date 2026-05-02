@@ -1,26 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/custom-widgets/primary_button.dart';
+import 'package:myapp/data-class/linked_water_account.dart';
 
-class DashboardAccount extends StatelessWidget {
-  const DashboardAccount({
+class DashboardDisplay extends StatelessWidget {
+  const DashboardDisplay({
     super.key,
-    required this.accountName,
-    required this.accountNumber,
-    required this.isActive,
-    required this.previousBill,
-    required this.lastReading,
-    required this.dueDay,
-    required this.balance,
+    required this.waterAccount,
     required this.primaryButton,
   });
 
-  final String accountName;
-  final String accountNumber;
-  final bool isActive;
-  final double previousBill;
-  final double lastReading;
-  final int dueDay;
-  final double balance;
+  final LinkedWaterAccount waterAccount;
   final PrimaryButton primaryButton;
 
   Color getStatusColor(bool isActive) {
@@ -33,7 +22,7 @@ class DashboardAccount extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color statusColor = getStatusColor(isActive);
+    Color statusColor = getStatusColor(waterAccount.isActive);
     double deviceWidth = MediaQuery.of(context).size.width;
 
     return Container(
@@ -58,9 +47,12 @@ class DashboardAccount extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             spacing: 5,
             children: [
-              Text(accountName, style: Theme.of(context).textTheme.titleLarge),
               Text(
-                accountNumber,
+                waterAccount.accountName,
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              Text(
+                waterAccount.accountNumber,
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               Row(
@@ -84,7 +76,7 @@ class DashboardAccount extends StatelessWidget {
                       borderRadius: BorderRadius.circular(3.0),
                     ),
                     child: Text(
-                      isActive ? 'Active' : 'Inactive',
+                      waterAccount.isActive ? 'Active' : 'Inactive',
                       style: Theme.of(context).textTheme.labelSmall!.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
@@ -93,11 +85,11 @@ class DashboardAccount extends StatelessWidget {
                 ],
               ),
               Text(
-                'Previous Bill: $balance',
+                'Previous Bill: ${waterAccount.balance}',
                 style: Theme.of(context).textTheme.labelSmall,
               ),
               Text(
-                'Last Reading: $lastReading m³',
+                'Last Reading: ${waterAccount.lastReading} m³',
                 style: Theme.of(context).textTheme.labelSmall,
               ),
             ],
@@ -109,18 +101,18 @@ class DashboardAccount extends StatelessWidget {
             spacing: 5,
             children: [
               Text(
-                'Due in $dueDay days',
+                'Due in ${waterAccount.dueDay} days',
                 style: Theme.of(
                   context,
                 ).textTheme.labelSmall!.copyWith(fontWeight: FontWeight.w600),
               ),
               Text('Balance', style: Theme.of(context).textTheme.titleLarge),
               Text(
-                '₱ $balance',
+                '₱ ${waterAccount.balance}',
 
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
-              if (isActive == true) primaryButton,
+              if (waterAccount.isActive == true) primaryButton,
             ],
           ),
         ],

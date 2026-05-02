@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/custom-widgets/news_information.dart';
+import 'package:myapp/data-class/news_information.dart';
 
 class NewsHeader extends StatelessWidget {
   const NewsHeader({super.key, required this.data});

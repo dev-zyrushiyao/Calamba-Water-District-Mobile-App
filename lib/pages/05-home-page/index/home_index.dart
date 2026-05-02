@@ -1,55 +1,87 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:myapp/custom-widgets/dashboard_account.dart';
 import 'package:myapp/custom-widgets/headline.dart';
+import 'package:myapp/data-bank/linked_account_list.dart';
+import 'package:myapp/custom-widgets/primary_button.dart';
 
 class HomeIndex extends StatelessWidget {
-  const HomeIndex({super.key, required this.accounts});
-
-  final List<Widget> accounts;
+  const HomeIndex({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: Column(
-        children: [
-          Align(
-            alignment: AlignmentGeometry.centerStart,
-            child: SvgPicture.asset('assets/home-logo.svg', fit: BoxFit.cover),
-          ),
+    //accounts to display
+    final List<dynamic> accountList = LinkedAccountList().accounts;
+    // final List<dynamic> accountList = [];
 
-          SizedBox(height: 28.0),
-
-          Align(
-            alignment: Alignment.bottomLeft,
-            child: Headline(
-              headline: 'Hi, Zyrus!',
-              subHeadline: 'Ready to settle your dues? We\'ve made it easy.',
-              spacing: 5.0,
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: Column(
+          children: [
+            Align(
+              alignment: AlignmentGeometry.centerStart,
+              child: SvgPicture.asset(
+                'assets/home-logo.svg',
+                fit: BoxFit.cover,
+              ),
             ),
-          ),
 
-          SizedBox(height: 26.0),
+            SizedBox(height: 28.0),
 
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              'Dashboard',
-              style: Theme.of(context).textTheme.headlineMedium,
+            Align(
+              alignment: Alignment.bottomLeft,
+              child: Headline(
+                headline: 'Hi, Zyrus!',
+                subHeadline: 'Ready to settle your dues? We\'ve made it easy.',
+                spacing: 5.0,
+              ),
             ),
-          ),
 
-          SizedBox(height: 13.0),
+            SizedBox(height: 26.0),
 
-          Expanded(
-            child: ListView(
-              children: [
-                if (accounts.isNotEmpty)
-                  for (var item in accounts) ...[item, SizedBox(height: 26)],
-              ],
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'Dashboard',
+                style: Theme.of(context).textTheme.headlineMedium,
+              ),
             ),
-          ),
-        ],
+
+            SizedBox(height: 13.0),
+
+            if (accountList.isNotEmpty)
+              Expanded(
+                child: ListView(
+                  children: [
+                    for (var item in accountList) ...[
+                      DashboardDisplay(
+                        waterAccount: item,
+                        primaryButton: PrimaryButton(
+                          label: 'Pay Bill',
+                          width: 92,
+                          height: 43,
+                          onPressed: () {
+                            // debugPrint('${item.accountName}');
+                            debugPrint('${accountList[2].accountName}');
+                          },
+                        ),
+                      ),
+                      SizedBox(height: 26),
+                    ],
+                  ],
+                ),
+              )
+            else
+              Expanded(
+                child: Container(
+                  alignment: Alignment.center,
+
+                  child: Text('No linked account'),
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/custom-widgets/news_bullet.dart';
 import 'package:myapp/custom-widgets/news_headline.dart';
-import 'package:myapp/custom-widgets/news_information.dart';
+import 'package:myapp/data-class/news_information.dart';
 import 'package:myapp/custom-widgets/news_header.dart';
 
 class NewsContentPage extends StatelessWidget {

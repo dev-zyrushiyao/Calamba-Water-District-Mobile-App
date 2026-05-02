@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/custom-widgets/headline.dart';
-import 'package:myapp/custom-widgets/news_information.dart';
+import 'package:myapp/data-class/news_information.dart';
 import 'package:myapp/custom-widgets/news_list.dart';
 
 class NewsIndex extends StatefulWidget {
@@ -132,87 +132,89 @@ class _NewsIndexState extends State<NewsIndex> {
       ),
     ];
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 86),
-      child: Column(
-        children: [
-          Align(
-            alignment: AlignmentGeometry.centerStart,
-            child: Headline(
-              headline: 'News',
-              subHeadline: 'Latest announcements and community updates.',
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 86),
+        child: Column(
+          children: [
+            Align(
+              alignment: AlignmentGeometry.centerStart,
+              child: Headline(
+                headline: 'News',
+                subHeadline: 'Latest announcements and community updates.',
+              ),
             ),
-          ),
 
-          SizedBox(height: 38),
+            SizedBox(height: 38),
 
-          Row(
-            spacing: 10.0,
-            children: [
-              SizedBox(
-                width: 110,
-                child: DropdownButtonFormField(
-                  initialValue: chosenValue,
-                  borderRadius: BorderRadius.circular(13.0),
-                  itemHeight: 55, //default 48
-                  items: yearMenu,
-                  decoration: InputDecoration(
-                    labelText: 'Year',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                  ),
-                  hint: Text('Year'),
-                  onChanged: (int? value) {
-                    if (value != null) {
-                      setState(() {
-                        chosenValue = value;
-                        addNews(chosenValue!);
-                      });
-                    }
-                  },
-                ),
-              ),
-              Expanded(
-                child: Divider(
-                  height: 3.0,
-                  thickness: 2.0,
-                  color: theme.colorScheme.onPrimary,
-                  radius: BorderRadiusGeometry.circular(3.0),
-                ),
-              ),
-            ],
-          ),
-
-          SizedBox(height: 33),
-          Expanded(
-            child: RefreshIndicator(
-              onRefresh: () async {
-                await Future.delayed(Duration(seconds: 2));
-                setState(() {
-                  addNews(chosenValue!);
-                });
-              },
-
-              child: newsList.isEmpty
-                  ? Container(
-                      alignment: AlignmentGeometry.center,
-                      child: Text(
-                        'No news to show',
-                        style: theme.textTheme.bodyLarge,
+            Row(
+              spacing: 10.0,
+              children: [
+                SizedBox(
+                  width: 110,
+                  child: DropdownButtonFormField(
+                    initialValue: chosenValue,
+                    borderRadius: BorderRadius.circular(13.0),
+                    itemHeight: 55, //default 48
+                    items: yearMenu,
+                    decoration: InputDecoration(
+                      labelText: 'Year',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
                       ),
-                    )
-                  : ListView.separated(
-                      separatorBuilder: (context, index) =>
-                          SizedBox(height: 35),
-                      itemCount: newsList.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return newsList[index];
-                      },
                     ),
+                    hint: Text('Year'),
+                    onChanged: (int? value) {
+                      if (value != null) {
+                        setState(() {
+                          chosenValue = value;
+                          addNews(chosenValue!);
+                        });
+                      }
+                    },
+                  ),
+                ),
+                Expanded(
+                  child: Divider(
+                    height: 3.0,
+                    thickness: 2.0,
+                    color: theme.colorScheme.onPrimary,
+                    radius: BorderRadiusGeometry.circular(3.0),
+                  ),
+                ),
+              ],
             ),
-          ),
-        ],
+
+            SizedBox(height: 33),
+            Expanded(
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  await Future.delayed(Duration(seconds: 2));
+                  setState(() {
+                    addNews(chosenValue!);
+                  });
+                },
+
+                child: newsList.isEmpty
+                    ? Container(
+                        alignment: AlignmentGeometry.center,
+                        child: Text(
+                          'No news to show',
+                          style: theme.textTheme.bodyLarge,
+                        ),
+                      )
+                    : ListView.separated(
+                        separatorBuilder: (context, index) =>
+                            SizedBox(height: 35),
+                        itemCount: newsList.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return newsList[index];
+                        },
+                      ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
