@@ -4,15 +4,22 @@ import 'package:myapp/custom-widgets/dashboard_account.dart';
 import 'package:myapp/custom-widgets/headline.dart';
 import 'package:myapp/data-bank/linked_account_list.dart';
 import 'package:myapp/custom-widgets/primary_button.dart';
+import 'package:myapp/data-bank/account_type.dart';
 
-class HomeIndex extends StatelessWidget {
+class HomeIndex extends StatefulWidget {
   const HomeIndex({super.key});
+
+  @override
+  State<HomeIndex> createState() => _HomeIndexState();
+}
+
+class _HomeIndexState extends State<HomeIndex> {
+  final _loggedUser = AccountType().owner;
 
   @override
   Widget build(BuildContext context) {
     //accounts to display
     final List<dynamic> accountList = LinkedAccountList().accounts;
-    // final List<dynamic> accountList = [];
 
     return SafeArea(
       child: Padding(
@@ -32,7 +39,7 @@ class HomeIndex extends StatelessWidget {
             Align(
               alignment: Alignment.bottomLeft,
               child: Headline(
-                headline: 'Hi, Zyrus!',
+                headline: 'Hi, ${_loggedUser.nickname}!',
                 subHeadline: 'Ready to settle your dues? We\'ve made it easy.',
                 spacing: 5.0,
               ),

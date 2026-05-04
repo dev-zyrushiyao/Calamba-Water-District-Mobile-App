@@ -10,7 +10,7 @@ enum Gender {
       case Gender.female:
         return 'assets/avatar/female.png';
       case Gender.lgbt:
-        return 'assets/avatar/lgbt.png';
+        return 'assets/avatar/unicorn.png';
     }
   }
 }

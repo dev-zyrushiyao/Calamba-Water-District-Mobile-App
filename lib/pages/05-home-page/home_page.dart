@@ -22,6 +22,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
 
+    //FOR ADJUSTMENT: use the Account Object on the pages parameters
     final List<Widget> pages = [
       HomeIndex(),
       NewsIndex(),
