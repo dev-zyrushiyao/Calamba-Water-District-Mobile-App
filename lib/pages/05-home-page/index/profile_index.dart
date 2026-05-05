@@ -6,6 +6,8 @@ import 'package:myapp/custom-widgets/primary_button.dart';
 import 'package:myapp/data-bank/account_type.dart';
 import 'package:myapp/data-class/constants/enums.dart';
 
+import 'package:flutter/services.dart';
+
 class ProfileIndex extends StatefulWidget {
   const ProfileIndex({super.key});
 
@@ -16,6 +18,7 @@ class ProfileIndex extends StatefulWidget {
 class _ProfileIndexState extends State<ProfileIndex> {
   final _loggedUser = AccountType().owner;
 
+  //Shape animation
   double _containerHeight = 0;
   double _photoSize = 0;
   double _nameSize = 0;
@@ -26,14 +29,52 @@ class _ProfileIndexState extends State<ProfileIndex> {
   final List<DropdownMenuItem<dynamic>> dropDownItems = [];
   Gender? chosenValue;
 
+  //toggle editing mode
+  bool isEditing = false;
+
+  //form validator
+  final _formKey = GlobalKey<FormState>();
+
+  String letterCapitalization(Gender value) {
+    return value.name == 'lgbt'
+        ? value.name.toUpperCase()
+        : value.name[0].toUpperCase() + value.name.substring(1);
+  }
+
+  void unShrinkAnimation() {
+    _containerHeight = 300;
+    _photoSize = 50;
+    _nameSize = 22;
+  }
+
+  void shrinkAnimation() {
+    _containerHeight = 80;
+    _photoSize = 0;
+    _nameSize = 0;
+  }
+
   @override
   void initState() {
     super.initState();
 
+    // Makes the status bar pull the color from your ClipPath
+    // statusBarColor: Colors.transparent,
+    // Makes icons white (use .dark for black icons)
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarIconBrightness: Brightness.light,
+        systemNavigationBarContrastEnforced: true,
+      ),
+    );
+
     //Add Gender Enum on the Dropdownlist
+    //Sample output: value = Gender.male , Text('Male')
     for (var value in Gender.values) {
       dropDownItems.add(
-        DropdownMenuItem(value: value, child: Text(value.name)),
+        DropdownMenuItem(
+          value: value,
+          child: Text(letterCapitalization(value)),
+        ),
       );
     }
 
@@ -47,7 +88,7 @@ class _ProfileIndexState extends State<ProfileIndex> {
       'E-mail',
       'Password',
       'Gender',
-      'E-Wallet',
+      'E-Wallet (GCash)',
     ];
 
     //List of initial value of textfield from _LoggedUser Object
@@ -80,6 +121,11 @@ class _ProfileIndexState extends State<ProfileIndex> {
   void dispose() {
     super.dispose();
 
+    // turn the System tray color to Dark if Profile Index page is closed
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(statusBarIconBrightness: Brightness.dark),
+    );
+
     //controller dispose
     for (var item in textController) {
       item.dispose();
@@ -92,6 +138,7 @@ class _ProfileIndexState extends State<ProfileIndex> {
 
     return Column(
       children: [
+        //header animation
         ClipPath(
           clipper: ProfileBorder(),
           clipBehavior: Clip.hardEdge,
@@ -150,164 +197,321 @@ class _ProfileIndexState extends State<ProfileIndex> {
           ),
         ),
 
+        //User Information Display
         Expanded(
-          child: GestureDetector(
-            onTap: () {
-              FocusScope.of(context).unfocus();
-            },
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 50.0,
-                vertical: 20,
-              ),
-              child: Column(
-                spacing: 10,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Expanded(
-                    child: ListView.separated(
-                      itemCount: textController.length,
-                      separatorBuilder: (context, index) =>
-                          SizedBox(height: 10.0),
-                      itemBuilder: (context, index) {
-                        return Focus(
-                          //change the animation of the UI (Shrinks and unshrinks the Shape)
-                          onFocusChange: (hasFocus) {
-                            if (hasFocus) {
-                              setState(() {
-                                _containerHeight = 30;
-                                _photoSize = 0;
-                                _nameSize = 0;
-                              });
-                              debugPrint('Its Focused');
-                            }
-                          },
-                          // if its Gender Section change to DropDown list else display TextField
-                          child: _textSection[index] == 'Gender'
-                              ? Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Column(
-                                    children: [
-                                      Container(
-                                        color: Colors.blue,
-                                        width: double.infinity,
-                                        child: Text(_textSection[index]),
-                                      ),
-                                      DropdownButton(
-                                        hint: Text(chosenValue!.name),
-                                        items: dropDownItems,
-                                        isExpanded: true,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            chosenValue = value;
-                                            debugPrint(value.toString());
-                                          });
-                                          // debugPrint(value.toString());
-                                          // debug
-                                        },
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              : FormEditableTextfield(
-                                  loggedUserValues: _loggedUserValues[index],
-                                  textController: textController[index],
-                                  textSection: _textSection[index],
-                                  isHidden: switch (index) {
-                                    3 => true,
-                                    _ => false,
-                                  },
-                                  textInputType: switch (index) {
-                                    0 => TextInputType.name,
-                                    1 || 5 => TextInputType.phone,
-                                    2 => TextInputType.emailAddress,
-                                    _ => TextInputType.text,
-                                  },
-                                  maxLength: switch (index) {
-                                    //index of List => maxlength Value
-                                    0 => 15,
-                                    1 => 11,
-                                    4 => 30,
-                                    5 => 13,
-                                    _ => null,
-                                  },
-                                  validator: (value) {
-                                    return switch (index) {
-                                      0 =>
-                                        (value != null && value.length < 2)
-                                            ? 'Did not reached the amount of characters need'
-                                            : null,
-                                      1 =>
-                                        (value != null && value.length < 11)
-                                            ? 'Did not reached the amount of characters need'
-                                            : null,
-                                      2 =>
-                                        (value == null || value.isEmpty)
-                                            ? 'Email is required'
-                                            : (value.contains('@') &&
-                                                  value.endsWith('.com') ^
-                                                      value.endsWith('.ph'))
-                                            ? null
-                                            : 'Invalid email',
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 50.0, vertical: 20),
+            child: Column(
+              spacing: 15,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                //Edit Toggle Button
+                Container(
+                  alignment: Alignment.centerRight,
+                  child: TextButton.icon(
+                    label: Text('Edit'),
+                    style: ButtonStyle(
+                      backgroundColor: WidgetStateProperty<Color>.fromMap(
+                        <WidgetStatesConstraint, Color>{
+                          WidgetState.selected: Colors.blue,
+                          WidgetState.any: Colors.transparent,
+                        },
+                      ),
+                    ),
+                    icon: Icon(Icons.edit),
+                    onPressed: () {
+                      setState(() {
+                        //toggle editing mode
+                        isEditing = !isEditing;
 
-                                      _ => null,
-                                    };
-                                  },
-                                  onChanged: (value) {
-                                    setState(() {
-                                      //updates the list and textbox value not the actual object that used on the pages
-                                      _loggedUserValues[index] = value;
-                                    });
+                        if (isEditing == true) {
+                          //shrink animation of heading animated container
+                          shrinkAnimation();
+                        } else {
+                          //unshrink animation of heading animated container
+                          unShrinkAnimation();
+                        }
+                      });
+                    },
+                  ),
+                ),
+
+                //Editing Form
+                isEditing
+                    ? Expanded(
+                        child: Form(
+                          key: _formKey,
+                          child: ListView.separated(
+                            physics: const ClampingScrollPhysics(),
+                            padding: EdgeInsets.zero,
+                            itemCount: textController.length,
+                            separatorBuilder: (context, index) =>
+                                SizedBox(height: 30.0),
+                            itemBuilder: (context, index) {
+                              return _textSection[index] == 'Gender'
+                                  ? Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Column(
+                                        children: [
+                                          SizedBox(
+                                            width: double.infinity,
+                                            child: Text(
+                                              _textSection[index],
+                                              style: theme.textTheme.bodyLarge,
+                                            ),
+                                          ),
+                                          DropdownButton(
+                                            hint: Text(chosenValue!.name),
+                                            items: dropDownItems,
+                                            isExpanded: true,
+                                            onChanged: (value) {
+                                              setState(() {
+                                                chosenValue = value;
+                                                debugPrint(value.toString());
+                                              });
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  : FormEditableTextfield(
+                                      loggedUserValues:
+                                          _loggedUserValues[index],
+                                      textController: textController[index],
+                                      textSection: _textSection[index],
+                                      isHidden: switch (index) {
+                                        3 => true,
+                                        _ => false,
+                                      },
+                                      textInputType: switch (index) {
+                                        0 => TextInputType.name,
+                                        1 || 5 => TextInputType.phone,
+                                        2 => TextInputType.emailAddress,
+                                        _ => TextInputType.text,
+                                      },
+                                      maxLength: switch (index) {
+                                        //index of List => maxlength Value
+                                        0 => 15,
+                                        1 => 11,
+                                        3 => 30,
+                                        4 => 30,
+                                        5 => 12,
+                                        _ => null,
+                                      },
+                                      validator: (value) {
+                                        return switch (index) {
+                                          0 =>
+                                            (value != null && value.length < 2)
+                                                ? 'Please put 2 or more characters'
+                                                : null,
+                                          1 =>
+                                            (value != null && value.length < 11)
+                                                ? 'Invalid number'
+                                                : value!.contains(
+                                                    RegExp(r'^09\d{9}$'),
+                                                  )
+                                                ? null
+                                                : 'Please put your 11 digit mobile number',
+                                          2 =>
+                                            (value == null || value.isEmpty)
+                                                ? 'Email is required'
+                                                : (value.contains('@') &&
+                                                      value.endsWith('.com') ^
+                                                          value.endsWith('.ph'))
+                                                ? null
+                                                : 'Invalid email',
+                                          3 =>
+                                            (value == null || value.isEmpty)
+                                                ? 'Password is required'
+                                                : (value.length < 10)
+                                                ? 'Not enough password character'
+                                                : null,
+                                          5 =>
+                                            (value == null || value.isEmpty)
+                                                ? 'Please add E-Wallet account'
+                                                : (value.length == 12 &&
+                                                      value.contains(
+                                                        RegExp(r'[0-9]'),
+                                                      ) &&
+                                                      (value.contains(
+                                                        RegExp(r'^639\d{9}$'),
+                                                      )))
+                                                ? null
+                                                : 'Invalid format (needs Area Code without the \'+\' and 11 digit mobile number)',
+
+                                          _ => null,
+                                        };
+                                      },
+                                      onChanged: (_) {},
+                                    );
+                            },
+                          ),
+                        ),
+                      )
+                    //Displaying the Current User Information
+                    : Expanded(
+                        child: ListView.separated(
+                          separatorBuilder: (context, index) =>
+                              SizedBox(height: 20),
+                          itemCount: _textSection.length,
+                          itemBuilder: (context, index) {
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              spacing: 30,
+                              children: [
+                                SizedBox(
+                                  height: 50,
+                                  width: 150,
+                                  child: Text(
+                                    '${_textSection[index]}:',
+                                    style: theme.textTheme.bodyLarge!.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 50,
+                                  width: 150,
+                                  child: switch (index) {
+                                    3 => Text(
+                                      '•' * _loggedUserValues[index].length,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: theme.textTheme.bodyLarge,
+                                    ),
+
+                                    4 => Text(
+                                      letterCapitalization(chosenValue!),
+                                      overflow: TextOverflow.ellipsis,
+                                      style: theme.textTheme.bodyLarge,
+                                    ),
+
+                                    _ => Text(
+                                      '${_loggedUserValues[index]}',
+                                      overflow: TextOverflow.ellipsis,
+                                      style: theme.textTheme.bodyLarge,
+                                    ),
                                   },
                                 ),
+                              ],
+                            );
+                          },
+                        ),
+                      ),
+                //Save button
+                Column(
+                  children: [
+                    TweenAnimationBuilder<double>(
+                      duration: Duration(milliseconds: 600),
+                      tween: Tween<double>(begin: 10, end: isEditing ? 80 : 10),
+                      curve: Curves.easeInOutBack,
+                      builder: (context, value, child) {
+                        return Container(
+                          color: Colors.transparent,
+                          height: value,
+                          padding: EdgeInsets.all(10),
+                          child: PrimaryButton(
+                            label: 'Save Details',
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                //Collapse the keyboard
+                                FocusScope.of(context).unfocus();
+
+                                //hides again the button after successfully updating the user information
+                                setState(() {
+                                  //expand the animatied container
+                                  unShrinkAnimation();
+                                  //turning off the toggle editing button
+                                  isEditing = !isEditing;
+
+                                  //updates the Singleton object for all pages and the List of User Information for display in Profile Index
+                                  for (
+                                    int i = 0;
+                                    i < textController.length;
+                                    i++
+                                  ) {
+                                    switch (i) {
+                                      case 0:
+                                        _loggedUser.nickname =
+                                            textController[i].text;
+                                        break;
+                                      case 1:
+                                        _loggedUser.phoneNumber =
+                                            int.tryParse(
+                                              textController[i].text,
+                                            ) ??
+                                            _loggedUser.phoneNumber;
+                                        break;
+                                      case 2:
+                                        _loggedUser.email =
+                                            textController[i].text;
+                                        break;
+                                      case 3:
+                                        _loggedUser.password =
+                                            textController[i].text;
+                                        break;
+                                      case 4:
+                                        _loggedUser.gender = chosenValue!;
+                                        break;
+                                      case 5:
+                                        _loggedUser.ewallet =
+                                            int.tryParse(
+                                              textController[i].text,
+                                            ) ??
+                                            0;
+                                        break;
+                                      // Add other cases (password, gender, etc.) as needed
+                                    }
+                                    //re-updates the display
+                                    _loggedUserValues[i] =
+                                        textController[i].text;
+                                    debugPrint(
+                                      'TEST CONTROLER VALUE:  ${textController[i].value}',
+                                    );
+                                  }
+                                });
+                              } else {
+                                debugPrint('Cannot Save Invalid Input');
+                              }
+
+                              debugPrint(
+                                'Current Phone number: ${_loggedUser.phoneNumber}',
+                              );
+                            },
+                          ),
                         );
                       },
                     ),
-                  ),
-                  PrimaryButton(
-                    label: 'Save Details',
-                    onPressed: () {
-                      setState(() {
-                        //expand the animatied container
-                        _containerHeight = 300;
-                        _photoSize = 50;
-                        _nameSize = 22;
-
-                        //updates the Singleton object for all pages
-                        for (int i = 0; i < textController.length; i++) {
-                          switch (i) {
-                            case 0:
-                              _loggedUser.nickname = textController[i].text;
-                              break;
-                            case 1:
-                              _loggedUser.phoneNumber =
-                                  int.tryParse(textController[i].text) ??
-                                  _loggedUser.phoneNumber;
-                              break;
-                            case 2:
-                              _loggedUser.email = textController[i].text;
-                              break;
-                            case 3:
-                              _loggedUser.password = textController[i].text;
-                              break;
-                            case 4:
-                              _loggedUser.gender = chosenValue!;
-                              break;
-                            case 5:
-                              _loggedUser.ewallet = int.parse(
-                                textController[i].text,
-                              );
-                              break;
-                            // Add other cases (password, gender, etc.) as needed
-                          }
-                        }
-                      });
-
-                      // setState(() {
-                    },
-                  ),
-                ],
-              ),
+                    TweenAnimationBuilder<double>(
+                      tween: Tween<double>(begin: 80, end: isEditing ? 10 : 80),
+                      duration: Duration(milliseconds: 600),
+                      curve: Curves.easeInOutBack,
+                      builder: (context, value, child) {
+                        return Container(
+                          decoration: BoxDecoration(),
+                          clipBehavior: Clip.hardEdge,
+                          width: 375.0,
+                          padding: EdgeInsets.all(10),
+                          height: value,
+                          child: FilledButton.icon(
+                            icon: isEditing
+                                ? SizedBox.shrink()
+                                : Icon(Icons.logout),
+                            onPressed: () {},
+                            label: isEditing
+                                ? SizedBox.shrink()
+                                : Text('Logout'),
+                            style: FilledButton.styleFrom(
+                              backgroundColor:
+                                  theme.colorScheme.secondaryContainer,
+                              foregroundColor: theme.colorScheme.onSecondary,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
         ),
@@ -316,116 +520,116 @@ class _ProfileIndexState extends State<ProfileIndex> {
   }
 }
 
-//  children: [
-//                   for (int i = 0; i < textController.length; i++)
-//                     Focus(
-//                       //change the animation of the UI (Shrinks the Shape)
-//                       onFocusChange: (hasFocus) {
-//                         if (hasFocus) {
-//                           setState(() {
-//                             _containerHeight = 30;
-//                             _photoSize = 0;
-//                             _nameSize = 0;
-//                           });
-//                           debugPrint('Its Focused');
-//                         } else {
-//                           setState(() {
-//                             _containerHeight = 300;
-//                             _photoSize = 50;
-//                             _nameSize = 22;
-//                           });
-//                         }
-//                       },
-//                       // if its Gender Section change to DropDown list else display TextField
-//                       child: i == 4
-//                           ? DropdownButton(
-//                               hint: Text(chosenValue!.name),
-//                               items: dropDownItems,
-//                               onChanged: (value) {
-//                                 setState(() {
-//                                   chosenValue = value;
-//                                   debugPrint(value.toString());
-//                                 });
-//                                 // debugPrint(value.toString());
-//                                 // debug
-//                               },
-//                             )
-//                           : FormEditableTextfield(
-//                               loggedUserValues: _loggedUserValues[i],
-//                               textController: textController[i],
-//                               textSection: _textSection[i],
-//                               isHidden: switch (i) {
-//                                 3 => true,
-//                                 _ => false,
-//                               },
-//                               textInputType: switch (i) {
-//                                 0 => TextInputType.name,
-//                                 1 || 5 => TextInputType.phone,
-//                                 2 => TextInputType.emailAddress,
-//                                 _ => TextInputType.text,
-//                               },
-//                               maxLength: switch (i) {
-//                                 //index of List => maxlength Value
-//                                 0 => 15,
-//                                 1 => 11,
-//                                 4 => 30,
-//                                 5 => 13,
-//                                 _ => null,
-//                               },
-//                               validator: (value) {
-//                                 return switch (i) {
-//                                   0 =>
-//                                     (value != null && value.length < 2)
-//                                         ? 'Did not reached the amount of characters need'
-//                                         : null,
-//                                   1 =>
-//                                     (value != null && value.length < 12)
-//                                         ? 'Did not reached the amount of characters need'
-//                                         : null,
-//                                   2 =>
-//                                     (value == null || value.isEmpty)
-//                                         ? 'Email is required'
-//                                         : (value.contains('@') &&
-//                                               value.endsWith('.com') ^
-//                                                   value.endsWith('.ph'))
-//                                         ? null
-//                                         : 'Invalid email',
+  //  children: [
+  //                   for (int i = 0; i < textController.length; i++)
+  //                     Focus(
+  //                       //change the animation of the UI (Shrinks the Shape)
+  //                       onFocusChange: (hasFocus) {
+  //                         if (hasFocus) {
+  //                           setState(() {
+  //                             _containerHeight = 30;
+  //                             _photoSize = 0;
+  //                             _nameSize = 0;
+  //                           });
+  //                           debugPrint('Its Focused');
+  //                         } else {
+  //                           setState(() {
+  //                             _containerHeight = 300;
+  //                             _photoSize = 50;
+  //                             _nameSize = 22;
+  //                           });
+  //                         }
+  //                       },
+  //                       // if its Gender Section change to DropDown list else display TextField
+  //                       child: i == 4
+  //                           ? DropdownButton(
+  //                               hint: Text(chosenValue!.name),
+  //                               items: dropDownItems,
+  //                               onChanged: (value) {
+  //                                 setState(() {
+  //                                   chosenValue = value;
+  //                                   debugPrint(value.toString());
+  //                                 });
+  //                                 // debugPrint(value.toString());
+  //                                 // debug
+  //                               },
+  //                             )
+  //                           : FormEditableTextfield(
+  //                               loggedUserValues: _loggedUserValues[i],
+  //                               textController: textController[i],
+  //                               textSection: _textSection[i],
+  //                               isHidden: switch (i) {
+  //                                 3 => true,
+  //                                 _ => false,
+  //                               },
+  //                               textInputType: switch (i) {
+  //                                 0 => TextInputType.name,
+  //                                 1 || 5 => TextInputType.phone,
+  //                                 2 => TextInputType.emailAddress,
+  //                                 _ => TextInputType.text,
+  //                               },
+  //                               maxLength: switch (i) {
+  //                                 //index of List => maxlength Value
+  //                                 0 => 15,
+  //                                 1 => 11,
+  //                                 4 => 30,
+  //                                 5 => 13,
+  //                                 _ => null,
+  //                               },
+  //                               validator: (value) {
+  //                                 return switch (i) {
+  //                                   0 =>
+  //                                     (value != null && value.length < 2)
+  //                                         ? 'Did not reached the amount of characters need'
+  //                                         : null,
+  //                                   1 =>
+  //                                     (value != null && value.length < 12)
+  //                                         ? 'Did not reached the amount of characters need'
+  //                                         : null,
+  //                                   2 =>
+  //                                     (value == null || value.isEmpty)
+  //                                         ? 'Email is required'
+  //                                         : (value.contains('@') &&
+  //                                               value.endsWith('.com') ^
+  //                                                   value.endsWith('.ph'))
+  //                                         ? null
+  //                                         : 'Invalid email',
 
-//                                   _ => null,
-//                                 };
-//                               },
-//                               onChanged: (value) {
-//                                 setState(() {
-//                                   //updates the list and textbox value not the actual object that used on the pages
-//                                   _loggedUserValues[i] = value;
+  //                                   _ => null,
+  //                                 };
+  //                               },
+  //                               onChanged: (value) {
+  //                                 setState(() {
+  //                                   //updates the list and textbox value not the actual object that used on the pages
+  //                                   _loggedUserValues[i] = value;
 
-//                                   //updates the object for all pages
-//                                   switch (i) {
-//                                     case 0:
-//                                       _loggedUser.nickname = value;
-//                                       break;
-//                                     case 1:
-//                                       _loggedUser.phoneNumber =
-//                                           int.tryParse(value) ??
-//                                           _loggedUser.phoneNumber;
-//                                       break;
-//                                     case 2:
-//                                       _loggedUser.email = value;
-//                                       break;
-//                                     // Add other cases (password, gender, etc.) as needed
-//                                   }
-//                                 });
-//                               },
-//                             ),
-//                     ),
+  //                                   //updates the object for all pages
+  //                                   switch (i) {
+  //                                     case 0:
+  //                                       _loggedUser.nickname = value;
+  //                                       break;
+  //                                     case 1:
+  //                                       _loggedUser.phoneNumber =
+  //                                           int.tryParse(value) ??
+  //                                           _loggedUser.phoneNumber;
+  //                                       break;
+  //                                     case 2:
+  //                                       _loggedUser.email = value;
+  //                                       break;
+  //                                     // Add other cases (password, gender, etc.) as needed
+  //                                   }
+  //                                 });
+  //                               },
+  //                             ),
+  //                     ),
 
-//                   PrimaryButton(label: 'Save Details'),
-//                 ],
-//               ),
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
+  //                   PrimaryButton(label: 'Save Details'),
+  //                 ],
+  //               ),
+  //             ),
+  //           ),
+  //         ],
+  //       ),
+  //     );
+  //   }
+  // }
