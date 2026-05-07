@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/pages/05-home-page/index/account_index.dart';
 import 'package:myapp/pages/05-home-page/index/home_index.dart';
 import 'package:myapp/pages/05-home-page/index/news_index.dart';
 import 'package:myapp/pages/05-home-page/index/profile_index.dart';
+import 'package:myapp/pages/05-home-page/index/support_index.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -26,8 +28,8 @@ class _HomePageState extends State<HomePage> {
     final List<Widget> pages = [
       HomeIndex(),
       NewsIndex(),
-      Text('Account'),
-      Text('Support'),
+      AccountIndex(),
+      SupportIndex(), //pending
       ProfileIndex(),
     ];
 

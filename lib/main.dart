@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:myapp/pages/01-login/login_page.dart';
 import 'package:myapp/pages/02-signup/signup_page.dart';
@@ -11,7 +12,13 @@ import 'package:myapp/design-system/design_system.dart';
 import 'package:myapp/pages/05-home-page/home_page.dart';
 import 'package:myapp/pages/05-home-page/index/news_content.dart';
 
-void main() {
+void main() async {
+  // 1. Mandatory for native platform calls before runApp
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // 2. Lock the orientation to portrait
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+
   //RunApp calling the myApp Class
   runApp(const MyApp());
 }

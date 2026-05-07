@@ -34,7 +34,7 @@ class _HomeIndexState extends State<HomeIndex> {
               ),
             ),
 
-            SizedBox(height: 28.0),
+            const SizedBox(height: 28.0),
 
             Align(
               alignment: Alignment.bottomLeft,
@@ -45,7 +45,7 @@ class _HomeIndexState extends State<HomeIndex> {
               ),
             ),
 
-            SizedBox(height: 26.0),
+            const SizedBox(height: 26.0),
 
             Align(
               alignment: Alignment.centerLeft,
@@ -55,7 +55,7 @@ class _HomeIndexState extends State<HomeIndex> {
               ),
             ),
 
-            SizedBox(height: 13.0),
+            const SizedBox(height: 13.0),
 
             if (accountList.isNotEmpty)
               Expanded(
@@ -74,7 +74,7 @@ class _HomeIndexState extends State<HomeIndex> {
                           },
                         ),
                       ),
-                      SizedBox(height: 26),
+                      const SizedBox(height: 26),
                     ],
                   ],
                 ),
@@ -83,7 +83,6 @@ class _HomeIndexState extends State<HomeIndex> {
               Expanded(
                 child: Container(
                   alignment: Alignment.center,
-
                   child: Text('No linked account'),
                 ),
               ),

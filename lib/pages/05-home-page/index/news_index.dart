@@ -76,7 +76,8 @@ class _NewsIndexState extends State<NewsIndex> {
           newsInformation: NewsInformation(
             dateNum: '03-22-2026',
             dateWord: 'March-22',
-            title: 'Notice of Scheduled Interconnection: Brgy. Mayapa Area',
+            title:
+                'CWD Celebrates World Water Day 2026: Glacier Preservation Awareness',
             status: status['ongoing'],
             paragraph1: ['placeholder paragraph'],
           ),

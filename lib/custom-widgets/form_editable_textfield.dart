@@ -9,6 +9,7 @@ class FormEditableTextfield extends StatefulWidget {
     this.maxLength,
     required this.validator,
     required this.onChanged,
+    required this.onSaved,
     this.isHidden = false,
     required this.textInputType,
   });
@@ -19,6 +20,7 @@ class FormEditableTextfield extends StatefulWidget {
   final int? maxLength;
   final String? Function(String? value)? validator;
   final void Function(String value)? onChanged;
+  final void Function(String? value)? onSaved;
   final bool isHidden;
   final TextInputType textInputType;
 
@@ -39,6 +41,7 @@ class _FormEditableTextfieldState extends State<FormEditableTextfield> {
       autovalidateMode: AutovalidateMode.onUserInteraction,
       validator: widget.validator,
       onChanged: widget.onChanged,
+      onSaved: widget.onSaved,
       decoration: InputDecoration(
         label: Text(widget.textSection),
         helperStyle: theme.textTheme.labelSmall!.copyWith(
