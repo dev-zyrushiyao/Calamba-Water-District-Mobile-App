@@ -134,10 +134,9 @@ class _ProfileIndexState extends State<ProfileIndex> {
             ? 'Invalid email: cannot start with special character'
             : (value.contains(_specialCharacterWithException))
             ? 'Invalid character detected'
-            : (_specialCharacterAtTheEnd.hasMatch(value.characters.last))
-            ? 'Invalid email format'
-            : (value.contains('@') &&
-                  value.endsWith('.com') ^ value.endsWith('.ph'))
+            : (!value.contains('@'))
+            ? 'Email require @ symbol'
+            : (value.endsWith('.com')) || (value.endsWith('.ph'))
             ? null
             : 'Invalid Email format',
       3 =>

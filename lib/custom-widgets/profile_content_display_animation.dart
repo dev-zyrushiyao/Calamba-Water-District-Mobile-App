@@ -28,12 +28,12 @@ class _ProfileContentDisplayAnimationState
     return Align(
       alignment: Alignment.bottomCenter,
       child: FittedBox(
-        fit: BoxFit.scaleDown,
+        fit: BoxFit.contain,
         child: Column(
           children: [
             TweenAnimationBuilder<double>(
-              tween: Tween<double>(begin: 1, end: widget.photoSize),
-              duration: Duration(seconds: 1),
+              tween: Tween<double>(begin: 10, end: widget.photoSize),
+              duration: Duration(milliseconds: 300),
               curve: Curves.easeOutBack,
               builder: (context, value, child) {
                 return CircleAvatar(
@@ -46,8 +46,8 @@ class _ProfileContentDisplayAnimationState
             const SizedBox(height: 20),
 
             TweenAnimationBuilder<double>(
-              tween: Tween<double>(begin: 1, end: widget.nameSize),
-              duration: const Duration(seconds: 1),
+              tween: Tween<double>(begin: 10, end: widget.nameSize),
+              duration: const Duration(milliseconds: 300),
               curve: Curves.linear,
               builder: (context, value, child) {
                 return widget.containerHeight < 150
