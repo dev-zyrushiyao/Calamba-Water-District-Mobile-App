@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/pages/05-home-page/index/account_index.dart';
+import 'package:myapp/pages/05-home-page/index/account/account_index.dart';
 import 'package:myapp/pages/05-home-page/index/home_index.dart';
 import 'package:myapp/pages/05-home-page/index/news_index.dart';
 import 'package:myapp/pages/05-home-page/index/profile_index.dart';

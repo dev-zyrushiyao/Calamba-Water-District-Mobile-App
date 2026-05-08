@@ -10,7 +10,8 @@ import 'package:myapp/pages/03-forgot-password/recovery_result_page.dart';
 import 'package:myapp/pages/04-on-boarding/boarding_page.dart';
 import 'package:myapp/design-system/design_system.dart';
 import 'package:myapp/pages/05-home-page/home_page.dart';
-import 'package:myapp/pages/05-home-page/index/news_content.dart';
+import 'package:myapp/pages/05-home-page/index/account/link_account_page.dart';
+import 'package:myapp/pages/05-home-page/index/news_content_page.dart';
 
 void main() async {
   // 1. Mandatory for native platform calls before runApp
@@ -60,6 +61,7 @@ class MyApp extends StatelessWidget {
         '/boarding': (context) => const BoardingPageOne(),
         '/home': (context) => const HomePage(),
         '/newscontent': (context) => const NewsContentPage(),
+        '/linkaccount': (context) => const LinkAccountPage(),
       },
     );
   }

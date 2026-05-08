@@ -27,9 +27,6 @@ class _ProfileIndexState extends State<ProfileIndex> {
   //r'''[!#$%^&*()\-+~`\[\]|;:{}'" <>?,/\\]''',
   final RegExp _specialCharacterWithException = RegExp(r'[\s!-\-/:-?\[-^`|~]');
 
-  //special character with numbers
-  final RegExp _specialCharacterAtTheEnd = RegExp(r'');
-
   //Shape animation
   double _containerHeight = 0;
   double _photoSize = 0;
