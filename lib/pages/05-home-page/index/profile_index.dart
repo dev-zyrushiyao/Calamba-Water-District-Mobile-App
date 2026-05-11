@@ -32,10 +32,10 @@ class _ProfileIndexState extends State<ProfileIndex> {
   double _photoSize = 0;
   double _nameSize = 0;
 
-  List _loggedUserValues = [];
+  List<dynamic> _loggedUserValues = [];
   List<String> _textSection = [];
   final List<TextEditingController> textController = [];
-  final List<DropdownMenuItem<dynamic>> dropDownItems = [];
+  final List<DropdownMenuItem<Gender>> dropDownItems = [];
   Gender? chosenValue;
 
   //toggle editing mode
@@ -67,7 +67,7 @@ class _ProfileIndexState extends State<ProfileIndex> {
     _nameSize = 10;
   }
 
-  void saveFormInformationFrom(int index, String value, Gender chosenValue) {
+  void saveFormInformationFrom(int index, String value, Gender? chosenValue) {
     switch (index) {
       case 0:
         _loggedUser.nickname = value;
@@ -83,7 +83,7 @@ class _ProfileIndexState extends State<ProfileIndex> {
         _loggedUser.password = value;
         break;
       case 4:
-        _loggedUser.gender = chosenValue;
+        _loggedUser.gender = chosenValue!;
         break;
       case 5:
         _loggedUser.ewallet = int.tryParse(value) ?? 0;
@@ -340,7 +340,7 @@ class _ProfileIndexState extends State<ProfileIndex> {
                                               style: theme.textTheme.bodyLarge,
                                             ),
                                           ),
-                                          DropdownButton(
+                                          DropdownButtonFormField<Gender>(
                                             hint: Text(
                                               //Gender Value of User Object will be capitalized for UI Display but the value Remains Enum
                                               //for example _LoggedUser.gender == Gender.male -> it will be converted to Male to Display
@@ -350,6 +350,18 @@ class _ProfileIndexState extends State<ProfileIndex> {
                                             ),
                                             items: dropDownItems,
                                             isExpanded: true,
+                                            onSaved: (value) {
+                                              //Saves the form values to User Object (loggedUser)
+                                              saveFormInformationFrom(
+                                                index,
+                                                '',
+                                                value!,
+                                              );
+
+                                              //re-updates the display
+                                              _loggedUserValues[index] =
+                                                  value.name;
+                                            },
                                             onChanged: (value) {
                                               setState(() {
                                                 //Value is Enum (example: Gender.Male)
@@ -381,6 +393,8 @@ class _ProfileIndexState extends State<ProfileIndex> {
                                           value!,
                                           chosenValue!,
                                         );
+
+                                        debugPrint('The value is $value');
 
                                         //re-updates the display
                                         _loggedUserValues[index] =
