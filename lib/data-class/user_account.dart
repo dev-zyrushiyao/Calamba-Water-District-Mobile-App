@@ -1,4 +1,4 @@
-import 'package:myapp/data-class/linked_water_account.dart';
+import 'package:myapp/data-class/water_account.dart';
 import 'package:myapp/data-class/constants/enums.dart';
 
 class UserAccount {
@@ -8,7 +8,7 @@ class UserAccount {
   String email;
   String password;
   int ewallet;
-  List<LinkedWaterAccount>? linkedAccounts;
+  List<WaterAccount> linkedAccounts;
 
   UserAccount(
     this.nickname,

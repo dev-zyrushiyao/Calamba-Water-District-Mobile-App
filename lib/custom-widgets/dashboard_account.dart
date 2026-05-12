@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/custom-widgets/primary_button.dart';
-import 'package:myapp/data-class/linked_water_account.dart';
+import 'package:myapp/data-class/water_account.dart';
 
 class DashboardDisplay extends StatelessWidget {
   const DashboardDisplay({
@@ -9,7 +9,7 @@ class DashboardDisplay extends StatelessWidget {
     required this.primaryButton,
   });
 
-  final LinkedWaterAccount waterAccount;
+  final WaterAccount waterAccount;
   final PrimaryButton primaryButton;
 
   Color getStatusColor(bool isActive) {
@@ -85,7 +85,7 @@ class DashboardDisplay extends StatelessWidget {
                 ],
               ),
               Text(
-                'Previous Bill: ${waterAccount.balance}',
+                'Previous Bill: ${waterAccount.previousBill}',
                 style: Theme.of(context).textTheme.labelSmall,
               ),
               Text(
@@ -101,7 +101,9 @@ class DashboardDisplay extends StatelessWidget {
             spacing: 5,
             children: [
               Text(
-                'Due in ${waterAccount.dueDay} days',
+                waterAccount.dueDay == 0
+                    ? 'Due today'
+                    : 'Due in ${waterAccount.dueDay} days',
                 style: Theme.of(
                   context,
                 ).textTheme.labelSmall!.copyWith(fontWeight: FontWeight.w600),

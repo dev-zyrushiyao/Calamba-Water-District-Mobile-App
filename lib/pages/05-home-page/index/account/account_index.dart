@@ -15,7 +15,7 @@ class _AccountIndexState extends State<AccountIndex>
     with SingleTickerProviderStateMixin {
   final _loggedUser = AccountType().owner;
 
-  late final controller = SlidableController(this);
+  late final _controller = SlidableController(this);
   double _actionExtent = 0.0;
 
   double? rotation;
@@ -24,13 +24,18 @@ class _AccountIndexState extends State<AccountIndex>
   void initState() {
     super.initState();
 
-    rotation = 0;
-
-    controller.animation.addListener(() {
+    //sliderAnimation
+    _controller.animation.addListener(() {
       setState(() {
-        _actionExtent = controller.animation.value;
+        _actionExtent = _controller.animation.value;
       });
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
   }
 
   @override
@@ -44,18 +49,28 @@ class _AccountIndexState extends State<AccountIndex>
           children: [
             const SizedBox(height: 85.0),
 
-            // Dismissible(key: key, child: Text('Text Widget'))
-            Headline(
-              headline: 'My Account',
-              subHeadline:
-                  'Manage your active water connections and service details',
+            Align(
+              alignment: Alignment.bottomLeft,
+              child: Headline(
+                headline: 'My Account',
+                subHeadline:
+                    'Manage your active water connections and service details',
+              ),
             ),
 
             const SizedBox(height: 30),
             //Outer Container
             Container(
-              color: Color(0xFFEEEEFA),
               padding: EdgeInsets.symmetric(horizontal: 16, vertical: 32),
+              decoration: BoxDecoration(
+                color: Color(0xFFEEEEFA),
+                border: BoxBorder.all(
+                  color: const Color(0xFFC8C8E5),
+                  width: 3,
+                  strokeAlign: -1.0,
+                ),
+                borderRadius: BorderRadius.circular(13.0),
+              ),
               //Inner Container
               child: Container(
                 padding: EdgeInsets.zero,
@@ -72,7 +87,7 @@ class _AccountIndexState extends State<AccountIndex>
                   children: [
                     Slidable(
                       key: const ValueKey(0),
-                      controller: controller,
+                      controller: _controller,
                       endActionPane: ActionPane(
                         motion: ScrollMotion(),
                         children: [

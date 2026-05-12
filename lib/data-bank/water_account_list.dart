@@ -1,8 +1,10 @@
-import 'package:myapp/data-class/linked_water_account.dart';
+import 'package:myapp/data-class/water_account.dart';
 
-class LinkedAccountList {
-  final List accounts = [
-    LinkedWaterAccount(
+class WaterAccountList {
+  // Simulates database of accounts
+  // unused assets for testing purposes
+  final List<WaterAccount> accounts = [
+    WaterAccount(
       accountName: 'Zyrus Hiyao',
       accountNumber: '591-482-637',
       isActive: true,
@@ -12,7 +14,7 @@ class LinkedAccountList {
       balance: 346.00,
     ),
 
-    LinkedWaterAccount(
+    WaterAccount(
       accountName: 'Paulo Nase',
       accountNumber: '591-482-637',
       isActive: true,
@@ -22,7 +24,7 @@ class LinkedAccountList {
       balance: 346.00,
     ),
 
-    LinkedWaterAccount(
+    WaterAccount(
       accountName: 'Felip Suson',
       accountNumber: '415-882-361',
       isActive: true,
@@ -32,7 +34,7 @@ class LinkedAccountList {
       balance: 235.00,
     ),
 
-    LinkedWaterAccount(
+    WaterAccount(
       accountName: 'Stell Ajero',
       accountNumber: '415-882-361',
       isActive: true,
@@ -42,7 +44,7 @@ class LinkedAccountList {
       balance: 235.00,
     ),
 
-    LinkedWaterAccount(
+    WaterAccount(
       accountName: 'Justin De Dios',
       accountNumber: '415-882-361',
       isActive: true,

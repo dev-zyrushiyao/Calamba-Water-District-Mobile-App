@@ -4,7 +4,7 @@ class FormEditableTextfield extends StatefulWidget {
   const FormEditableTextfield({
     super.key,
     required this.loggedUserValues,
-    required this.textController,
+    this.textController,
     required this.textSection,
     this.maxLength,
     required this.validator,
@@ -15,8 +15,8 @@ class FormEditableTextfield extends StatefulWidget {
   });
 
   final dynamic loggedUserValues;
-  final TextEditingController textController;
-  final String textSection;
+  final TextEditingController? textController;
+  final String? textSection;
   final int? maxLength;
   final String? Function(String? value)? validator;
   final void Function(String value)? onChanged;
@@ -43,7 +43,7 @@ class _FormEditableTextfieldState extends State<FormEditableTextfield> {
       onChanged: widget.onChanged,
       onSaved: widget.onSaved,
       decoration: InputDecoration(
-        label: Text(widget.textSection),
+        label: widget.textSection != null ? Text(widget.textSection!) : null,
         helperStyle: theme.textTheme.labelSmall!.copyWith(
           color: Theme.of(context).colorScheme.onPrimaryFixedVariant,
         ),

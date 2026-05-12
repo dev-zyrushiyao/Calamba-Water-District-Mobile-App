@@ -1,6 +1,6 @@
-//LinkedWaterAccount -> LinkedAccountList -> HomeIndex -> DashBoardAccount
+//WaterAccount -> LinkedAccountList -> HomeIndex -> DashBoardAccount
 
-class LinkedWaterAccount {
+class WaterAccount {
   //Widget of Accounts
 
   final String accountName;
@@ -11,10 +11,10 @@ class LinkedWaterAccount {
   final int dueDay;
   final double balance;
 
-  LinkedWaterAccount({
+  WaterAccount({
     required this.accountName,
     required this.accountNumber,
-    required this.isActive,
+    this.isActive = true,
     required this.previousBill,
     required this.lastReading,
     required this.dueDay,

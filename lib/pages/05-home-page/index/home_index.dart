@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:myapp/custom-widgets/dashboard_account.dart';
 import 'package:myapp/custom-widgets/headline.dart';
-import 'package:myapp/data-bank/linked_account_list.dart';
+import 'package:myapp/data-bank/water_account_list.dart';
 import 'package:myapp/custom-widgets/primary_button.dart';
 import 'package:myapp/data-bank/account_type.dart';
+import 'package:myapp/data-class/water_account.dart';
 
 class HomeIndex extends StatefulWidget {
   const HomeIndex({super.key});
@@ -17,9 +18,14 @@ class _HomeIndexState extends State<HomeIndex> {
   final _loggedUser = AccountType().owner;
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     //accounts to display
-    final List<dynamic> accountList = LinkedAccountList().accounts;
 
     return SafeArea(
       child: Padding(
@@ -57,11 +63,11 @@ class _HomeIndexState extends State<HomeIndex> {
 
             const SizedBox(height: 13.0),
 
-            if (accountList.isNotEmpty)
+            if (_loggedUser.linkedAccounts.isNotEmpty)
               Expanded(
                 child: ListView(
                   children: [
-                    for (var item in accountList) ...[
+                    for (var item in _loggedUser.linkedAccounts) ...[
                       DashboardDisplay(
                         waterAccount: item,
                         primaryButton: PrimaryButton(
@@ -69,8 +75,9 @@ class _HomeIndexState extends State<HomeIndex> {
                           width: 92,
                           height: 43,
                           onPressed: () {
+                            debugPrint('Pay Bill button is pressed!');
                             // debugPrint('${item.accountName}');
-                            debugPrint('${accountList[2].accountName}');
+                            // debugPrint('${accountList[2].accountName}');
                           },
                         ),
                       ),
@@ -83,7 +90,10 @@ class _HomeIndexState extends State<HomeIndex> {
               Expanded(
                 child: Container(
                   alignment: Alignment.center,
-                  child: Text('No linked account'),
+                  child: Text(
+                    'No linked account',
+                    style: theme.textTheme.bodyLarge,
+                  ),
                 ),
               ),
           ],

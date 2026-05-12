@@ -67,7 +67,7 @@ class _ProfileIndexState extends State<ProfileIndex> {
     _nameSize = 10;
   }
 
-  void saveFormInformationFrom(int index, String value, Gender? chosenValue) {
+  void saveFormInformationFrom(int index, String value, [Gender? chosenValue]) {
     switch (index) {
       case 0:
         _loggedUser.nickname = value;
@@ -352,15 +352,18 @@ class _ProfileIndexState extends State<ProfileIndex> {
                                             isExpanded: true,
                                             onSaved: (value) {
                                               //Saves the form values to User Object (loggedUser)
-                                              saveFormInformationFrom(
-                                                index,
-                                                '',
-                                                value!,
-                                              );
+                                              //saves from the index [4] which is the Gender section
+                                              if (value != null) {
+                                                saveFormInformationFrom(
+                                                  index,
+                                                  '',
+                                                  value,
+                                                );
 
-                                              //re-updates the display
-                                              _loggedUserValues[index] =
-                                                  value.name;
+                                                //re-updates the list for UI display
+                                                _loggedUserValues[index] =
+                                                    value.name;
+                                              }
                                             },
                                             onChanged: (value) {
                                               setState(() {
@@ -387,18 +390,15 @@ class _ProfileIndexState extends State<ProfileIndex> {
                                         return validateInputFrom(value, index);
                                       },
                                       onSaved: (value) {
-                                        //Saves the form values to User Object (loggedUser)
-                                        saveFormInformationFrom(
-                                          index,
-                                          value!,
-                                          chosenValue!,
-                                        );
+                                        //Saves the form values to User Object (loggedUser) except the Gender secton since it is a dropdown list
+                                        //saves only from the index [0,1,2,3,5]
+                                        if (value != null) {
+                                          saveFormInformationFrom(index, value);
 
-                                        debugPrint('The value is $value');
-
-                                        //re-updates the display
-                                        _loggedUserValues[index] =
-                                            textController[index].text;
+                                          //re-updates the display
+                                          //_LoggedUserValues now equals to the value saved on form instead of controller text.
+                                          _loggedUserValues[index] = value;
+                                        }
                                       },
                                       onChanged: (_) {},
                                     );
