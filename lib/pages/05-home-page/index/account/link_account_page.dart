@@ -32,6 +32,9 @@ class _LinkAccountPageState extends State<LinkAccountPage>
     'accountName': '',
   };
 
+  bool _isAccountLinkedFull = false;
+  final int _maxAccountToLink = 5;
+
   //method to generate number using Generic Type
   T generateNumber<T extends num>({
     required int minValue,
@@ -477,6 +480,16 @@ class _LinkAccountPageState extends State<LinkAccountPage>
                         border: OutlineInputBorder(),
                       ),
                     ),
+
+                    _isAccountLinkedFull
+                        ? Text(
+                            'Message: You have reached the maximum number of linked service connections.',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.red,
+                            ),
+                          )
+                        : SizedBox.shrink(),
                   ],
                 ),
               ),
@@ -485,9 +498,14 @@ class _LinkAccountPageState extends State<LinkAccountPage>
             PrimaryButton(
               label: 'Link Account',
               onPressed: () {
-                //if validation passed, the modalBottomSheet appears and will trigger the linking process and the loading text animation
-                //Saving form is triggered from the methood modalContent(setModalState, theme) that returns a widget used for ModalBottomSheet content.
-                if (_formKey.currentState!.validate()) {
+                if (_loggedUser.linkedAccounts.length == _maxAccountToLink) {
+                  //if it reaches maximum linked account , display error
+                  setState(() {
+                    _isAccountLinkedFull = true;
+                  });
+                } else if (_formKey.currentState!.validate()) {
+                  //if validation passed, the modalBottomSheet appears and will trigger the linking process and the loading text animation
+                  //Saving form is triggered from the methood modalContent(setModalState, theme) that returns a widget used for ModalBottomSheet content.
                   //Start linking process
                   startLinkingProcess();
                   //Start the timer for text loading animation

@@ -1,5 +1,5 @@
 import 'package:myapp/data-class/user_account.dart';
-import 'package:myapp/data-class/constants/enums.dart';
+import 'package:myapp/data-class/constants/gender_enum.dart';
 
 class AccountType {
   //private constructor

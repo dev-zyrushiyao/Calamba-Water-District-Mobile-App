@@ -31,6 +31,7 @@ class _ProfileContentDisplayAnimationState
         fit: BoxFit.contain,
         child: Column(
           children: [
+            //Photo Display
             TweenAnimationBuilder<double>(
               tween: Tween<double>(begin: 10, end: widget.photoSize),
               duration: Duration(milliseconds: 300),
@@ -45,6 +46,7 @@ class _ProfileContentDisplayAnimationState
 
             const SizedBox(height: 20),
 
+            //Name Display
             TweenAnimationBuilder<double>(
               tween: Tween<double>(begin: 10, end: widget.nameSize),
               duration: const Duration(milliseconds: 300),

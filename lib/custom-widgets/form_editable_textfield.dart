@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class FormEditableTextfield extends StatefulWidget {
   const FormEditableTextfield({
     super.key,
-    required this.loggedUserValues,
+
     this.textController,
     required this.textSection,
     this.maxLength,
@@ -12,9 +12,9 @@ class FormEditableTextfield extends StatefulWidget {
     required this.onSaved,
     this.isHidden = false,
     required this.textInputType,
+    this.suffixIcon,
   });
 
-  final dynamic loggedUserValues;
   final TextEditingController? textController;
   final String? textSection;
   final int? maxLength;
@@ -23,6 +23,7 @@ class FormEditableTextfield extends StatefulWidget {
   final void Function(String? value)? onSaved;
   final bool isHidden;
   final TextInputType textInputType;
+  final Widget? suffixIcon;
 
   @override
   State<FormEditableTextfield> createState() => _FormEditableTextfieldState();
@@ -43,6 +44,7 @@ class _FormEditableTextfieldState extends State<FormEditableTextfield> {
       onChanged: widget.onChanged,
       onSaved: widget.onSaved,
       decoration: InputDecoration(
+        suffixIcon: widget.suffixIcon,
         label: widget.textSection != null ? Text(widget.textSection!) : null,
         helperStyle: theme.textTheme.labelSmall!.copyWith(
           color: Theme.of(context).colorScheme.onPrimaryFixedVariant,

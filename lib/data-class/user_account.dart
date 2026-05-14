@@ -1,5 +1,5 @@
 import 'package:myapp/data-class/water_account.dart';
-import 'package:myapp/data-class/constants/enums.dart';
+import 'package:myapp/data-class/constants/gender_enum.dart';
 
 class UserAccount {
   String nickname;

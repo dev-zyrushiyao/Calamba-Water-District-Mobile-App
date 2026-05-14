@@ -5,13 +5,13 @@ import 'package:myapp/custom-widgets/primary_button.dart';
 import 'package:myapp/custom-widgets/profile_content_display_animation.dart';
 
 import 'package:myapp/data-bank/account_type.dart';
-import 'package:myapp/data-class/constants/enums.dart';
+import 'package:myapp/data-class/constants/gender_enum.dart';
 
 import 'package:flutter/services.dart';
+import 'package:myapp/data-class/constants/text_section_enum.dart';
+import 'package:myapp/data-class/user_account.dart';
 import 'package:myapp/services/profile_service.dart';
 import 'package:myapp/services/user_interface_service.dart';
-
-import 'package:myapp/data-class/user_account.dart';
 
 class ProfileIndex extends StatefulWidget {
   const ProfileIndex({super.key});
@@ -22,7 +22,7 @@ class ProfileIndex extends StatefulWidget {
 
 class _ProfileIndexState extends State<ProfileIndex> {
   //logged user account
-  final _loggedUser = AccountType().owner;
+  final UserAccount _loggedUser = AccountType().owner;
 
   //services
   final _profileService = ProfileService();
@@ -37,9 +37,10 @@ class _ProfileIndexState extends State<ProfileIndex> {
   Map<String, double> newSize = {};
 
   //list to display information from UI
-  List<dynamic> _loggedUserValues = [];
+  // final List<dynamic> _loggedUserValues = [];
+  Map<TextSection, dynamic> _loggedUserValues = {};
   //list of profile section
-  List<String> _textSection = [];
+  List<TextSection> _textSection = [];
 
   //controller
   final List<TextEditingController> _textController = [];
@@ -48,6 +49,9 @@ class _ProfileIndexState extends State<ProfileIndex> {
 
   //toggle editing mode
   bool _isEditing = false;
+
+  //toggle hidden character
+  bool _isHidden = true;
 
   //form validator
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -82,9 +86,7 @@ class _ProfileIndexState extends State<ProfileIndex> {
     );
 
     //controller dispose
-    for (var item in _textController) {
-      item.dispose();
-    }
+    _disposeControllers();
   }
 
   // ==================//
@@ -111,34 +113,28 @@ class _ProfileIndexState extends State<ProfileIndex> {
   }
 
   void _initializeTextSection() {
-    //section
-    _textSection = [
-      'Nickname',
-      'Phone Number',
-      'E-mail',
-      'Password',
-      'Gender',
-      'E-Wallet (GCash)',
-    ];
+    //make a copy of TextSection Enum in a List that will be looped through the Form
+    _textSection = TextSection.values;
   }
 
   void _initializeLoggedUserValues() {
-    //List of initial value of textfield from _LoggedUser Object
-    _loggedUserValues = [
-      _loggedUser.nickname,
-      _loggedUser.phoneNumber.toString().startsWith('9')
+    _loggedUserValues = {
+      TextSection.nickname: _loggedUser.nickname,
+      TextSection.phoneNumber:
+          _loggedUser.phoneNumber.toString().startsWith('9')
           ? '0${_loggedUser.phoneNumber}'
           : _loggedUser.phoneNumber.toString(),
-      _loggedUser.email,
-      _loggedUser.password,
-      _loggedUser.gender,
-      _loggedUser.ewallet,
-    ];
+      TextSection.email: _loggedUser.email,
+      TextSection.password: _loggedUser.password,
+      TextSection.gender: _loggedUser.gender,
+      TextSection.eWallet: _loggedUser.ewallet,
+    };
   }
 
   void _initializeTextControllers() {
     //initial value of textfield for UI Display
-    for (var item in _loggedUserValues) {
+    //add controller to the list
+    for (var item in _loggedUserValues.values) {
       _textController.add(TextEditingController(text: item.toString()));
     }
   }
@@ -155,6 +151,16 @@ class _ProfileIndexState extends State<ProfileIndex> {
         _nameSize = 22;
       });
     });
+  }
+
+  // ==================//
+  // Dispose methods   //
+  // ==================//
+
+  void _disposeControllers() {
+    for (var item in _textController) {
+      item.dispose();
+    }
   }
 
   //Main UI
@@ -186,7 +192,9 @@ class _ProfileIndexState extends State<ProfileIndex> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 //Edit Toggle Button
-                _buildEditButton(),
+                _buildEditButton(theme),
+
+                SizedBox(height: 20),
 
                 //Editing Form
                 _isEditing
@@ -200,7 +208,7 @@ class _ProfileIndexState extends State<ProfileIndex> {
                             separatorBuilder: (context, index) =>
                                 SizedBox(height: 20.0),
                             itemBuilder: (context, index) {
-                              return _textSection[index] == 'Gender'
+                              return _textSection[index] == TextSection.gender
                                   //if index is Gender section return a dropdown list
                                   ? _buildGenderDropDownButton(index, theme)
                                   //else show TextField
@@ -280,20 +288,24 @@ class _ProfileIndexState extends State<ProfileIndex> {
     );
   }
 
-  Widget _buildEditButton() {
+  Widget _buildEditButton(ThemeData theme) {
     return Container(
       alignment: Alignment.centerRight,
       child: TextButton.icon(
-        label: Text('Edit'),
+        label: Text(_isEditing ? 'Cancel' : 'Update Profile'),
         style: ButtonStyle(
-          backgroundColor: const WidgetStateProperty<Color>.fromMap(
-            <WidgetStatesConstraint, Color>{
-              WidgetState.selected: Colors.blue,
-              WidgetState.any: Colors.transparent,
-            },
+          foregroundColor: WidgetStateProperty.all(
+            _isEditing
+                ? theme.colorScheme.onPrimary
+                : theme.colorScheme.onSecondary,
+          ),
+
+          backgroundColor: WidgetStateProperty.all(
+            _isEditing ? Color(0xFFB4B5DB) : theme.colorScheme.primary,
           ),
         ),
-        icon: Icon(Icons.edit),
+
+        icon: Icon(_isEditing ? Icons.close : Icons.edit),
         onPressed: () {
           setState(() {
             //toggle editing mode
@@ -322,7 +334,10 @@ class _ProfileIndexState extends State<ProfileIndex> {
         children: [
           SizedBox(
             width: double.infinity,
-            child: Text(_textSection[index], style: theme.textTheme.bodyLarge),
+            child: Text(
+              _profileService.letterCapitalization(_textSection[index]),
+              style: theme.textTheme.bodyLarge,
+            ),
           ),
           DropdownButtonFormField<Gender>(
             hint: Text(_profileService.letterCapitalization(_chosenValue!)),
@@ -330,17 +345,16 @@ class _ProfileIndexState extends State<ProfileIndex> {
             isExpanded: true,
             onSaved: (value) {
               //Saves the form values to User Object (loggedUser)
-              //saves from the index [4] which is the Gender section
+              //saves only from the TextSection enum : _, _, _, _, gender , _
               if (value != null) {
                 _profileService.saveFormInformationFrom(
-                  _loggedUser,
-                  index,
-                  '',
-                  value,
+                  loggedUser: _loggedUser,
+                  textSection: _textSection[index],
+                  dropdownValue: value,
                 );
 
                 //re-updates the list for UI display
-                _loggedUserValues[index] = value.name;
+                _loggedUserValues[_textSection[index]] = value.name;
               }
             },
             onChanged: (value) {
@@ -355,26 +369,68 @@ class _ProfileIndexState extends State<ProfileIndex> {
     );
   }
 
+  Widget _buildIconPasswordButton(TextSection textSection) {
+    return IconButton(
+      onPressed: () {
+        setState(() {
+          //toggle Switch to hide and unhide password
+          _isHidden = !_isHidden;
+        });
+      },
+      icon:
+          //if the TextSection is TextSection.password
+          //check if the value of isHidden
+          //if true -> Hides the Password of Password field and use Visibility Off icon
+          //if false -> Show the password of the Password field and use Visibility On icon
+          _profileService.hideCharactersFrom(
+            textSection: textSection,
+            isHidden: _isHidden,
+          )
+          ? Icon(Icons.visibility_off)
+          : Icon(Icons.visibility),
+    );
+  }
+
   Widget _buildFormTextFields(int index) {
     return FormEditableTextfield(
-      loggedUserValues: _loggedUserValues[index],
       textController: _textController[index],
-      textSection: _textSection[index],
-      isHidden: _profileService.hideCharactersFrom(index),
-      textInputType: _profileService.setInputTypeFrom(index),
-      maxLength: _profileService.setMaxCharacterInputFrom(index),
+      textSection: _profileService.letterCapitalization(_textSection[index]),
+      isHidden: //Hides if character if the textfield is TextSection.password, toggle is trigger by suffix Icon:  __buildIconPasswordButton()
+      _profileService.hideCharactersFrom(
+        textSection: _textSection[index],
+        isHidden: _isHidden,
+      ),
+      textInputType: _profileService.setInputTypeFrom(_textSection[index]),
+      maxLength: _profileService.setMaxCharacterInputFrom(_textSection[index]),
+      //if textSection == password show an icon
+      suffixIcon: _textSection[index] == TextSection.password
+          ? _buildIconPasswordButton(_textSection[index])
+          : null,
       validator: (value) {
-        return _profileService.validateInputFrom(value, index);
+        return _profileService.validateInputFrom(
+          value: value,
+          textSection: _textSection[index],
+        );
       },
       onSaved: (value) {
         //Saves the form values to User Object (loggedUser) except the Gender secton since it is a dropdown list
-        //saves only from the index [0,1,2,3,5]
+        //saves only from the TextSection enum : nickname, phoneNumber, email, password, _ , eWallet
+        //onSaved() automatically loops all the values of the form to save
         if (value != null) {
-          _profileService.saveFormInformationFrom(_loggedUser, index, value);
+          _profileService.saveFormInformationFrom(
+            loggedUser: _loggedUser,
+            textSection: _textSection[index],
+            textFieldValue: value,
+          );
 
           //re-updates the display
+          //onSaved() automatically loops all the values of the form to save
           //_LoggedUserValues now equals to the value saved on form instead of controller text.
-          _loggedUserValues[index] = value;
+          //reset the password obscure -> isHidden variable back to default value : true
+          setState(() {
+            _loggedUserValues[_textSection[index]] = value;
+            _isHidden = true;
+          });
         }
       },
       onChanged: (_) {},
@@ -393,7 +449,7 @@ class _ProfileIndexState extends State<ProfileIndex> {
           child: SizedBox(
             width: double.infinity,
             child: Text(
-              '${_textSection[index]}:',
+              '${_profileService.letterCapitalization(_textSection[index])}:',
               style: theme.textTheme.bodyLarge!.copyWith(
                 fontWeight: FontWeight.bold,
               ),
@@ -408,7 +464,7 @@ class _ProfileIndexState extends State<ProfileIndex> {
             3 => SizedBox(
               width: double.infinity,
               child: Text(
-                '•' * _loggedUserValues[index].length,
+                '•' * _loggedUserValues[_textSection[index]].length,
                 style: theme.textTheme.bodyLarge,
               ),
             ),
@@ -424,7 +480,7 @@ class _ProfileIndexState extends State<ProfileIndex> {
             _ => SizedBox(
               width: double.infinity,
               child: Text(
-                '${_loggedUserValues[index]}',
+                '${_loggedUserValues[_textSection[index]]}',
                 textAlign: TextAlign.left,
                 style: theme.textTheme.bodyLarge,
               ),

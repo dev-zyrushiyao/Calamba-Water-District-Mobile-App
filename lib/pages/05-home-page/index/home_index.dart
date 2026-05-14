@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:myapp/custom-widgets/dashboard_account.dart';
 import 'package:myapp/custom-widgets/headline.dart';
-import 'package:myapp/data-bank/water_account_list.dart';
 import 'package:myapp/custom-widgets/primary_button.dart';
 import 'package:myapp/data-bank/account_type.dart';
-import 'package:myapp/data-class/water_account.dart';
 
 class HomeIndex extends StatefulWidget {
   const HomeIndex({super.key});
