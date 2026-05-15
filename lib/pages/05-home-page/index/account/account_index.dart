@@ -3,9 +3,14 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:myapp/custom-widgets/colored_container.dart';
 
 import 'package:myapp/custom-widgets/headline.dart';
+import 'package:myapp/custom-widgets/separation_divider.dart';
+import 'package:myapp/custom-widgets/silver_dotted_border.dart';
 import 'package:myapp/data-bank/account_type.dart';
 import 'package:myapp/data-class/user_account.dart';
 import 'package:myapp/data-class/water_account.dart';
+
+import 'package:dotted_border/dotted_border.dart';
+import 'package:myapp/services/user_interface_service.dart';
 
 class AccountIndex extends StatefulWidget {
   const AccountIndex({super.key});
@@ -18,6 +23,9 @@ class _AccountIndexState extends State<AccountIndex>
     with TickerProviderStateMixin {
   //User Account
   final UserAccount _loggedUser = AccountType().owner;
+
+  //service
+  final UserInterfaceService _userInterfaceService = UserInterfaceService();
 
   //controller
   final List<SlidableController> _slidableController = [];
@@ -126,12 +134,40 @@ class _AccountIndexState extends State<AccountIndex>
         children: [
           SlidableAction(
             onPressed: (context) {
-              debugPrint('$context');
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog.adaptive(
+                    icon: Icon(Icons.delete),
+                    title: Text('Unlink this account?'),
+                    content: Text(
+                      'Local transaction history for this account will be removed from this device.',
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text('Cancel'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          setState(() {
+                            linkedAccounts.removeAt(index);
+                            Navigator.pop(context);
+                          });
+                        },
+                        child: Text('Unlink'),
+                      ),
+                    ],
+                  );
+                },
+              );
             },
             backgroundColor: const Color(0xFFC50014),
             foregroundColor: theme.colorScheme.onSecondary,
             icon: Icons.delete,
-            label: 'Remove',
+            label: 'Unlink',
           ),
           SlidableAction(
             onPressed: (context) {
@@ -156,7 +192,10 @@ class _AccountIndexState extends State<AccountIndex>
                   spacing: 7,
                   children: [
                     Text(
-                      linkedAccounts[index].accountNumber,
+                      _userInterfaceService.formatAccountNumber(
+                        accountNumber:
+                            _loggedUser.linkedAccounts[index].accountNumber,
+                      ),
                       style: theme.textTheme.titleLarge,
                     ),
                     Container(
@@ -199,6 +238,7 @@ class _AccountIndexState extends State<AccountIndex>
         return AnimatedRotation(
           //Used a Unary Minus Operator (-double) to rotate the icon counter clockwise
           //_slidingvalue[index] || _slidingController[index].animation.value as turns property value
+          //_getTheSlidingValue is now Deprecated, please use _slidingController[index].animation.value directly on turns as dynamic double
           turns: (-_slidableController[index].animation.value / 2),
           duration: Duration(microseconds: 500),
           curve: Curves.easeIn,
@@ -210,7 +250,9 @@ class _AccountIndexState extends State<AccountIndex>
 
   Widget _buildLinkButton(ThemeData theme) {
     return Align(
-      alignment: Alignment.centerRight,
+      alignment: _loggedUser.linkedAccounts.isEmpty
+          ? Alignment.center
+          : Alignment.centerRight,
       child: FilledButton.icon(
         onPressed: () async {
           //wait for the user to finish linking account
@@ -221,12 +263,9 @@ class _AccountIndexState extends State<AccountIndex>
             _createSlidingController();
           });
         },
-        style: ButtonStyle(
-          backgroundColor: WidgetStateColor.fromMap(
-            <WidgetStatesConstraint, Color>{
-              WidgetState.any: theme.colorScheme.primaryContainer,
-            },
-          ),
+        style: FilledButton.styleFrom(
+          padding: EdgeInsetsGeometry.all(20.0),
+          backgroundColor: theme.colorScheme.primaryContainer,
         ),
         icon: Icon(Icons.add_circle_outline_rounded),
         label: Text('Link Account', style: theme.textTheme.labelLarge),
@@ -259,21 +298,38 @@ class _AccountIndexState extends State<AccountIndex>
 
             //Outer Container
             if (_loggedUser.linkedAccounts.isEmpty)
-              Column(
-                children: [Text('No data to show'), _buildLinkButton(theme)],
+              SilverDottedBorder(
+                message: Text(
+                  'Link your service connection to view bills and check consumption',
+                  textAlign: TextAlign.center,
+                  style: theme.textTheme.titleMedium,
+                ),
+                button: _buildLinkButton(theme),
               )
             else
+              //Display linked accounts
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 20),
                   child: ColoredContainer(
                     child: Column(
+                      spacing: 10,
                       children: [
                         Expanded(
                           child: ListView.separated(
                             itemCount: _loggedUser.linkedAccounts.length,
-                            separatorBuilder: (context, index) =>
-                                SizedBox(height: 20),
+                            separatorBuilder: (context, index) => Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 20,
+                                  ),
+                                  child: SizedBox(
+                                    child: SeparationDivider(thickness: 1.0),
+                                  ),
+                                ),
+                              ],
+                            ),
                             itemBuilder: (context, index) {
                               return Container(
                                 padding: EdgeInsets.zero,

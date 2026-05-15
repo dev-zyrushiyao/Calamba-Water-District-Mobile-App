@@ -4,7 +4,7 @@ class WaterAccount {
   //Widget of Accounts
 
   final String accountName;
-  final String accountNumber;
+  final int accountNumber;
   final bool isActive;
   final double previousBill;
   final double lastReading;

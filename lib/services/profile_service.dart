@@ -4,9 +4,9 @@ import 'package:myapp/data-class/user_account.dart';
 import 'package:flutter/material.dart';
 
 class ProfileService {
-  //Gender Value of User Object will be capitalized for UI Display but the value Remains Enum
+  //Value of Enum is capitalized for UI Display
   //for example _LoggedUser.gender == Gender.male -> it will be converted to Male to Display
-  //the original value of enum still remains the same
+  //the original value of enum still untouched
   //Execution sample: List<TextSection> -> letterCapitalization(textSection[index]) -> Display a String of modified name
   String letterCapitalization(Enum value) {
     switch (value) {
@@ -15,7 +15,9 @@ class ProfileService {
             ? value.name.toUpperCase()
             : value.name[0].toUpperCase() + value.name.substring(1);
       case TextSection _:
-        //temporary string to edit Enum value for display only
+        //temporary store the value to string to edit Enum value for display only
+        //Get the splitted part after the [dot]
+        //Alrogrithm (For example TextSection.nickname -> after split 'nickname' -> Store to string and return a uppercase first letter -> Returns 'Nickname)
         String enumValue = value.name;
         enumValue.split('.').last;
 
@@ -41,6 +43,7 @@ class ProfileService {
   }
 
   //Shrinking Animation of Profile Container
+  //return value is a new value and should be re-store to a map for toggle animation
   Map<String, double> toggleShrinkingAnimation({
     required bool toShrink,
     required double containerHeight,
@@ -60,7 +63,7 @@ class ProfileService {
   //Can use textFieldValue or DropdownValue if its null it will just ignore the process of saving to the object
   //for textField (onSave) you can put null as value in dropdownValue or just simply not include it in the parameters , vise-versa with Dropdown
   //It will not result to null as it goes through the same form and validate using a key.
-  //If somethings break and the textfield or dropdown has null value it will throw an Error and not process to saving process
+  //If something break and the textfield or dropdown has null value it will throw an Error and not process to saving process
   /* Saving Algorithm: 
      Form: 
        - TextField -> saveFormInformationFrom (textFieldValue: value , dropdownValue: null)
@@ -72,7 +75,7 @@ class ProfileService {
     String? textFieldValue,
     Gender? dropdownValue,
   }) {
-    //If value is not null(Passed the validation)
+    //If value is not null(It passed the validation)
     //Saves the values from the TextField (Category Nickname , PhoneNumber , Email , Password , E-Wallet)
     if (textFieldValue != null) {
       switch (textSection) {

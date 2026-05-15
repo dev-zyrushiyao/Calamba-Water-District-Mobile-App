@@ -6,7 +6,7 @@ class WaterAccountList {
   final List<WaterAccount> accounts = [
     WaterAccount(
       accountName: 'Zyrus Hiyao',
-      accountNumber: '591-482-637',
+      accountNumber: 591482637,
       isActive: true,
       previousBill: 373.25,
       lastReading: 124.0,
@@ -16,7 +16,7 @@ class WaterAccountList {
 
     WaterAccount(
       accountName: 'Paulo Nase',
-      accountNumber: '591-482-637',
+      accountNumber: 591482637,
       isActive: true,
       previousBill: 373.25,
       lastReading: 124.0,
@@ -26,7 +26,7 @@ class WaterAccountList {
 
     WaterAccount(
       accountName: 'Felip Suson',
-      accountNumber: '415-882-361',
+      accountNumber: 415882361,
       isActive: true,
       previousBill: 289.25,
       lastReading: 110.0,
@@ -36,7 +36,7 @@ class WaterAccountList {
 
     WaterAccount(
       accountName: 'Stell Ajero',
-      accountNumber: '415-882-361',
+      accountNumber: 415882361,
       isActive: true,
       previousBill: 289.25,
       lastReading: 110.0,
@@ -46,7 +46,7 @@ class WaterAccountList {
 
     WaterAccount(
       accountName: 'Justin De Dios',
-      accountNumber: '415-882-361',
+      accountNumber: 415882361,
       isActive: true,
       previousBill: 289.25,
       lastReading: 110.0,

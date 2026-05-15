@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
 class ColoredContainer extends StatefulWidget {
-  const ColoredContainer({super.key, this.child});
+  const ColoredContainer({super.key, this.child, this.height});
 
   final Widget? child;
+  final double? height;
 
   @override
   State<ColoredContainer> createState() => _MyWidgetState();
@@ -13,6 +14,7 @@ class _MyWidgetState extends State<ColoredContainer> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: widget.height,
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 32),
       decoration: BoxDecoration(
         color: Color(0xFFEEEEFA),

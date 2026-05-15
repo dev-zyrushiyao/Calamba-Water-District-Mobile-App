@@ -79,7 +79,6 @@ class _ProfileIndexState extends State<ProfileIndex> {
 
   @override
   void dispose() {
-    super.dispose();
     // turn the System tray color to Dark if Profile Index page is closed
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(statusBarIconBrightness: Brightness.dark),
@@ -87,6 +86,7 @@ class _ProfileIndexState extends State<ProfileIndex> {
 
     //controller dispose
     _disposeControllers();
+    super.dispose();
   }
 
   // ==================//

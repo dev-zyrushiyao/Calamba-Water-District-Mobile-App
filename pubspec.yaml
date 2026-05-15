@@ -41,6 +41,7 @@ dependencies:
   http: ^1.6.0
   flutter_slidable: ^4.0.3
   morphable_shape: ^2.0.0
+  dotted_border: ^3.1.0
 
 dev_dependencies:
   flutter_test:

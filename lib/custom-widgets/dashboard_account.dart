@@ -52,7 +52,7 @@ class DashboardDisplay extends StatelessWidget {
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               Text(
-                waterAccount.accountNumber,
+                waterAccount.accountNumber.toString(),
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               Row(
