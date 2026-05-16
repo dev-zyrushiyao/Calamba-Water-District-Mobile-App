@@ -16,7 +16,7 @@ class NewsInformation {
     required this.dateNum,
     required this.dateWord,
     required this.title,
-    required this.status,
+    this.status,
     required this.paragraph1,
     this.imageDirectory,
     this.headLine1,

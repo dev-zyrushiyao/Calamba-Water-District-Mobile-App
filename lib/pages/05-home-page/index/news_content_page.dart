@@ -3,20 +3,29 @@ import 'package:myapp/custom-widgets/news_bullet.dart';
 import 'package:myapp/custom-widgets/news_headline.dart';
 import 'package:myapp/data-class/news_information.dart';
 import 'package:myapp/custom-widgets/news_header.dart';
+import 'package:myapp/services/news_content_page_service.dart';
 
-class NewsContentPage extends StatelessWidget {
+class NewsContentPage extends StatefulWidget {
   const NewsContentPage({super.key});
 
-  //method string buffer -> for paragraphs
-  String formatList({required List<String> items, bool bulletFormat = false}) {
-    final buffer = StringBuffer();
+  @override
+  State<NewsContentPage> createState() => _NewsContentPageState();
+}
 
-    for (var item in items) {
-      bulletFormat ? buffer.writeln("• $item") : buffer.writeln(item);
-      buffer.writeln("");
-    }
-    return buffer.toString();
-  }
+class _NewsContentPageState extends State<NewsContentPage> {
+  //method string buffer -> for paragraphs
+  // String formatList({required List<String> items, bool bulletFormat = false}) {
+  //   final buffer = StringBuffer();
+
+  //   for (var item in items) {
+  //     bulletFormat ? buffer.writeln("• $item") : buffer.writeln(item);
+  //     buffer.writeln("");
+  //   }
+  //   return buffer.toString();
+  // }
+
+  //service
+  final NewsContentPageService _newsContentPage = NewsContentPageService();
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +78,10 @@ class NewsContentPage extends StatelessWidget {
           SizedBox(height: 10),
 
           Text(
-            formatList(items: data.paragraph1, bulletFormat: false),
+            _newsContentPage.formatList(
+              items: data.paragraph1,
+              bulletFormat: false,
+            ),
             style: theme.textTheme.bodyLarge,
           ),
           if (data.imageDirectory != null)

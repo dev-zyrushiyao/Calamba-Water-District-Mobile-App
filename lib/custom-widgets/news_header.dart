@@ -4,7 +4,7 @@ import 'package:myapp/data-class/news_information.dart';
 class NewsHeader extends StatelessWidget {
   const NewsHeader({super.key, required this.data});
 
-  final NewsInformation data;
+  final NewsInformation? data;
 
   Color setStatusColor(NewsInformation data) {
     if (data.status == 'On Going Repair') {
@@ -23,15 +23,15 @@ class NewsHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    Color statusColor = setStatusColor(data);
+    Color statusColor = setStatusColor(data!);
 
     return Column(
       spacing: 10.0,
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Date: ${data.dateNum}', style: theme.textTheme.labelSmall),
-        Text('${data.title}', style: theme.textTheme.titleLarge),
+        Text('Date: ${data!.dateNum}', style: theme.textTheme.labelSmall),
+        Text('${data!.title}', style: theme.textTheme.titleLarge),
         Row(
           spacing: 7.0,
           children: [
@@ -48,7 +48,7 @@ class NewsHeader extends StatelessWidget {
                 ),
               ),
               child: Text(
-                '${data.status}',
+                '${data!.status}',
                 style: theme.textTheme.labelSmall!.copyWith(
                   fontWeight: FontWeight.bold,
                 ),

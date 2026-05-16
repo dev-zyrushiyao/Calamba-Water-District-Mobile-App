@@ -10,8 +10,6 @@ class SilverDottedBorder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ThemeData theme = Theme.of(context);
-
     return SizedBox(
       height: 550,
       child: DottedBorder(

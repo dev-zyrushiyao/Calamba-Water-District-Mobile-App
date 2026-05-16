@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/custom-widgets/headline.dart';
+import 'package:myapp/custom-widgets/news_list_title.dart';
+import 'package:myapp/data-bank/news_data.dart';
 import 'package:myapp/data-class/news_information.dart';
-import 'package:myapp/custom-widgets/news_list.dart';
 
 class NewsIndex extends StatefulWidget {
   const NewsIndex({super.key});
@@ -12,126 +13,82 @@ class NewsIndex extends StatefulWidget {
 
 class _NewsIndexState extends State<NewsIndex> {
   //Year raw data
-  final int currentYear = DateTime.now().year;
+  final int _currentYear = DateTime.now().year;
+
   //Dynamic dropdown data
-  int? chosenValue;
-  List<NewsList> newsList = [];
-  Map<String, String> status = {
-    'ongoing': 'On Going Repair',
-    'resolved': 'Issue Resolved',
-    'monitoring': 'Currently Monitoring',
-  };
+  int? _chosenValue;
+  final List<DropdownMenuItem<int>> yearMenu = [];
+
+  //News simulated Database - source data , do not modify, only use in _buildNewsAndUI()
+  List<NewsInformation> _newsInformationList = NewsData().createNews();
+  //News UI to Display - dynamic data to modify
+  final List<NewsListTitle> _newsToDisplay = [];
 
   @override
   void initState() {
     super.initState();
-    //starter data
-    chosenValue = currentYear;
-    addNews(chosenValue!);
+    //set the default year to latest year
+    _chosenValue = _currentYear;
+    _createDropdownIitem();
+    _buildNewsAndUI(_chosenValue, _newsInformationList);
   }
 
-  void addNews(int chosenValue) {
+  void _buildNewsAndUI(
+    int? chosenValue,
+    List<NewsInformation> newsInformationList,
+  ) {
+    //clear the list everytime it invokes then add news if its year 2026
+    _newsToDisplay.clear();
+    //When user choose 2026 as dropdown menu show the News list
+    //loop through NewsInformationList Created by NewsData
+    //newsToDisplay is a list of Widget(NewsListTitle) containing newsInformationList
+    //Algorithm : newsInformationList data fetched news from NewsData class , a class that contains news
+    //----------- The list newsToDisplay is a list of Widget to display the UI News using the data of newsInformation
+    //if you want to create a year 2025 list, create a new list in NewsData class then loop it inside the if conditionals here
+    //if the value of dropdown is NOT 2026 it will clear the list(newsToDisplay)
+    //if the list is empty it will show 'No News to show UI'
+    //
+    //the refreshNewList is a way to trigger the _updateNews inside the CustomWidget
     if (chosenValue == 2026) {
-      newsList = [
-        NewsList(
-          newsInformation: NewsInformation(
-            dateNum: '03-25-2026',
-            dateWord: 'March-25',
-            title: 'Notice of Scheduled Interconnection: Brgy. Mayapa Area',
-            status: status['resolved'],
-            paragraph1: [
-              'The Calamba Water District (CWD) has issued an urgent advisory following a major pipe burst reported early this morning at the Main Entrance of Lakeview Subdivision.',
-              'The rupture was identified in a primary 8-inch distribution line, causing significant water loss and localized flooding near the subdivision gates.',
-              'CWD emergency response crews were dispatched at 8:30 AM and are currently on-site performing excavation and pipe replacement.',
-            ],
-            imageDirectory: 'assets/news-image/mar-25-2026-news.jpg',
-            headLine1: {
-              "headline": 'Service Impact',
-              "subheadline":
-                  'Residents in the following areas may experience low pressure to zero water supply during the repair period:',
-            },
-            bulletList1: [
-              'Lakeview Subdivision (All Phases)',
-              'Portions of Brgy. Halang',
-              'Immediate neighboring residential compounds',
-            ],
-            headLine2: {
-              "headline": "Restoration Timeline",
-              "subheadline":
-                  "CWD engineers estimate that repairs will be completed and water pressure will begin to normalize by 6:00 PM today, March 12, 2026.",
-            },
-            headLine3: {
-              "headline": "Advice for Residents",
-              "subheadline": null,
-            },
-            bulletList3: [
-              'Storage: Residents are encouraged to use stored water wisely until service is restored.',
-              'Water Quality: Upon restoration, "turbidity" (brownish water) may occur briefly. Please let your faucets run for 1–2 minutes until the water clears.',
-              'Traffic: Motorists are advised to take alternate routes as one lane near the Lakeview Main Entrance is partially obstructed by service vehicles and equipment.',
-            ],
+      for (var index = 0; index < newsInformationList.length; index++) {
+        _newsToDisplay.add(
+          NewsListTitle(
+            newsInformationList: newsInformationList[index],
+            refreshNewsList: _updateTheNews,
           ),
-        ),
-
-        NewsList(
-          newsInformation: NewsInformation(
-            dateNum: '03-22-2026',
-            dateWord: 'March-22',
-            title:
-                'CWD Celebrates World Water Day 2026: Glacier Preservation Awareness',
-            status: status['ongoing'],
-            paragraph1: ['placeholder paragraph'],
-          ),
-        ),
-
-        NewsList(
-          newsInformation: NewsInformation(
-            dateNum: '03-18-2026',
-            dateWord: 'March-18',
-            title:
-                'Water Conservation Workshop for Calamba City Public Schools',
-            status: status['ongoing'],
-            paragraph1: ['placeholder paragraph'],
-          ),
-        ),
-
-        NewsList(
-          newsInformation: NewsInformation(
-            dateNum: '03-12-2026',
-            dateWord: 'March-12',
-            title: 'Emergency Pipe Repair: Lakeview Subd. Main Entrance',
-            status: status['ongoing'],
-            paragraph1: ['placeholder paragraph'],
-          ),
-        ),
-
-        NewsList(
-          newsInformation: NewsInformation(
-            dateNum: '03-09-2026',
-            dateWord: 'March-09',
-            title:
-                '"Walk In Her Shoes" Activity Honors Women in the Water Sector',
-            status: status['ongoing'],
-            paragraph1: ['placeholder paragraph'],
-          ),
-        ),
-      ];
-    } else {
-      newsList.clear();
+        );
+      }
     }
+  }
+
+  void _createDropdownIitem() {
+    //dropdown value
+    //Algorithm: generate 4 items in a list that returns the current year - index
+    //For example: current year is 2026
+    //The generated list is [currentYear - 0(index) = 2026 , currentYear - 1(index) = 2025 , currentYear - 2(index).. and so on]
+    List<int> yearList = List.generate(4, (index) => _currentYear - index);
+
+    for (int year in yearList) {
+      yearMenu.add(DropdownMenuItem(value: year, child: Text('$year')));
+    }
+  }
+
+  void _updateTheNews() {
+    //UpdateTheNews is to simulate the Live changes in the news such as title , content and status.
+    setState(() {
+      //Overrite the content of the news (if there is changed made like title, status etc)
+      _newsInformationList = NewsData().createNews();
+      //Rebuilds the News UI with the latest value
+      _buildNewsAndUI(_chosenValue, _newsInformationList);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
 
-    //dropdown value
-    List<int> years = List.generate(7, (index) => currentYear - index);
-    List<DropdownMenuItem<int>> yearMenu = [
-      ...years.map(
-        (int year) =>
-            DropdownMenuItem(value: year, child: Text(year.toString())),
-      ),
-    ];
+    //Changes the value of list per year
+    //_buildNewsAndUI(_chosenValue, _newsInformationList);
 
     return SafeArea(
       child: Padding(
@@ -148,13 +105,14 @@ class _NewsIndexState extends State<NewsIndex> {
 
             SizedBox(height: 38),
 
+            //Dropdown
             Row(
               spacing: 10.0,
               children: [
                 SizedBox(
                   width: 110,
                   child: DropdownButtonFormField(
-                    initialValue: chosenValue,
+                    initialValue: _chosenValue,
                     borderRadius: BorderRadius.circular(13.0),
                     itemHeight: 55, //default 48
                     items: yearMenu,
@@ -167,10 +125,11 @@ class _NewsIndexState extends State<NewsIndex> {
                     hint: Text('Year'),
                     onChanged: (int? value) {
                       if (value != null) {
-                        setState(() {
-                          chosenValue = value;
-                          addNews(chosenValue!);
-                        });
+                        //updates the dropdown current value
+                        _chosenValue = value;
+
+                        //triggers refresh the page and updating the newsToDisplay
+                        _updateTheNews();
                       }
                     },
                   ),
@@ -187,16 +146,16 @@ class _NewsIndexState extends State<NewsIndex> {
             ),
 
             SizedBox(height: 33),
+
+            //News Display
             Expanded(
               child: RefreshIndicator(
                 onRefresh: () async {
                   await Future.delayed(Duration(seconds: 2));
-                  setState(() {
-                    addNews(chosenValue!);
-                  });
+                  _updateTheNews();
                 },
 
-                child: newsList.isEmpty
+                child: _newsToDisplay.isEmpty
                     ? Container(
                         alignment: AlignmentGeometry.center,
                         child: Text(
@@ -207,9 +166,9 @@ class _NewsIndexState extends State<NewsIndex> {
                     : ListView.separated(
                         separatorBuilder: (context, index) =>
                             SizedBox(height: 35),
-                        itemCount: newsList.length,
+                        itemCount: _newsToDisplay.length,
                         itemBuilder: (BuildContext context, int index) {
-                          return newsList[index];
+                          return _newsToDisplay[index];
                         },
                       ),
               ),

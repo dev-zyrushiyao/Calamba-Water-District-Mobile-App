@@ -34,7 +34,7 @@ class _LinkAccountPageState extends State<LinkAccountPage>
   final TextEditingController _accountNameController = TextEditingController();
 
   //Map to store the form to transfer for userObject after the linking process finish
-  final Map<String, dynamic> linkedAccountForm = {
+  final Map<String, dynamic> _linkedAccountForm = {
     'accountNumber': '',
     'accountName': '',
   };
@@ -46,8 +46,8 @@ class _LinkAccountPageState extends State<LinkAccountPage>
   //Duplicate Account checker
   bool _isAccountAlreadyOnList = false;
 
-  //Simulated datebase of water accounts
-  final List<WaterAccount> waterAccountList = WaterAccountList().accounts;
+  //Simulated datebase of water accounts - use only as placeholder
+  final List<WaterAccount> _waterAccountList = WaterAccountList().accounts;
 
   //Form key for the form widget
   final _formKey = GlobalKey<FormState>();
@@ -56,15 +56,15 @@ class _LinkAccountPageState extends State<LinkAccountPage>
   AnimationController? _animationController;
 
   //Variables for the Loading text animation
-  int _shapeIndex = 0;
-  final String loadingText = 'Linking Account';
-  final String loadingDotted = '...';
-  int substringStartIndex = 0;
-  int substringEndIndex = 0;
-  bool ascending = true;
+  late int _shapeIndex = 0;
+  final String _loadingText = 'Linking Account';
+  final String _loadingDotted = '...';
+  late int _substringStartIndex = 0;
+  late int _substringEndIndex = 0;
+  late bool _isAscending = true;
 
   //Animation Timer for Loading Text
-  Timer? dotTimer;
+  Timer? _dotTimer;
 
   //List of shapes for the morphing animation
   List<MorphableShapeBorder?> _shapes = [];
@@ -83,12 +83,16 @@ class _LinkAccountPageState extends State<LinkAccountPage>
 
   @override
   void dispose() {
-    dotTimer?.cancel();
+    _dotTimer?.cancel();
     _animationController?.dispose();
     _accountNumberController.dispose();
     _accountNameController.dispose();
     super.dispose();
   }
+
+  // ==================//
+  // initState methods //
+  // ==================//
 
   void _initializeAnimation() {
     _animationController = AnimationController(
@@ -108,11 +112,11 @@ class _LinkAccountPageState extends State<LinkAccountPage>
 
     Timer.periodic(const Duration(seconds: 3), (timer) {
       // If timer exists and is running, do nothing
-      if (dotTimer != null && dotTimer!.isActive) return;
+      if (_dotTimer != null && _dotTimer!.isActive) return;
 
       if (_isFinishedLinking || !mounted) {
         timer.cancel();
-        dotTimer = null;
+        _dotTimer = null;
       } else {
         setState(() {
           _loadingTextAnimation();
@@ -123,29 +127,29 @@ class _LinkAccountPageState extends State<LinkAccountPage>
 
   //Function for the loading text animation
   void _loadingTextAnimation() {
-    if (ascending) {
-      if (substringEndIndex < loadingDotted.length) {
+    if (_isAscending) {
+      if (_substringEndIndex < _loadingDotted.length) {
         setState(() {
-          substringEndIndex++;
+          _substringEndIndex++;
 
           debugPrint(
-            'Substring ASCENDING: $loadingDotted: $substringStartIndex , End: $substringEndIndex',
+            'Substring ASCENDING value of: [$_loadingDotted] , Start: $_substringStartIndex , End: $_substringEndIndex',
           );
         });
       }
 
-      if (substringEndIndex == loadingDotted.length) {
-        ascending = false;
+      if (_substringEndIndex == _loadingDotted.length) {
+        _isAscending = false;
       }
     } else {
-      if (1 < loadingDotted.length) {
-        substringEndIndex--;
+      if (1 < _loadingDotted.length) {
+        _substringEndIndex--;
         debugPrint(
-          'Substring DECENDING: $loadingDotted: $substringStartIndex , End: $substringEndIndex',
+          'Substring DECENDING value of: [$_loadingDotted] , Start: $_substringStartIndex , End: $_substringEndIndex',
         );
       }
-      if (substringEndIndex == 0) {
-        ascending = true;
+      if (_substringEndIndex == 0) {
+        _isAscending = true;
       }
     }
   }
@@ -184,8 +188,8 @@ class _LinkAccountPageState extends State<LinkAccountPage>
     //add to the linkedaccount list of UserObject (Owner/Currently Logged in User)
     _loggedUser.linkedAccounts.add(
       WaterAccount(
-        accountNumber: linkedAccountForm['accountNumber'],
-        accountName: linkedAccountForm['accountName']!,
+        accountNumber: _linkedAccountForm['accountNumber'],
+        accountName: _linkedAccountForm['accountName']!,
         isActive: true, //default value
         previousBill: _linkAccountService.generateNumber<double>(
           minValue: 150,
@@ -205,6 +209,11 @@ class _LinkAccountPageState extends State<LinkAccountPage>
         ),
       ),
     );
+  }
+
+  void _clearTextController() {
+    _accountNumberController.clear();
+    _accountNameController.clear();
   }
 
   //link account process simulation function
@@ -228,20 +237,23 @@ class _LinkAccountPageState extends State<LinkAccountPage>
       if (mounted) {
         if (_isFinishedLinking == true) {
           //reset the value of substring when the linking process is finished
-          substringStartIndex = 0;
-          substringEndIndex = 0;
-          ascending = true;
+          _substringStartIndex = 0;
+          _substringEndIndex = 0;
+          _isAscending = true;
 
           //if the validation is passed and the linking process is finished save the form values
           //values will be saved temporary on a map
           _formKey.currentState?.save();
           debugPrint('Linking process is finished!');
 
-          _createLinkAccount();
+          //Save User Input to the User Linked Account
+          _linkAccountService.createLinkAccount(
+            _loggedUser,
+            _linkedAccountForm,
+          );
 
           //clears the value of the textfield after saving the information
-          _accountNumberController.clear();
-          _accountNameController.clear();
+          _clearTextController();
 
           //remove the modal after the process is finished
           Navigator.pop(context);
@@ -449,7 +461,7 @@ class _LinkAccountPageState extends State<LinkAccountPage>
       maxLength: 15,
       onSaved: (value) {
         if (value != null) {
-          linkedAccountForm['accountName'] = value;
+          _linkedAccountForm['accountName'] = value;
         } else {
           debugPrint('Error onSaved: TextFormField: Account Name');
           debugPrintStack();
@@ -485,7 +497,7 @@ class _LinkAccountPageState extends State<LinkAccountPage>
       onSaved: (value) {
         //value is saved to the map when the linking process is finished
         if (value != null) {
-          linkedAccountForm['accountNumber'] = int.tryParse(value);
+          _linkedAccountForm['accountNumber'] = int.tryParse(value);
         } else {
           debugPrint('Error onSaved: TextFormField: Account Number');
           debugPrintStack();
@@ -511,7 +523,7 @@ class _LinkAccountPageState extends State<LinkAccountPage>
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          loadingText,
+          _loadingText,
           style: theme.textTheme.bodyLarge!.copyWith(
             fontWeight: FontWeight.bold,
             color: theme.colorScheme.onSecondary,
@@ -520,7 +532,7 @@ class _LinkAccountPageState extends State<LinkAccountPage>
         SizedBox(
           width: 30,
           child: Text(
-            loadingDotted.substring(substringStartIndex, substringEndIndex),
+            _loadingDotted.substring(_substringStartIndex, _substringEndIndex),
             style: theme.textTheme.bodyLarge!.copyWith(
               fontWeight: FontWeight.bold,
               color: theme.colorScheme.onSecondary,

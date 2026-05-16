@@ -1,5 +1,8 @@
 import 'dart:math';
 
+import 'package:myapp/data-class/user_account.dart' show UserAccount;
+import 'package:myapp/data-class/water_account.dart' show WaterAccount;
+
 class LinkAccountService {
   //method to generate number using Generic Type
   T generateNumber<T extends num>({
@@ -61,5 +64,24 @@ class LinkAccountService {
 
     //validation pass
     return null;
+  }
+
+  void createLinkAccount(
+    UserAccount loggedUser,
+    Map<String, dynamic> linkedAccountForm,
+  ) {
+    //store the map values to the UserObject water account to simulate database saving (one to many relationship)
+    //add to the linkedaccount list of UserObject (Owner/Currently Logged in User)
+    loggedUser.linkedAccounts.add(
+      WaterAccount(
+        accountNumber: linkedAccountForm['accountNumber'],
+        accountName: linkedAccountForm['accountName'],
+        isActive: true, //default value
+        previousBill: generateNumber<double>(minValue: 150, maxValue: 700),
+        lastReading: generateNumber<double>(minValue: 300, maxValue: 1500),
+        dueDay: generateNumber<int>(minValue: 0, maxValue: 30),
+        balance: generateNumber<double>(minValue: 150, maxValue: 900),
+      ),
+    );
   }
 }
