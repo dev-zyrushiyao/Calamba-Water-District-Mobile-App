@@ -22,4 +22,13 @@ class UserInterfaceService {
 
     return listOfCharacters.join('');
   }
+
+  //Account status color
+  Color getStatusColor(bool isActive) {
+    if (isActive) {
+      return Color(0xFFC8F2CF);
+    } else {
+      return Colors.grey[400]!;
+    }
+  }
 }

@@ -8,7 +8,8 @@ import 'package:myapp/custom-widgets/silver_dotted_border.dart';
 import 'package:myapp/data-bank/account_type.dart';
 import 'package:myapp/data-class/user_account.dart';
 import 'package:myapp/data-class/water_account.dart';
-import 'package:myapp/services/account_index_service.dart';
+
+import 'package:myapp/services/link_account_service.dart';
 
 import 'package:myapp/services/user_interface_service.dart';
 
@@ -24,9 +25,16 @@ class _AccountIndexState extends State<AccountIndex>
   //User Account
   final UserAccount _loggedUser = AccountType().owner;
 
+  //form key
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  //text contorller - for updating name
+  final TextEditingController _dialogTextfieldController =
+      TextEditingController();
+
   //service
   final UserInterfaceService _userInterfaceService = UserInterfaceService();
-  final AccountIndexService _accountIndexService = AccountIndexService();
+  final LinkAccountService _linkAccountService = LinkAccountService();
 
   //controller
   final List<SlidableController> _slidableController = [];
@@ -40,6 +48,7 @@ class _AccountIndexState extends State<AccountIndex>
   @override
   void dispose() {
     _disposeSlidingController();
+    _dialogTextfieldController.dispose();
     super.dispose();
   }
 
@@ -59,9 +68,9 @@ class _AccountIndexState extends State<AccountIndex>
     }
   }
 
-  // ==================//
-  // dispose methods   //
-  // ==================//
+  //==================//
+  // dispose methods  //
+  //==================//
 
   void _disposeSlidingController() {
     //dispose all the sliding controller of linked accounts
@@ -76,7 +85,11 @@ class _AccountIndexState extends State<AccountIndex>
   // private methods   //
   // ==================//
 
-  Future<dynamic> _buildDialogBox(
+  void _closeDialoge(BuildContext context) {
+    return Navigator.pop(context);
+  }
+
+  Future<dynamic> _buildUnlinkDialoguBox(
     BuildContext context,
     int index,
     List<WaterAccount> linkedAccounts,
@@ -107,6 +120,84 @@ class _AccountIndexState extends State<AccountIndex>
               child: Text('Unlink'),
             ),
           ],
+        );
+      },
+    );
+  }
+
+  Future<dynamic> _buildEditDialogBox(
+    BuildContext context,
+    int index,
+    List<WaterAccount> linkedAccounts,
+    ThemeData theme,
+  ) {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Update Name'),
+          content: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              spacing: 20,
+              children: [
+                TextFormField(
+                  validator: (value) =>
+                      _linkAccountService.validateAccountNameTextField(value),
+                  maxLength: 15,
+                  controller: _dialogTextfieldController,
+                  keyboardType: TextInputType.name,
+                  onSaved: (newValue) {
+                    if (newValue != null) {
+                      _loggedUser.linkedAccounts[index].accountName = newValue;
+                    }
+                  },
+                  decoration: InputDecoration(
+                    counterStyle: theme.textTheme.labelSmall,
+                    hintText: linkedAccounts[index].accountName,
+                    errorStyle: theme.textTheme.labelSmall!.copyWith(
+                      color: Colors.red,
+                    ),
+                    errorMaxLines: 2,
+                  ),
+                ),
+                Row(
+                  spacing: 20,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        //close the dialogbox when the button is pressed
+                        _closeDialoge(context);
+
+                        Future.delayed(Duration(seconds: 1), () {
+                          //clear the textvalue of controller
+                          _dialogTextfieldController.clear();
+                        });
+                      },
+                      child: Text('Cancel'),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          setState(() {
+                            //update the LinkedAccount name
+                            _formKey.currentState!.save();
+                            //close the dialogbox after saving
+                            _closeDialoge(context);
+                            //clear the textvalue of controller
+                            _dialogTextfieldController.clear();
+                          });
+                        }
+                      },
+                      child: Text('Save'),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
         );
       },
     );
@@ -219,7 +310,11 @@ class _AccountIndexState extends State<AccountIndex>
         children: [
           SlidableAction(
             onPressed: (context) {
-              _buildDialogBox(context, index, _loggedUser.linkedAccounts);
+              _buildUnlinkDialoguBox(
+                context,
+                index,
+                _loggedUser.linkedAccounts,
+              );
             },
             backgroundColor: const Color(0xFFC50014),
             foregroundColor: theme.colorScheme.onSecondary,
@@ -228,8 +323,15 @@ class _AccountIndexState extends State<AccountIndex>
           ),
           SlidableAction(
             onPressed: (context) {
-              //Action for Edit button
-              debugPrint('$context');
+              setState(() {
+                //build dialog
+                _buildEditDialogBox(
+                  context,
+                  index,
+                  _loggedUser.linkedAccounts,
+                  theme,
+                );
+              });
             },
             backgroundColor: const Color(0xFF0392CF),
             foregroundColor: theme.colorScheme.onSecondary,
@@ -243,44 +345,62 @@ class _AccountIndexState extends State<AccountIndex>
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  spacing: 7,
-                  children: [
-                    Text(
-                      _userInterfaceService.formatAccountNumber(
-                        accountNumber:
-                            _loggedUser.linkedAccounts[index].accountNumber,
+            Expanded(
+              child: GestureDetector(
+                onTap: () {
+                  debugPrint('PRESSED');
+                },
+                child: Container(
+                  //used transparent to expand the box for Gesture Detector , without the color the onTap won't fire
+                  color: Colors.transparent,
+                  height: 70,
+                  width: double.infinity,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        spacing: 7,
+                        children: [
+                          Text(
+                            _userInterfaceService.formatAccountNumber(
+                              accountNumber: _loggedUser
+                                  .linkedAccounts[index]
+                                  .accountNumber,
+                            ),
+                            style: theme.textTheme.titleLarge,
+                          ),
+                          Container(
+                            padding: EdgeInsets.all(3.0),
+                            decoration: BoxDecoration(
+                              color: _userInterfaceService.getStatusColor(
+                                linkedAccounts[index].isActive,
+                              ),
+                              border: Border.all(
+                                color: Color(0xFFE3E3E3),
+                                width: 1.0,
+                                strokeAlign: BorderSide.strokeAlignInside,
+                              ),
+                              borderRadius: BorderRadius.circular(3.0),
+                            ),
+                            child: Text(
+                              linkedAccounts[index].isActive
+                                  ? 'Active'
+                                  : 'Inactive',
+                              style: Theme.of(context).textTheme.labelSmall!
+                                  .copyWith(fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ],
                       ),
-                      style: theme.textTheme.titleLarge,
-                    ),
-                    Container(
-                      padding: EdgeInsets.all(3.0),
-                      decoration: BoxDecoration(
-                        color: Colors.green,
-                        border: Border.all(
-                          color: Color(0xFFE3E3E3),
-                          width: 1.0,
-                          strokeAlign: BorderSide.strokeAlignInside,
-                        ),
-                        borderRadius: BorderRadius.circular(3.0),
+                      Text(
+                        linkedAccounts[index].accountName,
+                        style: theme.textTheme.bodyLarge,
                       ),
-                      child: Text(
-                        linkedAccounts[index].isActive ? 'Active' : 'Inactive',
-                        style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-                Text(
-                  linkedAccounts[index].accountName,
-                  style: theme.textTheme.bodyLarge,
-                ),
-              ],
+              ),
             ),
             _buildRotatingIcon(index),
           ],

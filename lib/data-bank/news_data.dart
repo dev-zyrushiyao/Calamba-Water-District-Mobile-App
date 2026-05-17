@@ -17,7 +17,7 @@ class NewsData {
         dateNum: '03-22-2026',
         dateWord: 'March-22',
         title:
-            'AAAA CWD Celebrates World Water Day 2026: Glacier Preservation Awareness',
+            'CWD Celebrates World Water Day 2026: Glacier Preservation Awareness',
         status: _newsStatus['resolved'],
         paragraph1: ['placeholder paragraph'],
       ),

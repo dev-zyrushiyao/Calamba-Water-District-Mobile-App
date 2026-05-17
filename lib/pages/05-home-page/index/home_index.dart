@@ -1,8 +1,10 @@
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:myapp/custom-widgets/dashboard_account.dart';
 import 'package:myapp/custom-widgets/headline.dart';
 import 'package:myapp/custom-widgets/primary_button.dart';
+import 'package:myapp/custom-widgets/silver_dotted_border.dart';
 import 'package:myapp/data-bank/account_type.dart';
 
 class HomeIndex extends StatefulWidget {
@@ -85,13 +87,11 @@ class _HomeIndexState extends State<HomeIndex> {
                 ),
               )
             else
-              Expanded(
-                child: Container(
-                  alignment: Alignment.center,
-                  child: Text(
-                    'No linked account',
-                    style: theme.textTheme.bodyLarge,
-                  ),
+              SilverDottedBorder(
+                height: 500,
+                message: Text(
+                  'No linked account',
+                  style: theme.textTheme.bodyLarge,
                 ),
               ),
           ],

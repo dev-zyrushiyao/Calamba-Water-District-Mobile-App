@@ -37,10 +37,12 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: _currentPageIndex > 0
           ? null
           : FloatingActionButton(
-              onPressed: () {
-                debugPrint('Floating has been pressed, add new account');
+              onPressed: () async {
+                await Navigator.pushNamed(context, '/linkaccount');
+                setState(() {});
               },
               backgroundColor: themeData.colorScheme.secondaryContainer,
+              shape: CircleBorder(),
               child: Icon(Icons.add, color: themeData.colorScheme.onSecondary),
             ),
       bottomNavigationBar: NavigationBar(

@@ -3,7 +3,7 @@
 class WaterAccount {
   //Widget of Accounts
 
-  final String accountName;
+  String accountName; //removed the final to be editable
   final int accountNumber;
   final bool isActive;
   final double previousBill;

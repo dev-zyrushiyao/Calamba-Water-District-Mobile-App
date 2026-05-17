@@ -50,7 +50,7 @@ class LinkAccountService {
   String? validateAccountNameTextField(String? value) {
     RegExp letterAndSpaceOnly = RegExp(r'^[a-zA-Z\s]+$');
     if (value == null || value.isEmpty) {
-      return 'Please enter account number';
+      return 'Please enter account name';
     }
 
     if (value.length < 2) {

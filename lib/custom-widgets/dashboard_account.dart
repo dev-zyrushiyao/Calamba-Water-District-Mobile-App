@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:myapp/custom-widgets/primary_button.dart';
 import 'package:myapp/data-class/water_account.dart';
 
+import 'package:myapp/services/user_interface_service.dart';
+
 class DashboardDisplay extends StatelessWidget {
   const DashboardDisplay({
     super.key,
@@ -12,17 +14,13 @@ class DashboardDisplay extends StatelessWidget {
   final WaterAccount waterAccount;
   final PrimaryButton primaryButton;
 
-  Color getStatusColor(bool isActive) {
-    if (isActive) {
-      return Color(0xFFC8F2CF);
-    } else {
-      return Colors.grey[400]!;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    Color statusColor = getStatusColor(waterAccount.isActive);
+    //service
+    final UserInterfaceService userInterfaceService = UserInterfaceService();
+    Color statusColor = userInterfaceService.getStatusColor(
+      waterAccount.isActive,
+    );
     double deviceWidth = MediaQuery.of(context).size.width;
 
     return Container(
@@ -52,7 +50,9 @@ class DashboardDisplay extends StatelessWidget {
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               Text(
-                waterAccount.accountNumber.toString(),
+                userInterfaceService.formatAccountNumber(
+                  accountNumber: waterAccount.accountNumber,
+                ),
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               Row(

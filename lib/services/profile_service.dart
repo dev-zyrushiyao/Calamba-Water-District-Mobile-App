@@ -42,6 +42,23 @@ class ProfileService {
     }
   }
 
+  String maskPhoneNumber(String phoneNumberInString) {
+    List<String> letterSplit = phoneNumberInString.split('');
+    int characterToMask = 8;
+    String maskingCharacter = 'X';
+    String separatorCharacter = '-';
+
+    for (var i = 0; i < characterToMask; i++) {
+      letterSplit[i] = maskingCharacter;
+    }
+
+    for (var i = 4; i < letterSplit.length; i += 5) {
+      letterSplit.insert(i, separatorCharacter);
+    }
+
+    return letterSplit.join();
+  }
+
   //Shrinking Animation of Profile Container
   //return value is a new value and should be re-store to a map for toggle animation
   Map<String, double> toggleShrinkingAnimation({

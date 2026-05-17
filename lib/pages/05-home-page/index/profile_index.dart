@@ -459,9 +459,21 @@ class _ProfileIndexState extends State<ProfileIndex> {
         //Text Sections - value
         Flexible(
           flex: 1,
-          child: switch (index) {
+          child: switch (_textSection[index]) {
+            TextSection.phoneNumber => SizedBox(
+              width: double.infinity,
+              child: Text(
+                _profileService.maskPhoneNumber(
+                  _loggedUserValues[_textSection[index]],
+                ),
+
+                textAlign: TextAlign.left,
+                style: theme.textTheme.bodyLarge,
+              ),
+            ),
+
             //password mask
-            3 => SizedBox(
+            TextSection.password => SizedBox(
               width: double.infinity,
               child: Text(
                 '•' * _loggedUserValues[_textSection[index]].length,
@@ -469,7 +481,7 @@ class _ProfileIndexState extends State<ProfileIndex> {
               ),
             ),
             //gender
-            4 => SizedBox(
+            TextSection.gender => SizedBox(
               width: double.infinity,
               child: Text(
                 _profileService.letterCapitalization(_chosenValue!),

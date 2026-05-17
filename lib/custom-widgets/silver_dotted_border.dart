@@ -3,15 +3,22 @@ import 'package:flutter/material.dart';
 import 'package:dotted_border/dotted_border.dart';
 
 class SilverDottedBorder extends StatelessWidget {
-  const SilverDottedBorder({super.key, required this.message, this.button});
+  const SilverDottedBorder({
+    super.key,
+    required this.message,
+    this.button,
+    this.height = 550,
+  });
 
   final Widget? button;
   final Text? message;
+  final double height;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 550,
+      height: height,
+      width: double.infinity,
       child: DottedBorder(
         options: RoundedRectDottedBorderOptions(
           color: Colors.grey[400]!,
@@ -24,8 +31,8 @@ class SilverDottedBorder extends StatelessWidget {
           spacing: 25,
           children: [
             Container(
+              alignment: Alignment.center,
               padding: const EdgeInsets.symmetric(horizontal: 40.0),
-
               child: message,
             ),
             button ?? SizedBox.shrink(),
