@@ -183,34 +183,6 @@ class _LinkAccountPageState extends State<LinkAccountPage>
     }
   }
 
-  void _createLinkAccount() {
-    //store the map values to the UserObject water account to simulate database saving (one to many relationship)
-    //add to the linkedaccount list of UserObject (Owner/Currently Logged in User)
-    _loggedUser.linkedAccounts.add(
-      WaterAccount(
-        accountNumber: _linkedAccountForm['accountNumber'],
-        accountName: _linkedAccountForm['accountName']!,
-        isActive: true, //default value
-        previousBill: _linkAccountService.generateNumber<double>(
-          minValue: 150,
-          maxValue: 700,
-        ),
-        lastReading: _linkAccountService.generateNumber<double>(
-          minValue: 300,
-          maxValue: 1500,
-        ),
-        dueDay: _linkAccountService.generateNumber<int>(
-          minValue: 0,
-          maxValue: 30,
-        ),
-        balance: _linkAccountService.generateNumber<double>(
-          minValue: 150,
-          maxValue: 900,
-        ),
-      ),
-    );
-  }
-
   void _clearTextController() {
     _accountNumberController.clear();
     _accountNameController.clear();
@@ -299,7 +271,7 @@ class _LinkAccountPageState extends State<LinkAccountPage>
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     return Scaffold(
-      appBar: AppBar(title: Text('Link Account')),
+      appBar: AppBar(title: const Text('Link Account')),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: ListView(
@@ -307,13 +279,13 @@ class _LinkAccountPageState extends State<LinkAccountPage>
           children: [
             SizedBox(height: 54),
 
-            Headline(
+            const Headline(
               headline: 'Link new account',
               subHeadline:
                   'Enter your account number to track usage and pay bills.',
             ),
 
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
 
             //Size box - A
             ColoredContainer(
@@ -335,7 +307,7 @@ class _LinkAccountPageState extends State<LinkAccountPage>
             Container(
               height: 350,
               alignment: Alignment.bottomCenter,
-              padding: EdgeInsets.symmetric(vertical: 20),
+              padding: const EdgeInsets.symmetric(vertical: 20),
               child: PrimaryButton(
                 label: 'Link Account',
                 onPressed: () {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/custom-widgets/primary_button.dart';
+import 'package:myapp/custom-widgets/status_indicator.dart';
 import 'package:myapp/data-class/water_account.dart';
 
 import 'package:myapp/services/user_interface_service.dart';
@@ -18,9 +19,6 @@ class DashboardDisplay extends StatelessWidget {
   Widget build(BuildContext context) {
     //service
     final UserInterfaceService userInterfaceService = UserInterfaceService();
-    Color statusColor = userInterfaceService.getStatusColor(
-      waterAccount.isActive,
-    );
     double deviceWidth = MediaQuery.of(context).size.width;
 
     return Container(
@@ -64,24 +62,7 @@ class DashboardDisplay extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Container(
-                    padding: EdgeInsets.all(3.0),
-                    decoration: BoxDecoration(
-                      color: statusColor,
-                      border: Border.all(
-                        color: Color(0xFFE3E3E3),
-                        width: 1.0,
-                        strokeAlign: BorderSide.strokeAlignInside,
-                      ),
-                      borderRadius: BorderRadius.circular(3.0),
-                    ),
-                    child: Text(
-                      waterAccount.isActive ? 'Active' : 'Inactive',
-                      style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
+                  StatusIndicator(isActive: waterAccount.isActive),
                 ],
               ),
               Text(
@@ -101,9 +82,9 @@ class DashboardDisplay extends StatelessWidget {
             spacing: 5,
             children: [
               Text(
-                waterAccount.dueDay == 0
+                waterAccount.remainingDayDue == 0
                     ? 'Due today'
-                    : 'Due in ${waterAccount.dueDay} days',
+                    : 'Due in ${waterAccount.remainingDayDue} days',
                 style: Theme.of(
                   context,
                 ).textTheme.labelSmall!.copyWith(fontWeight: FontWeight.w600),

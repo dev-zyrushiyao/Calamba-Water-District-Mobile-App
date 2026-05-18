@@ -43,19 +43,28 @@ class ProfileService {
   }
 
   String maskPhoneNumber(String phoneNumberInString) {
+    //split the String character into a list (for example: "MASK" -> ['M' , 'A' , 'S' , 'K'])
     List<String> letterSplit = phoneNumberInString.split('');
-    int characterToMask = 8;
-    String maskingCharacter = 'X';
-    String separatorCharacter = '-';
+    //constant values
+    const int characterToMask = 8;
+    const String maskingCharacter = 'X';
+    const String separatorCharacter = '-';
 
+    //Mask with 'X' the first 8 digit character of the list
+    // letterSplit = ['X' , 'X' , 'X' ,'X' ,'X' ,'X' ,'X' , 'X' , 9 , 10 , 11]
     for (var i = 0; i < characterToMask; i++) {
       letterSplit[i] = maskingCharacter;
     }
 
+    // add '-' on the 4th index , since the list grow the next iteration is 5
+    //Trigger is on the 4th index and the 9th index
+    // letterSplit = ['X' , 'X' , 'X' ,'X' '-' ,'X' ,'X' ,'X' , 'X' , '-' , 9 , 10 , 11]
     for (var i = 4; i < letterSplit.length; i += 5) {
       letterSplit.insert(i, separatorCharacter);
     }
 
+    //join() is to merge the List LetterSplit into a single string
+    //['X' , 'X' , 'X' ,'X' '-' ,'X' ,'X' ,'X' , 'X' , '-' , 9 , 10 , 11] -> 'XXXX-XXXX-91011
     return letterSplit.join();
   }
 

@@ -10,6 +10,8 @@ import 'package:myapp/pages/03-forgot-password/recovery_result_page.dart';
 import 'package:myapp/pages/04-on-boarding/boarding_page.dart';
 import 'package:myapp/design-system/design_system.dart';
 import 'package:myapp/pages/05-home-page/home_page.dart';
+import 'package:myapp/pages/05-home-page/index/account/account_information_page.dart';
+import 'package:myapp/pages/05-home-page/index/account/billing_page.dart';
 import 'package:myapp/pages/05-home-page/index/account/link_account_page.dart';
 import 'package:myapp/pages/05-home-page/index/news_content_page.dart';
 
@@ -53,15 +55,23 @@ class MyApp extends StatelessWidget {
       initialRoute: '/home',
       routes: {
         '/login': (context) => const LoginPage(),
+        //Sign up page
         '/signup': (context) => const SignupPage(),
         '/accountverification': (context) => const AccountVerificationPage(),
         '/signupresult': (context) => const RegisterResultPage(),
+        //Forgot password page
         '/forgotpassword': (context) => const ForgotPasswordPage(),
         '/forgotpasswordresult': (context) => const RecoveryResultPage(),
+        //Boarding page
         '/boarding': (context) => const BoardingPageOne(),
+        //Home Index
         '/home': (context) => const HomePage(),
+        //News Index
         '/newscontent': (context) => const NewsContentPage(),
+        //Account Index
         '/linkaccount': (context) => const LinkAccountPage(),
+        '/accountinformation': (context) => const AccountInformationPage(),
+        '/billing': (context) => const BillingPage(),
       },
     );
   }

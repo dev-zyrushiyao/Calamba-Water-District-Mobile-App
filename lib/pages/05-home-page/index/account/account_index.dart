@@ -5,6 +5,7 @@ import 'package:myapp/custom-widgets/colored_container.dart';
 import 'package:myapp/custom-widgets/headline.dart';
 import 'package:myapp/custom-widgets/separation_divider.dart';
 import 'package:myapp/custom-widgets/silver_dotted_border.dart';
+import 'package:myapp/custom-widgets/status_indicator.dart';
 import 'package:myapp/data-bank/account_type.dart';
 import 'package:myapp/data-class/user_account.dart';
 import 'package:myapp/data-class/water_account.dart';
@@ -38,6 +39,9 @@ class _AccountIndexState extends State<AccountIndex>
 
   //controller
   final List<SlidableController> _slidableController = [];
+
+  //textField has value
+  bool _isSaveEnabled = false;
 
   @override
   void initState() {
@@ -134,70 +138,89 @@ class _AccountIndexState extends State<AccountIndex>
     return showDialog(
       context: context,
       builder: (context) {
-        return AlertDialog(
-          title: Text('Update Name'),
-          content: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              spacing: 20,
-              children: [
-                TextFormField(
-                  validator: (value) =>
-                      _linkAccountService.validateAccountNameTextField(value),
-                  maxLength: 15,
-                  controller: _dialogTextfieldController,
-                  keyboardType: TextInputType.name,
-                  onSaved: (newValue) {
-                    if (newValue != null) {
-                      _loggedUser.linkedAccounts[index].accountName = newValue;
-                    }
-                  },
-                  decoration: InputDecoration(
-                    counterStyle: theme.textTheme.labelSmall,
-                    hintText: linkedAccounts[index].accountName,
-                    errorStyle: theme.textTheme.labelSmall!.copyWith(
-                      color: Colors.red,
-                    ),
-                    errorMaxLines: 2,
-                  ),
-                ),
-                Row(
+        return StatefulBuilder(
+          builder: (context, StateSetter setDialogState) {
+            //StateSetter setDialogue work the same as setState
+            //setDialogState only refresh the dialog box
+            return AlertDialog(
+              title: Text('Update Name'),
+              content: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   spacing: 20,
-                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    TextButton(
-                      onPressed: () {
-                        //close the dialogbox when the button is pressed
-                        _closeDialoge(context);
-
-                        Future.delayed(Duration(seconds: 1), () {
-                          //clear the textvalue of controller
-                          _dialogTextfieldController.clear();
-                        });
-                      },
-                      child: Text('Cancel'),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          setState(() {
-                            //update the LinkedAccount name
-                            _formKey.currentState!.save();
-                            //close the dialogbox after saving
-                            _closeDialoge(context);
-                            //clear the textvalue of controller
-                            _dialogTextfieldController.clear();
-                          });
+                    TextFormField(
+                      validator: (value) => _linkAccountService
+                          .validateAccountNameTextField(value),
+                      maxLength: 15,
+                      controller: _dialogTextfieldController,
+                      keyboardType: TextInputType.name,
+                      onSaved: (newValue) {
+                        if (newValue != null) {
+                          _loggedUser.linkedAccounts[index].accountName =
+                              newValue;
                         }
                       },
-                      child: Text('Save'),
+                      onChanged: (value) {
+                        setDialogState(() {
+                          if (value.isEmpty) {
+                            _isSaveEnabled = false;
+                          } else {
+                            _isSaveEnabled = true;
+                          }
+                        });
+                      },
+                      decoration: InputDecoration(
+                        counterStyle: theme.textTheme.labelSmall,
+                        hintText: linkedAccounts[index].accountName,
+                        errorStyle: theme.textTheme.labelSmall!.copyWith(
+                          color: Colors.red,
+                        ),
+                        errorMaxLines: 2,
+                      ),
+                    ),
+                    Row(
+                      spacing: 20,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        TextButton(
+                          onPressed: () {
+                            //close the dialogbox when the button is pressed
+                            _closeDialoge(context);
+
+                            Future.delayed(Duration(seconds: 1), () {
+                              //clear the textvalue of controller
+                              _dialogTextfieldController.clear();
+                            });
+                          },
+                          child: Text('Cancel'),
+                        ),
+
+                        TextButton(
+                          onPressed: _isSaveEnabled
+                              ? () {
+                                  if (_formKey.currentState!.validate()) {
+                                    setState(() {
+                                      //update the LinkedAccount name
+                                      _formKey.currentState!.save();
+                                      //close the dialogbox after saving
+                                      _closeDialoge(context);
+                                      //clear the textvalue of controller
+                                      _dialogTextfieldController.clear();
+                                    });
+                                  }
+                                }
+                              : null,
+                          child: Text('Save'),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ],
-            ),
-          ),
+              ),
+            );
+          },
         );
       },
     );
@@ -341,14 +364,38 @@ class _AccountIndexState extends State<AccountIndex>
         ],
       ),
       child: ListTile(
-        // contentPadding: EdgeInsets.zero,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
               child: GestureDetector(
-                onTap: () {
-                  debugPrint('PRESSED');
+                onTap: () async {
+                  //Push to AccountInformationPage and return a triggerable String stored in result variable
+                  final result = await Navigator.pushNamed(
+                    context,
+                    '/accountinformation',
+                    arguments: _loggedUser.linkedAccounts[index],
+                  );
+
+                  //When the Account Information Page pressed the delete button it will return
+                  //a 'delete string to a variable result'
+                  //if the condition is met this will delete the current linked account on the list , the slidable controller on the list
+                  //and dispose the controller that has been removed from the SlidableController
+                  if (result == 'delete') {
+                    setState(() {
+                      //removed the target UserLinked LinkedAccount
+                      _loggedUser.linkedAccounts.removeAt(index);
+
+                      //dispose the current Linked Account controller
+                      final targetController = _slidableController.removeAt(
+                        index,
+                      );
+                      targetController.dispose();
+
+                      //after it successfully the item on the list and dipose the controller
+                      //the List of LinkedAccount length and the Slidable Controller will be updated
+                    });
+                  }
                 },
                 child: Container(
                   //used transparent to expand the box for Gesture Detector , without the color the onTap won't fire
@@ -370,26 +417,8 @@ class _AccountIndexState extends State<AccountIndex>
                             ),
                             style: theme.textTheme.titleLarge,
                           ),
-                          Container(
-                            padding: EdgeInsets.all(3.0),
-                            decoration: BoxDecoration(
-                              color: _userInterfaceService.getStatusColor(
-                                linkedAccounts[index].isActive,
-                              ),
-                              border: Border.all(
-                                color: Color(0xFFE3E3E3),
-                                width: 1.0,
-                                strokeAlign: BorderSide.strokeAlignInside,
-                              ),
-                              borderRadius: BorderRadius.circular(3.0),
-                            ),
-                            child: Text(
-                              linkedAccounts[index].isActive
-                                  ? 'Active'
-                                  : 'Inactive',
-                              style: Theme.of(context).textTheme.labelSmall!
-                                  .copyWith(fontWeight: FontWeight.bold),
-                            ),
+                          StatusIndicator(
+                            isActive: linkedAccounts[index].isActive,
                           ),
                         ],
                       ),
@@ -436,7 +465,7 @@ class _AccountIndexState extends State<AccountIndex>
           //wait for the user to finish linking account
           await Navigator.pushNamed(context, '/linkaccount');
 
-          //when the user press back, rebuild the page
+          //when the user press back, rebuild the page and create sliding controller
           setState(() {
             _createSlidingController();
           });

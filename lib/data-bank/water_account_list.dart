@@ -10,8 +10,10 @@ class WaterAccountList {
       isActive: true,
       previousBill: 373.25,
       lastReading: 124.0,
-      dueDay: 3,
+      dueDate: 25,
+      remainingDayDue: 3,
       balance: 346.00,
+      bill: null,
     ),
 
     WaterAccount(
@@ -20,8 +22,10 @@ class WaterAccountList {
       isActive: true,
       previousBill: 373.25,
       lastReading: 124.0,
-      dueDay: 3,
+      dueDate: 21,
+      remainingDayDue: 6,
       balance: 346.00,
+      bill: null,
     ),
 
     WaterAccount(
@@ -30,8 +34,10 @@ class WaterAccountList {
       isActive: true,
       previousBill: 289.25,
       lastReading: 110.0,
-      dueDay: 12,
+      dueDate: 25,
+      remainingDayDue: 3,
       balance: 235.00,
+      bill: null,
     ),
 
     WaterAccount(
@@ -40,8 +46,10 @@ class WaterAccountList {
       isActive: true,
       previousBill: 289.25,
       lastReading: 110.0,
-      dueDay: 12,
+      dueDate: 16,
+      remainingDayDue: 7,
       balance: 235.00,
+      bill: null,
     ),
 
     WaterAccount(
@@ -50,8 +58,10 @@ class WaterAccountList {
       isActive: true,
       previousBill: 289.25,
       lastReading: 110.0,
-      dueDay: 12,
+      dueDate: 19,
+      remainingDayDue: 4,
       balance: 235.00,
+      bill: null,
     ),
   ];
 }

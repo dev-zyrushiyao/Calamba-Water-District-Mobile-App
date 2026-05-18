@@ -53,10 +53,7 @@ class _AccountVerificationPageState extends State<AccountVerificationPage> {
       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
       textAlign: TextAlign.center,
       style: TextStyle(fontSize: 30),
-      decoration: InputDecoration(
-        counterText: '',
-        border: OutlineInputBorder(),
-      ),
+      decoration: InputDecoration(border: OutlineInputBorder()),
       maxLength: 1,
       onChanged: onChanged,
     );
