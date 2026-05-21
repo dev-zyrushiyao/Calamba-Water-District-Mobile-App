@@ -20,5 +20,7 @@ class UserAccount {
     this.linkedAccounts,
   );
 
+  //automatic fetch the image directory according to the chosen gender
+  //no need to add the image to constructor
   String get image => gender.getProfileDirectory();
 }

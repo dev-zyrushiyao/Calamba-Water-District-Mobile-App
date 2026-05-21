@@ -88,7 +88,7 @@ class AccountInformationPage extends StatelessWidget {
 
           //Account Information
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 23),
+            padding: EdgeInsets.symmetric(vertical: 23),
             child: Column(
               spacing: 7.0,
               children: [
@@ -123,13 +123,13 @@ class AccountInformationPage extends StatelessWidget {
           ),
 
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 26),
+            padding: EdgeInsets.symmetric(vertical: 26),
             child: Column(
               spacing: 18,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Due date: ${data.dueDate} of the month',
+                  'Due date: ${data.dueDay} of the month',
                   style: theme.textTheme.titleLarge,
                 ),
                 Text(
@@ -137,7 +137,13 @@ class AccountInformationPage extends StatelessWidget {
                   style: theme.textTheme.headlineMedium,
                 ),
 
-                SecondaryButton(label: 'Pay', width: 200, onPressed: () {}),
+                SecondaryButton(
+                  label: 'Pay',
+                  width: 200,
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/payment');
+                  },
+                ),
               ],
             ),
           ),
@@ -173,7 +179,18 @@ class AccountInformationPage extends StatelessWidget {
                         },
                       ),
                     ),
-                    Expanded(child: PrimaryButton(label: 'Receipts')),
+                    Expanded(
+                      child: PrimaryButton(
+                        label: 'Receipt',
+                        onPressed: () {
+                          Navigator.pushNamed(
+                            context,
+                            '/receipt',
+                            arguments: data.receipt,
+                          );
+                        },
+                      ),
+                    ),
                   ],
                 ),
                 Container(

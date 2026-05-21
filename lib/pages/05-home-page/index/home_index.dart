@@ -1,4 +1,3 @@
-import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:myapp/custom-widgets/dashboard_account.dart';
@@ -65,25 +64,39 @@ class _HomeIndexState extends State<HomeIndex> {
 
             if (_loggedUser.linkedAccounts.isNotEmpty)
               Expanded(
-                child: ListView(
-                  children: [
-                    for (var item in _loggedUser.linkedAccounts) ...[
-                      DashboardDisplay(
-                        waterAccount: item,
-                        primaryButton: PrimaryButton(
-                          label: 'Pay Bill',
-                          width: 92,
-                          height: 43,
-                          onPressed: () {
-                            debugPrint('Pay Bill button is pressed!');
-                            // debugPrint('${item.accountName}');
-                            // debugPrint('${accountList[2].accountName}');
-                          },
-                        ),
-                      ),
+                child: ListView.separated(
+                  separatorBuilder: (context, index) =>
                       const SizedBox(height: 26),
-                    ],
-                  ],
+                  itemCount: _loggedUser.linkedAccounts.length,
+                  itemBuilder: (context, index) {
+                    return DashboardDisplay(
+                      waterAccount: _loggedUser.linkedAccounts[index],
+                      primaryButton: PrimaryButton(
+                        label: 'Pay Bill',
+                        width: 92,
+                        height: 43,
+                        onPressed: () async {
+                          //Push to AccountInformationPage and return a triggerable String stored in result variable
+                          final result = await Navigator.pushNamed(
+                            context,
+                            '/accountinformation',
+                            arguments: _loggedUser.linkedAccounts[index],
+                          );
+
+                          //When the Account Information Page pressed the delete button it will return
+                          //a 'delete string to a variable result'
+                          //if the condition is met this will delete the current linked account on the list , the slidable controller on the list
+                          //and dispose the controller that has been removed from the SlidableController
+                          if (result == 'delete') {
+                            setState(() {
+                              //removed the target UserLinked LinkedAccount
+                              _loggedUser.linkedAccounts.removeAt(index);
+                            });
+                          }
+                        },
+                      ),
+                    );
+                  },
                 ),
               )
             else

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/data-class/news_information.dart';
-import 'package:myapp/pages/05-home-page/index/news_index.dart';
 
 class NewsListTitle extends StatefulWidget {
   const NewsListTitle({

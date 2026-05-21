@@ -74,6 +74,7 @@ flutter:
     - assets/mobile-app/onboarding/
     - assets/news-image/
     - assets/avatar/
+    - assets/mobile-app/onboarding/gcash-vector-logo-seeklogo/
     
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

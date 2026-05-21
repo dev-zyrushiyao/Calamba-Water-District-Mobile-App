@@ -1,5 +1,6 @@
 //WaterAccount -> LinkedAccountList -> HomeIndex -> DashBoardAccount
 
+import 'package:myapp/data-bank/receipt.dart';
 import 'package:myapp/data-class/bill.dart';
 
 class WaterAccount {
@@ -10,10 +11,11 @@ class WaterAccount {
   final bool isActive;
   final double previousBill;
   final double lastReading;
-  final int dueDate;
+  final int dueDay;
   final int remainingDayDue;
   final double balance;
-  final List<Bill>? bill; //removed the final so it can be added later
+  final List<Bill>? bill;
+  final List<Receipt>? receipt;
 
   WaterAccount({
     required this.accountName,
@@ -21,9 +23,10 @@ class WaterAccount {
     this.isActive = true, //Added true as default value
     required this.previousBill,
     required this.lastReading,
-    required this.dueDate,
+    required this.dueDay,
     required this.remainingDayDue,
     required this.balance,
     required this.bill,
+    required this.receipt,
   });
 }

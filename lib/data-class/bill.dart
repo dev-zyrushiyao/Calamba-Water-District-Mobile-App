@@ -4,7 +4,7 @@ class Bill {
     required this.monthName,
     required this.accountNumber,
     required this.dueDate,
-    required this.readingDate,
+    required this.readingRate,
     required this.meterNumber,
     required this.period,
     required this.presentReading,
@@ -22,7 +22,7 @@ class Bill {
   final String monthName;
   final int accountNumber;
   final String dueDate;
-  final String readingDate;
+  final String readingRate;
   final int meterNumber;
   final Map<String, String>
   period; //[key-{'start' , 'end'} , value-{'3123213 , '219024'}]

@@ -15,11 +15,7 @@ class BillingPage extends StatelessWidget {
     final UserInterfaceService userInterfaceService = UserInterfaceService();
     final ThemeData theme = Theme.of(context);
 
-    debugPrint('Is the Bill list length: {$data.bill!.length}');
-
-    if (data != null) {
-      for (var item in data.bill!) {}
-    }
+    debugPrint('Is the Bill list length: ${data?.bill?.length}');
 
     if (data == null) {
       return DisplayNoData();
@@ -52,19 +48,30 @@ class BillingPage extends StatelessWidget {
                 if (data.bill != null && data.bill!.isNotEmpty)
                   Expanded(
                     child: ListView.separated(
+                      shrinkWrap: true,
                       separatorBuilder: (context, index) =>
                           const SizedBox(height: 50),
                       itemCount: data.bill!.length,
                       itemBuilder: (context, index) {
-                        return Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Calamba Water District Bill -',
-                              style: theme.textTheme.bodyLarge,
-                            ),
-                            Text('Mar 2026', style: theme.textTheme.bodyLarge),
-                          ],
+                        return GestureDetector(
+                          onTap: () => Navigator.pushNamed(
+                            context,
+                            '/billingcontent',
+                            arguments: data.bill?.reversed.toList()[index],
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Calamba Water District Bill - ',
+                                style: theme.textTheme.bodyLarge,
+                              ),
+                              Text(
+                                '${data.bill?.reversed.toList()[index].monthName} 2026',
+                                style: theme.textTheme.bodyLarge,
+                              ),
+                            ],
+                          ),
                         );
                       },
                     ),

@@ -10,6 +10,9 @@ class DisplayNoData extends StatefulWidget {
 class _MyWidgetState extends State<DisplayNoData> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Center(child: Text('404 Data not found')));
+    return Scaffold(
+      appBar: AppBar(),
+      body: Center(child: Text('404 Data not found')),
+    );
   }
 }

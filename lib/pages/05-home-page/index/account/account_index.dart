@@ -208,6 +208,8 @@ class _AccountIndexState extends State<AccountIndex>
                                       _closeDialoge(context);
                                       //clear the textvalue of controller
                                       _dialogTextfieldController.clear();
+                                      //flip back the boolean to false to make the button disabled again
+                                      _isSaveEnabled = !_isSaveEnabled;
                                     });
                                   }
                                 }

@@ -11,8 +11,12 @@ import 'package:myapp/pages/04-on-boarding/boarding_page.dart';
 import 'package:myapp/design-system/design_system.dart';
 import 'package:myapp/pages/05-home-page/home_page.dart';
 import 'package:myapp/pages/05-home-page/index/account/account_information_page.dart';
+import 'package:myapp/pages/05-home-page/index/account/billing_content_page.dart';
 import 'package:myapp/pages/05-home-page/index/account/billing_page.dart';
 import 'package:myapp/pages/05-home-page/index/account/link_account_page.dart';
+import 'package:myapp/pages/05-home-page/index/account/payment_page.dart';
+import 'package:myapp/pages/05-home-page/index/account/receipt_content_page.dart';
+import 'package:myapp/pages/05-home-page/index/account/receipt_page.dart';
 import 'package:myapp/pages/05-home-page/index/news_content_page.dart';
 
 void main() async {
@@ -72,6 +76,10 @@ class MyApp extends StatelessWidget {
         '/linkaccount': (context) => const LinkAccountPage(),
         '/accountinformation': (context) => const AccountInformationPage(),
         '/billing': (context) => const BillingPage(),
+        '/billingcontent': (context) => const BillingContentPage(),
+        '/receipt': (context) => const ReceiptPage(),
+        '/receiptcontent': (context) => const ReceiptContentPage(), //pending
+        '/payment': (context) => const PaymentPage(),
       },
     );
   }
