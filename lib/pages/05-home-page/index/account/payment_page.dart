@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:myapp/custom-widgets/display_no_data.dart';
 import 'package:myapp/custom-widgets/primary_button.dart';
+import 'package:myapp/data-bank/account_type.dart';
+import 'package:myapp/data-class/user_account.dart';
+import 'package:myapp/data-class/water_account.dart';
 
 class PaymentPage extends StatefulWidget {
   const PaymentPage({super.key});
@@ -10,14 +14,22 @@ class PaymentPage extends StatefulWidget {
 }
 
 class _MyWidgetState extends State<PaymentPage> {
-  String defaultAmount = '0';
+  //user
+  final UserAccount _loggedUser = AccountType().owner;
 
+  //used for textfield hint
+  final String _defaultAmount = '0';
   TextEditingController? _amountController;
+  bool isEnabled = false;
+  String? inputAmount;
+
+  //form key
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   initState() {
     super.initState();
-    _amountController = TextEditingController(text: defaultAmount);
+    _amountController = TextEditingController();
   }
 
   @override
@@ -29,22 +41,62 @@ class _MyWidgetState extends State<PaymentPage> {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
+    //Philippine Peso sign
+    final String currencySign = '\u20B1';
+    //Data passed through Account Index to Account InformationPage
+    final data = ModalRoute.of(context)?.settings.arguments as WaterAccount?;
+
+    if (data == null) {
+      return DisplayNoData();
+    }
 
     return Scaffold(
       appBar: AppBar(title: Text('Payment')),
       body: SizedBox(
         child: ListView(
+          physics: const ScrollPhysics(parent: NeverScrollableScrollPhysics()),
           padding: EdgeInsets.symmetric(horizontal: 16.0),
           children: [
             const SizedBox(height: 20),
-            _buildTextField(theme),
+            _buildTextField(data, currencySign, theme),
             const SizedBox(height: 50),
-            _buildPaymentMethod(theme),
+            _buildPaymentMethod(_loggedUser, theme),
+            const SizedBox(height: 60),
+            Stack(
+              clipBehavior: Clip.none,
+              children: [
+                Positioned(bottom: 325, child: _buildTransactioNotice(theme)),
+                _buildBigbox(theme),
+              ],
+            ),
+
             const SizedBox(height: 25),
-            _buildTransactioNotice(theme),
-            _buildBigbox(theme),
-            const SizedBox(height: 25),
-            PrimaryButton(label: 'Proceed'),
+            PrimaryButton(
+              label: 'Proceed',
+              onPressed: isEnabled
+                  ? () async {
+                      if (_formKey.currentState!.validate()) {
+                        //pass the value of onSave to inputAmount (String)
+                        _formKey.currentState?.save();
+
+                        // passes 2 arguments
+                        // TextInput
+                        // WaterAccount
+                        await Navigator.pushNamed(
+                          context,
+                          '/paymentconfirmation',
+                          arguments: {
+                            'inputAmount': double.tryParse(inputAmount!),
+                            'waterAccount': data,
+                          },
+                        );
+
+                        //clear the value of controller
+                        _amountController?.clear();
+                      }
+                    }
+                  : null,
+            ),
           ],
         ),
       ),
@@ -59,7 +111,7 @@ class _MyWidgetState extends State<PaymentPage> {
         borderRadius: BorderRadius.circular(7.0),
       ),
       child: Text(
-        'Please be advised that all digital payments require 24 to 48 hours to be officially posted to your account.'
+        'Please be advised that all digital payments require 24 to 48 hours to be officially posted to your account.\n'
         'You will receive a notification once the transaction has been verified and your updated balance is reflected on the dashboard.'
         'We recommend keeping your digital receipt for your records until the payment is fully visible in your billing history.',
         style: theme.textTheme.bodyLarge?.copyWith(
@@ -94,7 +146,7 @@ class _MyWidgetState extends State<PaymentPage> {
     );
   }
 
-  Widget _buildPaymentMethod(ThemeData theme) {
+  Widget _buildPaymentMethod(UserAccount loggedUser, ThemeData theme) {
     return Column(
       spacing: 10,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -117,7 +169,12 @@ class _MyWidgetState extends State<PaymentPage> {
                   ],
                 ),
               ),
-              Text('XXXX-XXXXX-21324', style: theme.textTheme.bodyLarge),
+              Text(
+                '${loggedUser.ewallet} (${loggedUser.nickname})',
+                style: theme.textTheme.bodyLarge?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ],
           ),
         ),
@@ -125,9 +182,11 @@ class _MyWidgetState extends State<PaymentPage> {
     );
   }
 
-  Widget _buildTextField(ThemeData theme) {
-    //Philippine Peso sign
-    final String currencySign = '\u20B1';
+  Widget _buildTextField(
+    WaterAccount data,
+    String currencySign,
+    ThemeData theme,
+  ) {
     return Align(
       alignment: Alignment.center,
       child: SizedBox(
@@ -135,31 +194,69 @@ class _MyWidgetState extends State<PaymentPage> {
         child: Column(
           spacing: 25,
           children: [
-            Text('Amount', style: theme.textTheme.headlineMedium),
-            TextField(
-              controller: _amountController,
-              keyboardType: TextInputType.number,
-              textAlign: TextAlign.center,
-              cursorColor: theme.colorScheme.primary,
-              decoration: InputDecoration(
-                hintText: defaultAmount,
-                helper: Text.rich(
-                  TextSpan(
-                    children: [
-                      TextSpan(
-                        text: 'Balance: ',
-                        style: theme.textTheme.labelSmall,
-                      ),
-                      TextSpan(
-                        text: '$currencySign 5000',
-                        style: theme.textTheme.labelSmall?.copyWith(
-                          color: Color(0xFF664D03),
-                          fontWeight: FontWeight.bold,
+            Text('Enter amount:', style: theme.textTheme.headlineMedium),
+            Form(
+              key: _formKey,
+              child: TextFormField(
+                controller: _amountController,
+                keyboardType: TextInputType.number,
+                textAlign: TextAlign.center,
+                cursorColor: theme.colorScheme.primary,
+                autovalidateMode: AutovalidateMode.onUserInteractionIfError,
+                onChanged: (value) {
+                  if (value.isNotEmpty || value != '') {
+                    if (0 < double.parse(value)) {
+                      setState(() {
+                        isEnabled = true;
+                      });
+                    } else {
+                      setState(() {
+                        isEnabled = false;
+                      });
+                    }
+                  } else {
+                    setState(() {
+                      isEnabled = false;
+                    });
+                  }
+                },
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please input amount';
+                  }
+
+                  if (value.contains(RegExp(r'^\d*\.?\d*$'))) {
+                    return null;
+                  } else {
+                    return 'Invalid input';
+                  }
+                },
+                onSaved: (newValue) {
+                  inputAmount = newValue;
+                },
+                decoration: InputDecoration(
+                  hintText: _defaultAmount,
+                  errorStyle: Theme.of(context).textTheme.labelSmall!.copyWith(
+                    color: Theme.of(context).colorScheme.error,
+                  ),
+                  helper: Text.rich(
+                    TextSpan(
+                      children: [
+                        TextSpan(
+                          text: 'Balance: ',
+                          style: theme.textTheme.labelSmall,
                         ),
+                        TextSpan(
+                          text: '$currencySign ${data.balance}',
+                          style: theme.textTheme.labelSmall?.copyWith(
+                            color: Color(0xFF664D03),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                      style: theme.textTheme.labelSmall?.copyWith(
+                        color: Color(0xFF664D03),
                       ),
-                    ],
-                    style: theme.textTheme.labelSmall?.copyWith(
-                      color: Color(0xFF664D03),
                     ),
                   ),
                 ),

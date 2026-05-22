@@ -1,17 +1,15 @@
 class Receipt {
   final String transactionNumber;
   final String billerName;
-  final int amount;
-  final int currentBalance;
+  final double amount;
   final String paymentMethod;
+  final DateTime date;
 
   Receipt({
     required this.transactionNumber,
-    this.billerName = 'Calamba Water District',
+    required this.billerName,
     required this.amount,
-    required this.currentBalance,
     required this.paymentMethod,
+    required this.date,
   });
-
-  DateTime get date => DateTime.now();
 }

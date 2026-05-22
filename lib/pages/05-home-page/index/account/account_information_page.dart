@@ -102,7 +102,7 @@ class AccountInformationPage extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    StatusIndicator(isActive: true),
+                    StatusIndicator(isActive: data.isActive),
                   ],
                 ),
 
@@ -137,11 +137,12 @@ class AccountInformationPage extends StatelessWidget {
                   style: theme.textTheme.headlineMedium,
                 ),
 
+                //payment CTA
                 SecondaryButton(
                   label: 'Pay',
                   width: 200,
                   onPressed: () {
-                    Navigator.pushNamed(context, '/payment');
+                    Navigator.pushNamed(context, '/payment', arguments: data);
                   },
                 ),
               ],

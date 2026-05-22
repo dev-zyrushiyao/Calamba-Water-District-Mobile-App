@@ -13,7 +13,7 @@ class WaterAccount {
   final double lastReading;
   final int dueDay;
   final int remainingDayDue;
-  final double balance;
+  double balance; //removed the final to be editable
   final List<Bill>? bill;
   final List<Receipt>? receipt;
 

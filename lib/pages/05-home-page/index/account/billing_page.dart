@@ -42,7 +42,7 @@ class BillingPage extends StatelessWidget {
                   ),
                   child: Headline(
                     headline:
-                        '${userInterfaceService.formatAccountNumber(accountNumber: data.accountNumber)} Billing',
+                        '${userInterfaceService.formatAccountNumber(accountNumber: data.accountNumber)} Bills',
                   ),
                 ),
                 if (data.bill != null && data.bill!.isNotEmpty)

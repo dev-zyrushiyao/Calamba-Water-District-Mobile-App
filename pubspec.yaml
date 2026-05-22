@@ -42,6 +42,9 @@ dependencies:
   flutter_slidable: ^4.0.3
   morphable_shape: ^2.0.0
   dotted_border: ^3.1.0
+  intl: ^0.20.2
+  timezone: ^0.11.0
+  collection: ^1.19.1
 
 dev_dependencies:
   flutter_test:

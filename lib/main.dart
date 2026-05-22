@@ -14,7 +14,9 @@ import 'package:myapp/pages/05-home-page/index/account/account_information_page.
 import 'package:myapp/pages/05-home-page/index/account/billing_content_page.dart';
 import 'package:myapp/pages/05-home-page/index/account/billing_page.dart';
 import 'package:myapp/pages/05-home-page/index/account/link_account_page.dart';
+import 'package:myapp/pages/05-home-page/index/account/payment_confirmation.dart';
 import 'package:myapp/pages/05-home-page/index/account/payment_page.dart';
+import 'package:myapp/pages/05-home-page/index/account/payment_result.dart';
 import 'package:myapp/pages/05-home-page/index/account/receipt_content_page.dart';
 import 'package:myapp/pages/05-home-page/index/account/receipt_page.dart';
 import 'package:myapp/pages/05-home-page/index/news_content_page.dart';
@@ -80,6 +82,8 @@ class MyApp extends StatelessWidget {
         '/receipt': (context) => const ReceiptPage(),
         '/receiptcontent': (context) => const ReceiptContentPage(), //pending
         '/payment': (context) => const PaymentPage(),
+        '/paymentconfirmation': (context) => PaymentConfirmation(),
+        '/paymentresult': (context) => PaymentResult(),
       },
     );
   }
