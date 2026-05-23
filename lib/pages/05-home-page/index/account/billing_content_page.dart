@@ -13,7 +13,7 @@ class BillingContentPage extends StatefulWidget {
 class BillingContenttState extends State<BillingContentPage> {
   @override
   Widget build(BuildContext context) {
-    ThemeData theme = Theme.of(context);
+    final ThemeData theme = Theme.of(context);
 
     final data = ModalRoute.of(context)?.settings.arguments as Bill?;
 

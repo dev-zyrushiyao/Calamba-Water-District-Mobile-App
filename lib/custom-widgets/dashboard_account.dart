@@ -45,7 +45,9 @@ class DashboardDisplay extends StatelessWidget {
             children: [
               Text(
                 waterAccount.accountName,
-                style: Theme.of(context).textTheme.titleLarge,
+                style: Theme.of(
+                  context,
+                ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
               ),
               Text(
                 userInterfaceService.formatAccountNumber(
@@ -91,7 +93,7 @@ class DashboardDisplay extends StatelessWidget {
               ),
               Text('Balance', style: Theme.of(context).textTheme.titleLarge),
               Text(
-                '₱ ${waterAccount.balance}',
+                '₱ ${waterAccount.balance.toStringAsFixed(2)}',
 
                 style: Theme.of(context).textTheme.headlineSmall,
               ),

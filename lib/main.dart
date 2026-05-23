@@ -20,6 +20,7 @@ import 'package:myapp/pages/05-home-page/index/account/payment_result.dart';
 import 'package:myapp/pages/05-home-page/index/account/receipt_content_page.dart';
 import 'package:myapp/pages/05-home-page/index/account/receipt_page.dart';
 import 'package:myapp/pages/05-home-page/index/news_content_page.dart';
+import 'package:myapp/pages/05-home-page/index/support/support_index.dart';
 
 void main() async {
   // 1. Mandatory for native platform calls before runApp
@@ -83,7 +84,9 @@ class MyApp extends StatelessWidget {
         '/receiptcontent': (context) => const ReceiptContentPage(), //pending
         '/payment': (context) => const PaymentPage(),
         '/paymentconfirmation': (context) => PaymentConfirmation(),
-        '/paymentresult': (context) => PaymentResult(),
+        '/paymentresult': (context) => const PaymentResult(),
+        //Support Index
+        '/support': (context) => const SupportIndex(),
       },
     );
   }

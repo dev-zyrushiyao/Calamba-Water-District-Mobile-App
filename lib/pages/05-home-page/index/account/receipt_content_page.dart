@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/custom-widgets/display_no_data.dart';
+import 'package:myapp/custom-widgets/receipt_container.dart';
+import 'package:myapp/data-bank/receipt.dart';
+import 'package:myapp/services/user_interface_service.dart';
 
 class ReceiptContentPage extends StatefulWidget {
   const ReceiptContentPage({super.key});
@@ -8,11 +12,35 @@ class ReceiptContentPage extends StatefulWidget {
 }
 
 class _MyWidgetState extends State<ReceiptContentPage> {
+  final UserInterfaceService _userInterfaceService = UserInterfaceService();
+
   @override
   Widget build(BuildContext context) {
-    ThemeData theme = Theme.of(context);
+    final data = ModalRoute.of(context)?.settings.arguments as Receipt?;
+    final ThemeData theme = Theme.of(context);
+
+    if (data == null) {
+      return DisplayNoData();
+    }
+
     return Scaffold(
-      appBar: AppBar(title: Text('Receipt Number')),
+      appBar: AppBar(
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Transaction #${data.transactionNumber}'),
+            Text(
+              _userInterfaceService.convertReceiptDateFormat(
+                date: data.date,
+                receiptListFormat: true,
+              ),
+              style: theme.textTheme.labelSmall?.copyWith(
+                color: Color(0xFF616161),
+              ),
+            ),
+          ],
+        ),
+      ),
       body: ListView(
         padding: EdgeInsets.symmetric(horizontal: 16.0),
         children: [
@@ -30,68 +58,18 @@ class _MyWidgetState extends State<ReceiptContentPage> {
             ),
           ),
           SizedBox(height: 35),
-          Container(
-            padding: EdgeInsets.all(30),
-            height: 500,
-            decoration: BoxDecoration(
-              color: Color(0xFF5456A7),
-              borderRadius: BorderRadius.circular(7.0),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Text(
-                  'Receipt #:',
-                  style: theme.textTheme.bodyLarge!.copyWith(
-                    color: theme.colorScheme.onSecondary,
-                    fontWeight: FontWeight.bold,
-                  ),
+          ReceiptContainer(
+            actions: [
+              {'Transaction No.': data.transactionNumber},
+              {'Biller:': data.billerName},
+              {'Amount:': data.amount.toStringAsFixed(2)},
+              {
+                'Date:': _userInterfaceService.convertReceiptDateFormat(
+                  date: data.date,
                 ),
-                Text(
-                  'Transaction No:',
-                  style: theme.textTheme.bodyLarge!.copyWith(
-                    color: theme.colorScheme.onSecondary,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  'Biller:',
-                  style: theme.textTheme.bodyLarge!.copyWith(
-                    color: theme.colorScheme.onSecondary,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  'Amount:',
-                  style: theme.textTheme.bodyLarge!.copyWith(
-                    color: theme.colorScheme.onSecondary,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  'Date:',
-                  style: theme.textTheme.bodyLarge!.copyWith(
-                    color: theme.colorScheme.onSecondary,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  'Current Balance:',
-                  style: theme.textTheme.bodyLarge!.copyWith(
-                    color: theme.colorScheme.onSecondary,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  'Payment Method:',
-                  style: theme.textTheme.bodyLarge!.copyWith(
-                    color: theme.colorScheme.onSecondary,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
+              },
+              {'Payment Method:': data.paymentMethod},
+            ],
           ),
         ],
       ),

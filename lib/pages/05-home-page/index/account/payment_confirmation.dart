@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:myapp/custom-widgets/display_no_data.dart';
 import 'package:myapp/custom-widgets/primary_button.dart';
@@ -69,7 +67,7 @@ class PaymentConfirmation extends StatelessWidget {
                         ),
                         _buildDisplayItem(
                           'Current Balance',
-                          waterAccount.balance.toString(),
+                          waterAccount.balance.toStringAsFixed(2),
                           theme,
                         ),
                         _buildDisplayItem(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class UserInterfaceService {
   //custom snackbar
@@ -21,6 +22,24 @@ class UserInterfaceService {
     }
 
     return listOfCharacters.join('');
+  }
+
+  String convertReceiptDateFormat({
+    required DateTime date,
+    bool receiptListFormat = false,
+  }) {
+    String receiptTimestamp = DateFormat(
+      receiptListFormat ? "MMM d, yyyy" : "E, MMM d, yyyy 'at' hh:mm a",
+    ).format(date);
+
+    return receiptTimestamp;
+  }
+
+  String convertToCalendarDateFormat(DateTime date) {
+    //Sample Format: Sat, May 23, 2026
+    String receiptTimestamp = DateFormat("E , MMM d, yyyy").format(date);
+
+    return receiptTimestamp;
   }
 
   //Account status color

@@ -57,6 +57,10 @@ class AccountInformationPage extends StatelessWidget {
       return DisplayNoData();
     }
 
+    //Receipt button
+    bool isReceiptButtonEnabled =
+        data.receipt != null && data.receipt!.isNotEmpty;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('My Account'),
@@ -133,7 +137,7 @@ class AccountInformationPage extends StatelessWidget {
                   style: theme.textTheme.titleLarge,
                 ),
                 Text(
-                  'Balance: $currencySign ${data.balance}',
+                  'Balance: $currencySign ${data.balance.toStringAsFixed(2)}',
                   style: theme.textTheme.headlineMedium,
                 ),
 
@@ -183,13 +187,15 @@ class AccountInformationPage extends StatelessWidget {
                     Expanded(
                       child: PrimaryButton(
                         label: 'Receipt',
-                        onPressed: () {
-                          Navigator.pushNamed(
-                            context,
-                            '/receipt',
-                            arguments: data.receipt,
-                          );
-                        },
+                        onPressed: isReceiptButtonEnabled
+                            ? () {
+                                Navigator.pushNamed(
+                                  context,
+                                  '/receipt',
+                                  arguments: data.receipt,
+                                );
+                              }
+                            : null,
                       ),
                     ),
                   ],

@@ -38,6 +38,28 @@ class _MyWidgetState extends State<PaymentPage> {
     super.dispose();
   }
 
+  String? _validateAmountTextfield(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please input amount';
+    }
+    if (value.contains(RegExp(r'^\d*\.?\d*$'))) {
+      return null;
+    } else {
+      return 'Invalid input';
+    }
+  }
+
+  void _storeValue(String? value) {
+    inputAmount = value;
+  }
+
+  void _textFieldToggleSwitch(String value) {
+    final double? parsedAmount = double.tryParse(value);
+    setState(() {
+      isEnabled = parsedAmount != null && parsedAmount > 0;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
@@ -112,7 +134,7 @@ class _MyWidgetState extends State<PaymentPage> {
       ),
       child: Text(
         'Please be advised that all digital payments require 24 to 48 hours to be officially posted to your account.\n'
-        'You will receive a notification once the transaction has been verified and your updated balance is reflected on the dashboard.'
+        'You will receive a notification once the transaction has been verified and your updated balance is reflected on the dashboard.\n'
         'We recommend keeping your digital receipt for your records until the payment is fully visible in your billing history.',
         style: theme.textTheme.bodyLarge?.copyWith(
           color: theme.colorScheme.onSecondary,
@@ -204,40 +226,18 @@ class _MyWidgetState extends State<PaymentPage> {
                 cursorColor: theme.colorScheme.primary,
                 autovalidateMode: AutovalidateMode.onUserInteractionIfError,
                 onChanged: (value) {
-                  if (value.isNotEmpty || value != '') {
-                    if (0 < double.parse(value)) {
-                      setState(() {
-                        isEnabled = true;
-                      });
-                    } else {
-                      setState(() {
-                        isEnabled = false;
-                      });
-                    }
-                  } else {
-                    setState(() {
-                      isEnabled = false;
-                    });
-                  }
+                  _textFieldToggleSwitch(value);
                 },
                 validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please input amount';
-                  }
-
-                  if (value.contains(RegExp(r'^\d*\.?\d*$'))) {
-                    return null;
-                  } else {
-                    return 'Invalid input';
-                  }
+                  return _validateAmountTextfield(value);
                 },
-                onSaved: (newValue) {
-                  inputAmount = newValue;
+                onSaved: (value) {
+                  _storeValue(value);
                 },
                 decoration: InputDecoration(
                   hintText: _defaultAmount,
-                  errorStyle: Theme.of(context).textTheme.labelSmall!.copyWith(
-                    color: Theme.of(context).colorScheme.error,
+                  errorStyle: theme.textTheme.labelSmall!.copyWith(
+                    color: theme.colorScheme.error,
                   ),
                   helper: Text.rich(
                     TextSpan(
@@ -247,7 +247,8 @@ class _MyWidgetState extends State<PaymentPage> {
                           style: theme.textTheme.labelSmall,
                         ),
                         TextSpan(
-                          text: '$currencySign ${data.balance}',
+                          text:
+                              '$currencySign ${data.balance.toStringAsFixed(2)}',
                           style: theme.textTheme.labelSmall?.copyWith(
                             color: Color(0xFF664D03),
                             fontWeight: FontWeight.bold,

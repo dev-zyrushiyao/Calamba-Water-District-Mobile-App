@@ -15,8 +15,6 @@ class BillingPage extends StatelessWidget {
     final UserInterfaceService userInterfaceService = UserInterfaceService();
     final ThemeData theme = Theme.of(context);
 
-    debugPrint('Is the Bill list length: ${data?.bill?.length}');
-
     if (data == null) {
       return DisplayNoData();
     }
