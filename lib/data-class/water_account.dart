@@ -2,6 +2,7 @@
 
 import 'package:myapp/data-bank/receipt.dart';
 import 'package:myapp/data-class/bill.dart';
+import 'package:myapp/data-class/ticket.dart';
 
 class WaterAccount {
   //Widget of Accounts
@@ -16,6 +17,7 @@ class WaterAccount {
   double balance; //removed the final to be editable
   final List<Bill>? bill;
   final List<Receipt>? receipt;
+  final List<Ticket>? ticket;
 
   WaterAccount({
     required this.accountName,
@@ -28,5 +30,6 @@ class WaterAccount {
     required this.balance,
     required this.bill,
     required this.receipt,
+    required this.ticket,
   });
 }

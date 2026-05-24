@@ -52,6 +52,7 @@ class MyApp extends StatelessWidget {
           shadowColor: designSystem.cwdThemeColor().primary,
           surfaceTintColor: designSystem.cwdThemeColor().primary,
         ),
+
         useMaterial3: true,
         textTheme: designSystem.cwdTypography(
           designSystem.primaryFont,

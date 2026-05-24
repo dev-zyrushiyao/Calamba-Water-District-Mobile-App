@@ -4,8 +4,7 @@ import 'package:myapp/custom-widgets/headline.dart';
 import 'package:myapp/custom-widgets/primary_button.dart';
 import 'package:myapp/custom-widgets/receipt_container.dart';
 import 'package:myapp/data-bank/receipt.dart';
-import 'package:intl/intl.dart';
-import 'package:myapp/services/payment_service.dart';
+
 import 'package:myapp/services/user_interface_service.dart';
 
 class PaymentResult extends StatelessWidget {

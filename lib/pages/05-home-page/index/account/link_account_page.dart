@@ -7,8 +7,7 @@ import 'package:myapp/custom-widgets/colored_container.dart';
 import 'package:myapp/custom-widgets/headline.dart';
 import 'package:myapp/custom-widgets/primary_button.dart';
 import 'package:myapp/data-bank/account_type.dart';
-import 'package:myapp/data-bank/water_account_list.dart';
-import 'package:myapp/data-class/water_account.dart';
+
 import 'package:myapp/services/link_account_service.dart';
 import 'package:myapp/services/user_interface_service.dart';
 
@@ -47,7 +46,7 @@ class _LinkAccountPageState extends State<LinkAccountPage>
   bool _isAccountAlreadyOnList = false;
 
   //Simulated datebase of water accounts - use only as placeholder
-  final List<WaterAccount> _waterAccountList = WaterAccountList().accounts;
+  // final List<WaterAccount> _waterAccountList = WaterAccountList().accounts;
 
   //Form key for the form widget
   final _formKey = GlobalKey<FormState>();
@@ -271,7 +270,21 @@ class _LinkAccountPageState extends State<LinkAccountPage>
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     return Scaffold(
-      appBar: AppBar(title: const Text('Link Account')),
+      appBar: AppBar(
+        title: const Text('Link Account'),
+        leading: IconButton(
+          onPressed: () async {
+            if (!context.mounted) return;
+            FocusScope.of(context).unfocus();
+
+            await Future.delayed(Duration(milliseconds: 1), () {});
+
+            if (!context.mounted) return;
+            Navigator.pop(context);
+          },
+          icon: Icon(Icons.arrow_back_outlined),
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: ListView(

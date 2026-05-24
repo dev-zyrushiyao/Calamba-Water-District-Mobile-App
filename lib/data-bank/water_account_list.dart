@@ -15,6 +15,7 @@ class WaterAccountList {
       balance: 346.00,
       bill: null,
       receipt: null,
+      ticket: null,
     ),
 
     WaterAccount(
@@ -28,6 +29,7 @@ class WaterAccountList {
       balance: 346.00,
       bill: null,
       receipt: null,
+      ticket: null,
     ),
 
     WaterAccount(
@@ -41,6 +43,7 @@ class WaterAccountList {
       balance: 235.00,
       bill: null,
       receipt: null,
+      ticket: null,
     ),
 
     WaterAccount(
@@ -54,6 +57,7 @@ class WaterAccountList {
       balance: 235.00,
       bill: null,
       receipt: null,
+      ticket: null,
     ),
 
     WaterAccount(
@@ -67,6 +71,7 @@ class WaterAccountList {
       balance: 235.00,
       bill: null,
       receipt: null,
+      ticket: null,
     ),
   ];
 }

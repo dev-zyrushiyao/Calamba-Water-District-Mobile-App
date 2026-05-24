@@ -1,0 +1,1 @@
+enum ChatRole { client, staff }

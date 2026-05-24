@@ -233,6 +233,7 @@ class LinkAccountService {
             generateBill(loggedUser, linkedAccountForm, generatedDueDay) ??
             [], // if the generateBill method fails to fire it will produce an empty instance of a list and not a null value for the bill property
         receipt: [],
+        ticket: [],
       ),
     );
   }

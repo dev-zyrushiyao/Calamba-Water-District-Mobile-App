@@ -12,7 +12,7 @@ import 'package:timezone/timezone.dart' as tz;
 class PaymentService {
   String generateTransactionNumber() {
     //generate 8 digit number
-    var transactionNumber = Random().nextInt(90000000) + 10000000;
+    var transactionNumber = Random().nextInt(80_000_000) + 10_000_000;
 
     //convert the generated number as List
     List<String> transactionNumberAsList = transactionNumber.toString().split(
