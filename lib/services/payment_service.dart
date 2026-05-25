@@ -5,9 +5,7 @@ import 'package:myapp/data-bank/receipt.dart';
 import 'package:myapp/data-class/constants/biller_enum.dart';
 import 'package:myapp/data-class/constants/payment_method_enum.dart';
 import 'package:myapp/data-class/water_account.dart';
-
-import 'package:timezone/data/latest.dart' as tz;
-import 'package:timezone/timezone.dart' as tz;
+import 'package:myapp/services/user_interface_service.dart';
 
 class PaymentService {
   String generateTransactionNumber() {
@@ -34,13 +32,8 @@ class PaymentService {
     required double inputAmount,
     required PaymentMethod paymentMethod,
   }) async {
-    // from the import dependency timezone & latest
-    // import 'package:timezone/data/latest.dart' as tz;
-    // import 'package:timezone/timezone.dart' as tz;
-    tz.initializeTimeZones();
-    final manilaLocation = tz.getLocation('Asia/Manila');
-    final manilaTime = tz.TZDateTime.now(manilaLocation);
-
+    final UserInterfaceService userInterfaceService = UserInterfaceService();
+    final manilaTime = userInterfaceService.getManilaTimezone();
     //add receipt object
     waterAccount.receipt?.add(
       Receipt(

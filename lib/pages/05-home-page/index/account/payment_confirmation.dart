@@ -100,9 +100,12 @@ class PaymentConfirmation extends StatelessWidget {
                           ),
                           TextButton(
                             onPressed: () async {
+                              //create a generated transaction number
                               var generatedTransactionNumber = paymentService
                                   .generateTransactionNumber();
 
+                              //use the generated transaction number and create the receipt
+                              //deduct the balance
                               await paymentService.saveAndCreateReceipt(
                                 waterAccount: waterAccount,
                                 transactionNumber: generatedTransactionNumber,
@@ -111,6 +114,8 @@ class PaymentConfirmation extends StatelessWidget {
                                 paymentMethod: PaymentMethod.gCash,
                               );
 
+                              //after creating the receipt , search the linkedAccount generated transaction number
+                              //returns a Receipt object of that specific transaction (current one created)
                               Receipt? retrievedReceipt = await paymentService
                                   .searchReceiptToDisplay(
                                     searchTransactionNumber:
@@ -118,9 +123,11 @@ class PaymentConfirmation extends StatelessWidget {
                                     waterAccountReceipt: waterAccount.receipt,
                                   );
 
-                              //guard
+                              //guard clause
                               if (!context.mounted) return;
 
+                              //The Receipt object is pass as argument to be displayed on the next page
+                              //shows the receipt of user's current transaction
                               if (retrievedReceipt != null) {
                                 Navigator.pushNamed(
                                   context,

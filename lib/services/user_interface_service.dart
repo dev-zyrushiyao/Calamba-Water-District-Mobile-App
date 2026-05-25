@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
+
 class UserInterfaceService {
   //custom snackbar
   ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showCustomSnackbar(
@@ -49,5 +52,16 @@ class UserInterfaceService {
     } else {
       return Colors.grey[400]!;
     }
+  }
+
+  DateTime getManilaTimezone() {
+    // from the import dependency timezone & latest
+    // import 'package:timezone/data/latest.dart' as tz;
+    // import 'package:timezone/timezone.dart' as tz;
+    tz.initializeTimeZones();
+    final manilaLocation = tz.getLocation('Asia/Manila');
+    final manilaTime = tz.TZDateTime.now(manilaLocation);
+
+    return manilaTime;
   }
 }

@@ -16,11 +16,12 @@ import 'package:myapp/pages/05-home-page/index/account/billing_page.dart';
 import 'package:myapp/pages/05-home-page/index/account/link_account_page.dart';
 import 'package:myapp/pages/05-home-page/index/account/payment_confirmation.dart';
 import 'package:myapp/pages/05-home-page/index/account/payment_page.dart';
-import 'package:myapp/pages/05-home-page/index/account/payment_result.dart';
+import 'package:myapp/pages/05-home-page/index/account/payment_result_page.dart';
 import 'package:myapp/pages/05-home-page/index/account/receipt_content_page.dart';
 import 'package:myapp/pages/05-home-page/index/account/receipt_page.dart';
 import 'package:myapp/pages/05-home-page/index/news_content_page.dart';
 import 'package:myapp/pages/05-home-page/index/support/support_index.dart';
+import 'package:myapp/pages/05-home-page/index/support/support_result_page.dart';
 
 void main() async {
   // 1. Mandatory for native platform calls before runApp
@@ -85,9 +86,10 @@ class MyApp extends StatelessWidget {
         '/receiptcontent': (context) => const ReceiptContentPage(), //pending
         '/payment': (context) => const PaymentPage(),
         '/paymentconfirmation': (context) => PaymentConfirmation(),
-        '/paymentresult': (context) => const PaymentResult(),
+        '/paymentresult': (context) => const PaymentResultPage(),
         //Support Index
         '/support': (context) => const SupportIndex(),
+        '/supportresult': (context) => const SupportResultPage(),
       },
     );
   }

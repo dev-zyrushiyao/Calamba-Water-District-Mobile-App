@@ -6,6 +6,6 @@
 //DONE - CHANGE THE CONSTANT VALUE OF BILLING : PERIOD , READING AND DUE DATE
 //CANCELLED- Create masking for E-Wallet (ProfileIndex)
 //DONE- Create UI for Support
-// - Create Report Class and Dataclass List<Report>
+//DONE - Create Report Class and Dataclass List<Report>
 // - App Report Class to UI
 //- Work on the Creation of User Account

@@ -23,6 +23,7 @@ class _SupportIndexState extends State<SupportIndex> {
 
   //service
   final SupportService _supportService = SupportService();
+  final UserInterfaceService _userInterfaceService = UserInterfaceService();
 
   final List<DropdownMenuEntry<dynamic>> _categoryDropDownItem = [];
   final TextEditingController _categoryController = TextEditingController();
@@ -32,16 +33,14 @@ class _SupportIndexState extends State<SupportIndex> {
 
   DateTime _selectedDate = DateTime.now();
 
-  final UserInterfaceService _userInterfaceService = UserInterfaceService();
-
   String? _formatDateValue;
   bool _isCategoryNotAppBug = false;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final Map<String, dynamic> _supportInput = {
-    'supportCategory': '',
-    'affectedAccountNumber': '',
-    'reportContext': '',
+    'supportCategory': null,
+    'affectedAccountNumber': null,
+    'reportContext': null,
   };
 
   @override
@@ -83,6 +82,58 @@ class _SupportIndexState extends State<SupportIndex> {
     _formatDateValue = _userInterfaceService.convertToCalendarDateFormat(
       _selectedDate,
     );
+  }
+
+  Future<void> createTicketSupport(int generatedTicketNumber) async {
+    //Search the affected account under the LoggedUser
+    for (var linkedAccount in _loggedUser.linkedAccounts) {
+      //when the user is found create a receipt
+      if (linkedAccount.accountNumber ==
+          _supportInput['affectedAccountNumber']) {
+        DateTime manilaTime = _userInterfaceService.getManilaTimezone();
+
+        linkedAccount.ticket?.add(
+          Ticket(
+            ticketNumber: generatedTicketNumber,
+            report: Report(
+              supportCategory: _supportInput['supportCategory'],
+              affectedAccountNumber: _supportInput['affectedAccountNumber'],
+              dateOccurence: _selectedDate,
+              dateTicketCreated: manilaTime,
+              reportedBy: _loggedUser.nickname,
+              reportContext: _supportInput['reportContext'],
+              chatHistory: [],
+            ),
+            reportStatus: ReportStatus.inProgress,
+          ),
+        );
+        debugPrint('NOTE: Ticket has been Created');
+        break;
+      }
+    }
+  }
+
+  Future<Ticket?> retrieveTicket(int generatedTicketNumber) async {
+    for (var linkedAccount in _loggedUser.linkedAccounts) {
+      for (var ticket in linkedAccount.ticket!) {
+        if (ticket.ticketNumber == generatedTicketNumber) {
+          return ticket;
+        }
+      }
+    }
+
+    return null;
+  }
+
+  void _refreshValues() {
+    setState(() {
+      _formKey.currentState?.reset(); // Clears form validation & FormFields
+      _categoryController.clear(); // Clears Category Text
+      _accountController.clear(); // Clears Account Text
+      _selectedDate = DateTime.now(); // Resets calendar date
+      _isCategoryNotAppBug = false; // Hides the conditional dropdown
+      _supportInput.updateAll((key, value) => null);
+    });
   }
 
   @override
@@ -164,40 +215,61 @@ class _SupportIndexState extends State<SupportIndex> {
                   if (_formKey.currentState!.validate()) {
                     _formKey.currentState!.save();
 
-                    //Search the affected account under the LoggedUser
-                    for (var linkedAccount in _loggedUser.linkedAccounts) {
-                      //when the user is found create a receipt
-                      if (linkedAccount.accountNumber ==
-                          _supportInput['affectedAccountNumber']) {
-                        //Placeholder
-                        linkedAccount.ticket?.add(
-                          Ticket(
-                            ticketNumber: _supportService
-                                .generateTicketNumber(),
-                            report: Report(
-                              supportCategory: _supportInput['supportCategory'],
-                              affectedAccountNumber:
-                                  _supportInput['affectedAccountNumber'],
-                              dateOccurence: _selectedDate,
-                              dateTicketCreated: DateTime.now(),
-                              reportedBy: _loggedUser.nickname,
-                              reportContext: _supportInput['reportContext'],
-                              chatHistory: [],
-                            ),
-                            reportStatus: ReportStatus.inProgress,
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog.adaptive(
+                          title: Text('Submit report?'),
+                          content: Text(
+                            'Confirming this submission will automatically generate a support ticket for your reported issue.',
                           ),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Text('Cancel'),
+                            ),
+                            TextButton(
+                              onPressed: () async {
+                                //generate ticketNumber
+                                int generatedTicketNumber = _supportService
+                                    .generateTicketNumber();
+
+                                //create ticket
+                                await createTicketSupport(
+                                  generatedTicketNumber,
+                                );
+
+                                Ticket? searchedReceipt = await retrieveTicket(
+                                  generatedTicketNumber,
+                                );
+
+                                if (!context.mounted) return;
+                                //close the dialogbox
+                                Navigator.pop(context);
+
+                                // Future.delayed(Duration(seconds: 3));
+                                if (searchedReceipt != null) {
+                                  await Navigator.pushNamed(
+                                    context,
+                                    '/supportresult',
+                                    arguments: searchedReceipt,
+                                  );
+
+                                  _refreshValues();
+                                } else {
+                                  debugPrint(
+                                    'searched ticket value : $searchedReceipt , no ticket found',
+                                  );
+                                }
+                              },
+                              child: Text('Submit'),
+                            ),
+                          ],
                         );
-
-                        debugPrint('NOTE: Ticket has been Created');
-
-                        for (var i = 0; i < linkedAccount.ticket!.length; i++) {
-                          debugPrint(
-                            'Ticket #:${linkedAccount.ticket?[i].ticketNumber} - Report: ${linkedAccount.ticket?[i].report.reportContext} - Report By User - ${linkedAccount.ticket?[i].report.reportedBy} - Affected user ${linkedAccount.ticket?[i].report.affectedAccountNumber} - Date Occrence: ${linkedAccount.ticket?[i].report.dateOccurence} - Date reported ${linkedAccount.ticket?[i].report.dateTicketCreated}',
-                          );
-                        }
-                        break;
-                      }
-                    }
+                      },
+                    );
                   }
                 },
               ),

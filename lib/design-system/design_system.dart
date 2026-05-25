@@ -26,9 +26,9 @@ class DesignSystem {
   final TextStyle primaryFont = GoogleFonts.montserrat();
   final TextStyle secondaryFont = GoogleFonts.openSans();
 
-  double letterSpacingConverter(double fontSize, double percentage) =>
+  double _letterSpacingConverter(double fontSize, double percentage) =>
       fontSize * (percentage / 100);
-  double lineHeightConverter(double fontSize, double percentage) =>
+  double _lineHeightConverter(double fontSize, double percentage) =>
       percentage / fontSize;
 
   //Design System - Typography FIGMA
@@ -56,29 +56,29 @@ class DesignSystem {
         fontFamily: primaryFont.fontFamily,
         fontSize: 20,
         fontWeight: semiBold,
-        letterSpacing: letterSpacingConverter(20.00, 1.5),
+        letterSpacing: _letterSpacingConverter(20.00, 1.5),
         color: cwdThemeColor().onPrimary,
       ), //H3
       titleLarge: TextStyle(
         fontFamily: primaryFont.fontFamily,
         fontSize: 17,
         fontWeight: semiBold,
-        letterSpacing: letterSpacingConverter(17.00, 1.5),
+        letterSpacing: _letterSpacingConverter(17.00, 1.5),
         color: cwdThemeColor().onPrimary,
       ), //Headline
       titleMedium: TextStyle(
         fontFamily: primaryFont.fontFamily,
         fontSize: 15,
         fontWeight: FontWeight.normal,
-        letterSpacing: letterSpacingConverter(15.00, 1.5),
+        letterSpacing: _letterSpacingConverter(15.00, 1.5),
         color: cwdThemeColor().onPrimary,
       ), //Subhead
       labelSmall: TextStyle(
         fontFamily: primaryFont.fontFamily,
         fontSize: 13,
         fontWeight: FontWeight.normal,
-        letterSpacing: letterSpacingConverter(13.00, 1.5),
-        height: lineHeightConverter(13.00, 20.00),
+        letterSpacing: _letterSpacingConverter(13.00, 1.5),
+        height: _lineHeightConverter(13.00, 20.00),
         color: cwdThemeColor().onPrimary,
       ), //Caption
       //SecondaryFont (Body , Link , CTA)
@@ -86,8 +86,8 @@ class DesignSystem {
         fontFamily: secondaryFont.fontFamily,
         fontSize: 17,
         fontWeight: FontWeight.normal,
-        letterSpacing: letterSpacingConverter(17, 5.0),
-        height: lineHeightConverter(17.00, 25.00),
+        letterSpacing: _letterSpacingConverter(17, 5.0),
+        height: _lineHeightConverter(17.00, 25.00),
         color: cwdThemeColor().onPrimary,
       ), //Body
       bodySmall: TextStyle(

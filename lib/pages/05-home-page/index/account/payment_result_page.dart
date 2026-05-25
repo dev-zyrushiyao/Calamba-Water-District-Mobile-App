@@ -7,8 +7,8 @@ import 'package:myapp/data-bank/receipt.dart';
 
 import 'package:myapp/services/user_interface_service.dart';
 
-class PaymentResult extends StatelessWidget {
-  const PaymentResult({super.key});
+class PaymentResultPage extends StatelessWidget {
+  const PaymentResultPage({super.key});
 
   @override
   Widget build(BuildContext context) {
