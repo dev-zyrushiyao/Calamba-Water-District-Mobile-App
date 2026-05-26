@@ -5,16 +5,15 @@ import 'package:myapp/custom-shapes/support-page-shapes/support_shape3.dart';
 import 'package:myapp/custom-shapes/support-page-shapes/support_shape4.dart';
 import 'package:myapp/custom-shapes/support-page-shapes/support_shape5.dart';
 import 'package:myapp/custom-widgets/display_no_data.dart';
-import 'package:myapp/data-class/ticket.dart';
 
-class SupportResultPage extends StatefulWidget {
-  const SupportResultPage({super.key});
+class SupportEmailResultPage extends StatefulWidget {
+  const SupportEmailResultPage({super.key});
 
   @override
-  State<SupportResultPage> createState() => _MyWidgetState();
+  State<SupportEmailResultPage> createState() => _MyWidgetState();
 }
 
-class _MyWidgetState extends State<SupportResultPage>
+class _MyWidgetState extends State<SupportEmailResultPage>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<Size?> _sizeAnimation;
@@ -64,7 +63,7 @@ class _MyWidgetState extends State<SupportResultPage>
 
   @override
   Widget build(BuildContext context) {
-    final data = ModalRoute.of(context)?.settings.arguments as Ticket?;
+    final data = ModalRoute.of(context)?.settings.arguments as int?;
 
     if (data == null) {
       return DisplayNoData();
@@ -111,15 +110,15 @@ class _MyWidgetState extends State<SupportResultPage>
                               TextSpan(text: 'A new Ticket'),
                               TextSpan(text: ' '),
                               TextSpan(
-                                text: '#${data.ticketNumber}',
+                                text: '#$data',
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
                               TextSpan(text: ' '),
-                              TextSpan(text: 'is now active '),
+                              TextSpan(text: 'is now active.'),
                               TextSpan(text: ' '),
                               TextSpan(
                                 text:
-                                    'You can view your ticket status on the Account page.',
+                                    'You will receive a reply within 48 hours via email.',
                               ),
                             ],
                           ),

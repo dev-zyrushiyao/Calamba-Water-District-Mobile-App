@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:myapp/custom-widgets/headline.dart';
 import 'package:myapp/custom-widgets/primary_button.dart';
 import 'package:myapp/data-bank/account_type.dart';
+import 'package:myapp/data-class/chat_support.dart';
+import 'package:myapp/data-class/constants/chat_role_enum.dart';
 import 'package:myapp/data-class/constants/report_status_enum.dart';
 import 'package:myapp/data-class/constants/support_category_enum.dart';
 import 'package:myapp/data-class/report.dart';
@@ -34,7 +36,7 @@ class _SupportIndexState extends State<SupportIndex> {
   DateTime _selectedDate = DateTime.now();
 
   String? _formatDateValue;
-  bool _isCategoryNotAppBug = false;
+  bool _enableAccountDropdown = false;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final Map<String, dynamic> _supportInput = {
@@ -84,6 +86,35 @@ class _SupportIndexState extends State<SupportIndex> {
     );
   }
 
+  ChatSupport createChatMessage(
+    String senderName,
+    String? reportContext,
+    DateTime dateTime,
+    ChatRole role,
+  ) {
+    switch (role) {
+      case ChatRole.client:
+        return ChatSupport(
+          senderName: senderName,
+          message: reportContext ?? 'Report Context Not Found',
+          date: dateTime,
+          role: role,
+        );
+      case ChatRole.staff:
+        //default
+        return ChatSupport(
+          senderName: 'Stell - Support',
+          message:
+              'We apologize for the inconvenience regarding your balance; \n'
+              'please allow 24 to 48 hours for your mobile payment to sync with our system. \n'
+              'If the issue persists after this period, kindly send a screenshot of your receipt \n'
+              'so we can manually verify and update your account.',
+          date: dateTime,
+          role: role,
+        );
+    }
+  }
+
   Future<void> createTicketSupport(int generatedTicketNumber) async {
     //Search the affected account under the LoggedUser
     for (var linkedAccount in _loggedUser.linkedAccounts) {
@@ -92,7 +123,7 @@ class _SupportIndexState extends State<SupportIndex> {
           _supportInput['affectedAccountNumber']) {
         DateTime manilaTime = _userInterfaceService.getManilaTimezone();
 
-        linkedAccount.ticket?.add(
+        linkedAccount.ticket.add(
           Ticket(
             ticketNumber: generatedTicketNumber,
             report: Report(
@@ -101,8 +132,22 @@ class _SupportIndexState extends State<SupportIndex> {
               dateOccurence: _selectedDate,
               dateTicketCreated: manilaTime,
               reportedBy: _loggedUser.nickname,
-              reportContext: _supportInput['reportContext'],
-              chatHistory: [],
+              reportContext:
+                  _supportInput['reportContext'] ?? 'Report Context Not Found',
+              chatHistory: [
+                createChatMessage(
+                  _loggedUser.nickname,
+                  _supportInput['reportContext'],
+                  manilaTime,
+                  ChatRole.client,
+                ),
+                createChatMessage(
+                  'Stell',
+                  _supportInput['reportContext'],
+                  manilaTime,
+                  ChatRole.staff,
+                ),
+              ],
             ),
             reportStatus: ReportStatus.inProgress,
           ),
@@ -115,7 +160,7 @@ class _SupportIndexState extends State<SupportIndex> {
 
   Future<Ticket?> retrieveTicket(int generatedTicketNumber) async {
     for (var linkedAccount in _loggedUser.linkedAccounts) {
-      for (var ticket in linkedAccount.ticket!) {
+      for (var ticket in linkedAccount.ticket) {
         if (ticket.ticketNumber == generatedTicketNumber) {
           return ticket;
         }
@@ -131,7 +176,7 @@ class _SupportIndexState extends State<SupportIndex> {
       _categoryController.clear(); // Clears Category Text
       _accountController.clear(); // Clears Account Text
       _selectedDate = DateTime.now(); // Resets calendar date
-      _isCategoryNotAppBug = false; // Hides the conditional dropdown
+      _enableAccountDropdown = false; // Hides the conditional dropdown
       _supportInput.updateAll((key, value) => null);
     });
   }
@@ -170,7 +215,7 @@ class _SupportIndexState extends State<SupportIndex> {
 
               const SizedBox(height: 30),
 
-              if (_isCategoryNotAppBug)
+              if (_enableAccountDropdown)
                 _buildDropdownButton(
                   title: 'Affected Account',
                   controller: _accountController,
@@ -236,32 +281,59 @@ class _SupportIndexState extends State<SupportIndex> {
                                 int generatedTicketNumber = _supportService
                                     .generateTicketNumber();
 
-                                //create ticket
-                                await createTicketSupport(
-                                  generatedTicketNumber,
-                                );
-
-                                Ticket? searchedReceipt = await retrieveTicket(
-                                  generatedTicketNumber,
-                                );
-
-                                if (!context.mounted) return;
                                 //close the dialogbox
                                 Navigator.pop(context);
 
-                                // Future.delayed(Duration(seconds: 3));
-                                if (searchedReceipt != null) {
-                                  await Navigator.pushNamed(
-                                    context,
-                                    '/supportresult',
-                                    arguments: searchedReceipt,
-                                  );
+                                switch (_supportInput['supportCategory']) {
+                                  case SupportCategory.issueLeak ||
+                                      SupportCategory.issueBill:
 
-                                  _refreshValues();
-                                } else {
-                                  debugPrint(
-                                    'searched ticket value : $searchedReceipt , no ticket found',
-                                  );
+                                    //create ticket
+                                    await createTicketSupport(
+                                      generatedTicketNumber,
+                                    );
+
+                                    Ticket? searchedReceipt =
+                                        await retrieveTicket(
+                                          generatedTicketNumber,
+                                        );
+
+                                    //guard clause
+                                    if (!context.mounted) return;
+
+                                    if (searchedReceipt != null) {
+                                      await Navigator.pushNamed(
+                                        context,
+                                        '/supportresult',
+                                        arguments: searchedReceipt,
+                                      );
+                                      //refresh the value when the user go back at SupportIndex after creating ticket
+                                      _refreshValues();
+                                    } else {
+                                      debugPrint(
+                                        'searched ticket value : $searchedReceipt , no ticket found',
+                                      );
+                                    }
+                                    break;
+                                  case SupportCategory.issueApp ||
+                                      SupportCategory.issueAccount:
+                                    //Not saved in Receipt object because its an account issue
+                                    //Receipt only issued in LinkedAccount
+                                    //For account level and app issue proceed to email support instead
+                                    //arguments just return an integer generated number
+                                    //Display a separate page that display just a generated number imitating ticket is saved
+                                    await Navigator.pushNamed(
+                                      context,
+                                      '/supportemailresult',
+                                      arguments: generatedTicketNumber,
+                                    );
+                                    //refresh the value when the user go back at SupportIndex after creating ticket
+                                    _refreshValues();
+                                    break;
+                                  default:
+                                    debugPrint(
+                                      'switch case value (SupportCategory) is not found.',
+                                    );
                                 }
                               },
                               child: Text('Submit'),
@@ -375,6 +447,7 @@ class _SupportIndexState extends State<SupportIndex> {
           ),
         ),
         DropdownMenuFormField(
+          requestFocusOnTap: false,
           controller: controller,
           width: double.infinity,
           autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -388,7 +461,9 @@ class _SupportIndexState extends State<SupportIndex> {
           onSelected: (value) {
             setState(() {
               //this is used to hide the affected Account Dropdown
-              _isCategoryNotAppBug = (value != SupportCategory.issueApp);
+              _enableAccountDropdown =
+                  !(value == SupportCategory.issueApp ||
+                      value == SupportCategory.issueAccount);
             });
           },
           validator: (value) {
@@ -411,7 +486,7 @@ class _SupportIndexState extends State<SupportIndex> {
                 break;
               default:
                 debugPrint(
-                  'value: $value (${value.runtimeType}) failed to save',
+                  'OnSaved value: $value (${value.runtimeType}) failed to save',
                 );
             }
           },

@@ -1,5 +1,6 @@
 //WaterAccount -> LinkedAccountList -> HomeIndex -> DashBoardAccount
 
+import 'package:flutter/material.dart';
 import 'package:myapp/data-bank/receipt.dart';
 import 'package:myapp/data-class/bill.dart';
 import 'package:myapp/data-class/ticket.dart';
@@ -15,9 +16,9 @@ class WaterAccount {
   final int dueDay;
   final int remainingDayDue;
   double balance; //removed the final to be editable
-  final List<Bill>? bill;
-  final List<Receipt>? receipt;
-  final List<Ticket>? ticket;
+  final List<Bill> bill;
+  final List<Receipt> receipt;
+  final List<Ticket> ticket;
 
   WaterAccount({
     required this.accountName,
@@ -32,4 +33,12 @@ class WaterAccount {
     required this.receipt,
     required this.ticket,
   });
+
+  Color get statusColor {
+    if (isActive) {
+      return Color(0xFFC8F2CF);
+    } else {
+      return Colors.grey[400]!;
+    }
+  }
 }

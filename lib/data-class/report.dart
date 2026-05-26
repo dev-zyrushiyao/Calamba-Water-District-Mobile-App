@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:myapp/data-class/chat_support.dart';
 import 'package:myapp/data-class/constants/support_category_enum.dart';
 
@@ -9,7 +8,7 @@ class Report {
   final DateTime dateTicketCreated;
   final String reportedBy;
   final String reportContext;
-  final List<Map<Widget, ChatSupport>>? chatHistory;
+  final List<ChatSupport> chatHistory;
 
   Report({
     required this.supportCategory,

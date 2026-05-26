@@ -68,12 +68,11 @@ class PaymentResultPage extends StatelessWidget {
             SizedBox(height: 20),
 
             PrimaryButton(
-              label: 'Return to Homepage',
+              label: 'Return to Account Page',
               onPressed: () {
-                Navigator.pushNamedAndRemoveUntil(
+                Navigator.popUntil(
                   context,
-                  '/home',
-                  (route) => false,
+                  ModalRoute.withName('/accountinformation'),
                 );
               },
             ),

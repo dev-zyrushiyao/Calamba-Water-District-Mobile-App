@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/services/user_interface_service.dart';
+import 'package:myapp/data-class/water_account.dart';
 
 class StatusIndicator extends StatelessWidget {
-  const StatusIndicator({super.key, required this.isActive});
+  const StatusIndicator({super.key, required this.waterAccount});
 
-  final bool isActive;
+  final WaterAccount waterAccount;
 
   @override
   Widget build(BuildContext context) {
-    final UserInterfaceService userInterfaceService = UserInterfaceService();
     ThemeData theme = Theme.of(context);
     return Container(
       padding: EdgeInsets.all(3.0),
       decoration: BoxDecoration(
-        color: userInterfaceService.getStatusColor(isActive),
+        color: waterAccount.statusColor,
         border: Border.all(
           color: Color(0xFFE3E3E3),
           width: 1.0,
@@ -22,7 +21,7 @@ class StatusIndicator extends StatelessWidget {
         borderRadius: BorderRadius.circular(3.0),
       ),
       child: Text(
-        isActive ? 'Active' : 'Inactive',
+        waterAccount.isActive ? 'Active' : 'Inactive',
         style: theme.textTheme.labelSmall!.copyWith(
           fontWeight: FontWeight.bold,
         ),

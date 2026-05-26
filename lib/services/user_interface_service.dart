@@ -38,7 +38,14 @@ class UserInterfaceService {
     return receiptTimestamp;
   }
 
-  String convertToCalendarDateFormat(DateTime date) {
+  String convertToCalendarDateFormat(DateTime date, [bool? chatSupportFormat]) {
+    if (chatSupportFormat == true) {
+      //Sample Format: Sat, May 23, 2026
+      String receiptTimestamp = DateFormat("E , MMM d, hh:mm a").format(date);
+
+      return receiptTimestamp;
+    }
+
     //Sample Format: Sat, May 23, 2026
     String receiptTimestamp = DateFormat("E , MMM d, yyyy").format(date);
 
@@ -46,7 +53,7 @@ class UserInterfaceService {
   }
 
   //Account status color
-  Color getStatusColor(bool isActive) {
+  Color getAccountStatusColor(bool isActive) {
     if (isActive) {
       return Color(0xFFC8F2CF);
     } else {

@@ -7,5 +7,11 @@
 //CANCELLED- Create masking for E-Wallet (ProfileIndex)
 //DONE- Create UI for Support
 //DONE - Create Report Class and Dataclass List<Report>
-// - App Report Class to UI
+//DONE - Finsih the Support Index and Support Index UI Page
+//DONE - Create a separate saving mode for Account Issue and App Bug (Support Index) 
+//DONE -App Report Class to UI
+//DONE make a getter or function to make get color of isActive of WaterAccount 
+//Done- REFRESH THE AMOUNT on the dashboard when its reload
+//Create a textbox and add message to chatlog
+//Add a copy the transaction number from receipt
 //- Work on the Creation of User Account

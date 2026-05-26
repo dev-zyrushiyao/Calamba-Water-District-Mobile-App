@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:myapp/custom-widgets/colored_container.dart';
 import 'package:myapp/custom-widgets/display_no_data.dart';
 import 'package:myapp/custom-widgets/headline.dart';
+import 'package:myapp/data-class/bill.dart';
 import 'package:myapp/data-class/water_account.dart';
 import 'package:myapp/services/user_interface_service.dart';
 
@@ -11,13 +12,17 @@ class BillingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final data = ModalRoute.of(context)?.settings.arguments as WaterAccount?;
+    final data = ModalRoute.of(context)?.settings.arguments as Map?;
+
     final UserInterfaceService userInterfaceService = UserInterfaceService();
     final ThemeData theme = Theme.of(context);
 
     if (data == null) {
       return DisplayNoData();
     }
+
+    var billList = data['reversedListData'] as List<Bill>;
+    var userData = data['userData'] as WaterAccount;
 
     return Scaffold(
       appBar: AppBar(title: const Text('Billing')),
@@ -40,22 +45,22 @@ class BillingPage extends StatelessWidget {
                   ),
                   child: Headline(
                     headline:
-                        '${userInterfaceService.formatAccountNumber(accountNumber: data.accountNumber)} Bills',
+                        '${userInterfaceService.formatAccountNumber(accountNumber: userData.accountNumber)} Bills',
                   ),
                 ),
-                if (data.bill != null && data.bill!.isNotEmpty)
+                if (billList.isNotEmpty)
                   Expanded(
                     child: ListView.separated(
                       shrinkWrap: true,
                       separatorBuilder: (context, index) =>
                           const SizedBox(height: 50),
-                      itemCount: data.bill!.length,
+                      itemCount: billList.length,
                       itemBuilder: (context, index) {
                         return GestureDetector(
                           onTap: () => Navigator.pushNamed(
                             context,
                             '/billingcontent',
-                            arguments: data.bill?.reversed.toList()[index],
+                            arguments: billList[index],
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -65,7 +70,7 @@ class BillingPage extends StatelessWidget {
                                 style: theme.textTheme.bodyLarge,
                               ),
                               Text(
-                                '${data.bill?.reversed.toList()[index].monthName} 2026',
+                                '${billList[index].monthName} 2026',
                                 style: theme.textTheme.bodyLarge,
                               ),
                             ],

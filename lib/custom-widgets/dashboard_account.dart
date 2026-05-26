@@ -64,7 +64,7 @@ class DashboardDisplay extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  StatusIndicator(isActive: waterAccount.isActive),
+                  StatusIndicator(waterAccount: waterAccount),
                 ],
               ),
               Text(

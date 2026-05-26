@@ -19,7 +19,10 @@ import 'package:myapp/pages/05-home-page/index/account/payment_page.dart';
 import 'package:myapp/pages/05-home-page/index/account/payment_result_page.dart';
 import 'package:myapp/pages/05-home-page/index/account/receipt_content_page.dart';
 import 'package:myapp/pages/05-home-page/index/account/receipt_page.dart';
+import 'package:myapp/pages/05-home-page/index/account/ticket_content.dart';
+import 'package:myapp/pages/05-home-page/index/account/ticket_page.dart';
 import 'package:myapp/pages/05-home-page/index/news_content_page.dart';
+import 'package:myapp/pages/05-home-page/index/support/support_email_result_page.dart';
 import 'package:myapp/pages/05-home-page/index/support/support_index.dart';
 import 'package:myapp/pages/05-home-page/index/support/support_result_page.dart';
 
@@ -87,9 +90,12 @@ class MyApp extends StatelessWidget {
         '/payment': (context) => const PaymentPage(),
         '/paymentconfirmation': (context) => PaymentConfirmation(),
         '/paymentresult': (context) => const PaymentResultPage(),
+        '/ticket': (context) => const TicketPage(),
+        '/ticketcontent': (context) => const TicketContent(),
         //Support Index
         '/support': (context) => const SupportIndex(),
         '/supportresult': (context) => const SupportResultPage(),
+        '/supportemailresult': (context) => const SupportEmailResultPage(),
       },
     );
   }

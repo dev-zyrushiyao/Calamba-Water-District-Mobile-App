@@ -219,6 +219,8 @@ class LinkAccountService {
 
     //store the map values to the UserObject water account to simulate database saving (one to many relationship)
     //add to the linkedaccount list of UserObject (Owner/Currently Logged in User)
+    //add empty bracket for bill , receipt and ticket to prevent using Nullable Type Indicator , Bang Operator and making unnecessary if else null-checking value
+    //instead just create a conditional if isEmpty OR isNotEmpty
     loggedUser.linkedAccounts.add(
       WaterAccount(
         accountNumber: linkedAccountForm['accountNumber'],

@@ -419,9 +419,7 @@ class _AccountIndexState extends State<AccountIndex>
                             ),
                             style: theme.textTheme.titleLarge,
                           ),
-                          StatusIndicator(
-                            isActive: linkedAccounts[index].isActive,
-                          ),
+                          StatusIndicator(waterAccount: linkedAccounts[index]),
                         ],
                       ),
                       Text(

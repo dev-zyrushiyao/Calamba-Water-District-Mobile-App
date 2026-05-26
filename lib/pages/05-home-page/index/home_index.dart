@@ -24,7 +24,6 @@ class _HomeIndexState extends State<HomeIndex> {
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
-    //accounts to display
 
     return SafeArea(
       child: Padding(
@@ -92,6 +91,10 @@ class _HomeIndexState extends State<HomeIndex> {
                               //removed the target UserLinked LinkedAccount
                               _loggedUser.linkedAccounts.removeAt(index);
                             });
+                          } else {
+                            //refresh the page when the user get back from
+                            //AccountInformationPage to HomeIndex if linked account is not deleted
+                            setState(() {});
                           }
                         },
                       ),

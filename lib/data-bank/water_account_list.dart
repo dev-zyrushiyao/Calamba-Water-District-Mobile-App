@@ -13,9 +13,9 @@ class WaterAccountList {
       dueDay: 25,
       remainingDayDue: 3,
       balance: 346.00,
-      bill: null,
-      receipt: null,
-      ticket: null,
+      bill: [],
+      receipt: [],
+      ticket: [],
     ),
 
     WaterAccount(
@@ -27,9 +27,9 @@ class WaterAccountList {
       dueDay: 21,
       remainingDayDue: 6,
       balance: 346.00,
-      bill: null,
-      receipt: null,
-      ticket: null,
+      bill: [],
+      receipt: [],
+      ticket: [],
     ),
 
     WaterAccount(
@@ -41,9 +41,9 @@ class WaterAccountList {
       dueDay: 25,
       remainingDayDue: 3,
       balance: 235.00,
-      bill: null,
-      receipt: null,
-      ticket: null,
+      bill: [],
+      receipt: [],
+      ticket: [],
     ),
 
     WaterAccount(
@@ -55,9 +55,9 @@ class WaterAccountList {
       dueDay: 16,
       remainingDayDue: 7,
       balance: 235.00,
-      bill: null,
-      receipt: null,
-      ticket: null,
+      bill: [],
+      receipt: [],
+      ticket: [],
     ),
 
     WaterAccount(
@@ -69,9 +69,9 @@ class WaterAccountList {
       dueDay: 19,
       remainingDayDue: 4,
       balance: 235.00,
-      bill: null,
-      receipt: null,
-      ticket: null,
+      bill: [],
+      receipt: [],
+      ticket: [],
     ),
   ];
 }

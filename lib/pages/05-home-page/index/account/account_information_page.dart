@@ -33,7 +33,7 @@ class AccountInformationPage extends StatelessWidget {
                 //Destroy the Dialogbox
                 //Destroy the current page (account information)
                 //return a 'delete' string that will be triggered from
-                //_buildSlider Guesture Detector onTap () async to delete the WaterAccount data
+                //AccountIndex _buildSlider() Guesture Detector onTap () async to delete the WaterAccount data
                 Navigator.pop(dialogBoxContext);
                 Navigator.pop(context, 'delete');
               },
@@ -58,8 +58,8 @@ class AccountInformationPage extends StatelessWidget {
     }
 
     //Receipt button
-    bool isReceiptButtonEnabled =
-        data.receipt != null && data.receipt!.isNotEmpty;
+    bool hasReceipt = data.receipt.isNotEmpty;
+    bool hasTicket = data.ticket.isNotEmpty;
 
     return Scaffold(
       appBar: AppBar(
@@ -106,7 +106,7 @@ class AccountInformationPage extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    StatusIndicator(isActive: data.isActive),
+                    StatusIndicator(waterAccount: data),
                   ],
                 ),
 
@@ -179,7 +179,11 @@ class AccountInformationPage extends StatelessWidget {
                           Navigator.pushNamed(
                             context,
                             '/billing',
-                            arguments: data,
+                            //passes data to display accountNumber and a reversed list
+                            arguments: {
+                              'reversedListData': data.bill.reversed.toList(),
+                              'userData': data,
+                            },
                           );
                         },
                       ),
@@ -187,12 +191,12 @@ class AccountInformationPage extends StatelessWidget {
                     Expanded(
                       child: PrimaryButton(
                         label: 'Receipt',
-                        onPressed: isReceiptButtonEnabled
+                        onPressed: hasReceipt
                             ? () {
                                 Navigator.pushNamed(
                                   context,
                                   '/receipt',
-                                  arguments: data.receipt,
+                                  arguments: data.receipt.reversed.toList(),
                                 );
                               }
                             : null,
@@ -206,7 +210,19 @@ class AccountInformationPage extends StatelessWidget {
                   ),
                   child: Text('Ticket', style: theme.textTheme.titleLarge),
                 ),
-                PrimaryButton(label: 'View Ticket', width: 200),
+                PrimaryButton(
+                  label: 'View Ticket',
+                  width: 200,
+                  onPressed: hasTicket
+                      ? () {
+                          Navigator.pushNamed(
+                            context,
+                            '/ticket',
+                            arguments: data.ticket.reversed.toList(),
+                          );
+                        }
+                      : null,
+                ),
               ],
             ),
           ),
