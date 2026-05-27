@@ -12,6 +12,7 @@
 //DONE -App Report Class to UI
 //DONE make a getter or function to make get color of isActive of WaterAccount 
 //Done- REFRESH THE AMOUNT on the dashboard when its reload
-//Create a textbox and add message to chatlog
-//Add a copy the transaction number from receipt
+//DONE - Create a textbox and add message to chatlog
+//DONE - Fix the the Positioned element on Payment Page (Web)
+//WORKING - Add a copy the transaction number from receipt
 //- Work on the Creation of User Account

@@ -84,17 +84,19 @@ class _MyWidgetState extends State<PaymentPage> {
             const SizedBox(height: 50),
             _buildPaymentMethod(_loggedUser, theme),
             const SizedBox(height: 60),
-            Stack(
-              clipBehavior: Clip.none,
-              children: [
-                Positioned(bottom: 325, child: _buildTransactioNotice(theme)),
-                _buildBigbox(theme),
-              ],
-            ),
 
+            // Stack(
+            //   clipBehavior: Clip.none,
+            //   children: [
+            //     Positioned(bottom: 325, child: _buildTransactioNotice(theme)),
+            //     _buildBigbox(theme),
+            //   ],
+            // ),
+            _buildBigbox(theme),
             const SizedBox(height: 25),
             PrimaryButton(
               label: 'Proceed',
+              width: double.infinity,
               onPressed: isEnabled
                   ? () async {
                       if (_formKey.currentState!.validate()) {
@@ -126,20 +128,28 @@ class _MyWidgetState extends State<PaymentPage> {
   }
 
   Widget _buildBigbox(ThemeData theme) {
-    return Container(
-      padding: EdgeInsets.all(27),
-      decoration: BoxDecoration(
-        color: Color(0xFF5456A7),
-        borderRadius: BorderRadius.circular(7.0),
-      ),
-      child: Text(
-        'Please be advised that all digital payments require 24 to 48 hours to be officially posted to your account.\n'
-        'You will receive a notification once the transaction has been verified and your updated balance is reflected on the dashboard.\n'
-        'We recommend keeping your digital receipt for your records until the payment is fully visible in your billing history.',
-        style: theme.textTheme.bodyLarge?.copyWith(
-          color: theme.colorScheme.onSecondary,
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Positioned(top: -40, child: _buildTransactioNotice(theme)),
+        Container(
+          width: double.infinity,
+          padding: EdgeInsets.all(27),
+
+          decoration: BoxDecoration(
+            color: Color(0xFF5456A7),
+            borderRadius: BorderRadius.circular(7.0),
+          ),
+          child: Text(
+            'Please be advised that all digital payments require 24 to 48 hours to be officially posted to your account.\n'
+            'You will receive a notification once the transaction has been verified and your updated balance is reflected on the dashboard.\n'
+            'We recommend keeping your digital receipt for your records until the payment is fully visible in your billing history.',
+            style: theme.textTheme.bodyLarge?.copyWith(
+              color: theme.colorScheme.onSecondary,
+            ),
+          ),
         ),
-      ),
+      ],
     );
   }
 

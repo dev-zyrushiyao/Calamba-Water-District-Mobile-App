@@ -20,6 +20,7 @@ class SecondaryButtonOutlined extends StatelessWidget {
     return OutlinedButton(
       onPressed: onPressed,
       style: OutlinedButton.styleFrom(
+        padding: EdgeInsets.zero,
         minimumSize: Size(width, height),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(8.0)),

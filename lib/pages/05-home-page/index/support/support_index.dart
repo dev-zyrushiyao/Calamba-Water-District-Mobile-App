@@ -255,6 +255,7 @@ class _SupportIndexState extends State<SupportIndex> {
               const SizedBox(height: 30),
 
               PrimaryButton(
+                width: double.infinity,
                 label: 'Submit Report',
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {

@@ -16,27 +16,32 @@ class SilverDottedBorder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: height,
-      width: double.infinity,
-      child: DottedBorder(
-        options: RoundedRectDottedBorderOptions(
-          color: Colors.grey[400]!,
-          strokeWidth: 4,
-          radius: const Radius.circular(13.0),
-          dashPattern: [20, 10],
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          spacing: 25,
-          children: [
-            Container(
-              alignment: Alignment.center,
-              padding: const EdgeInsets.symmetric(horizontal: 40.0),
-              child: message,
+    return Expanded(
+      child: Padding(
+        padding: EdgeInsetsGeometry.all(8),
+        child: SizedBox(
+          height: height,
+          width: double.infinity,
+          child: DottedBorder(
+            options: RoundedRectDottedBorderOptions(
+              color: Colors.grey[400]!,
+              strokeWidth: 4,
+              radius: const Radius.circular(13.0),
+              dashPattern: [20, 10],
             ),
-            button ?? SizedBox.shrink(),
-          ],
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              spacing: 25,
+              children: [
+                Container(
+                  alignment: Alignment.center,
+                  padding: const EdgeInsets.symmetric(horizontal: 40.0),
+                  child: message,
+                ),
+                button ?? SizedBox.shrink(),
+              ],
+            ),
+          ),
         ),
       ),
     );

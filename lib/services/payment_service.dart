@@ -35,7 +35,7 @@ class PaymentService {
     final UserInterfaceService userInterfaceService = UserInterfaceService();
     final manilaTime = userInterfaceService.getManilaTimezone();
     //add receipt object
-    waterAccount.receipt?.add(
+    waterAccount.receipt.add(
       Receipt(
         transactionNumber: transactionNumber,
         billerName: billerName.value,

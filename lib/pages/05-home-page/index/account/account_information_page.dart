@@ -190,6 +190,7 @@ class AccountInformationPage extends StatelessWidget {
                     ),
                     Expanded(
                       child: PrimaryButton(
+                        width: double.infinity,
                         label: 'Receipt',
                         onPressed: hasReceipt
                             ? () {

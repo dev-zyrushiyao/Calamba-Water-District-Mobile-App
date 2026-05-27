@@ -69,6 +69,7 @@ class PaymentResultPage extends StatelessWidget {
 
             PrimaryButton(
               label: 'Return to Account Page',
+              width: double.infinity,
               onPressed: () {
                 Navigator.popUntil(
                   context,
