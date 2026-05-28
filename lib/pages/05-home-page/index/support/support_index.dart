@@ -194,7 +194,7 @@ class _SupportIndexState extends State<SupportIndex> {
         child: Form(
           key: _formKey,
           child: ListView(
-            padding: EdgeInsets.symmetric(horizontal: 16.0),
+            padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
             children: [
               const SizedBox(height: 85.0),
 

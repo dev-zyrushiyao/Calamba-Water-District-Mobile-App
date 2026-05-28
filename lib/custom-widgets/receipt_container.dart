@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 
 class ReceiptContainer extends StatelessWidget {
-  const ReceiptContainer({super.key, required this.actions});
+  const ReceiptContainer({
+    super.key,
+    required this.actions,
+    required this.copyButton,
+  });
 
   final List<Map<String, String>> actions;
+  final Widget copyButton;
 
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     return Container(
+      clipBehavior: Clip.hardEdge,
       padding: EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Color(0xFF5456A7),
@@ -19,6 +25,22 @@ class ReceiptContainer extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
+          Stack(
+            fit: StackFit.loose,
+            clipBehavior: Clip.none,
+            children: [
+              Container(
+                color: Colors.transparent,
+                height: 20,
+                width: double.infinity,
+              ),
+              Positioned(
+                top: -35,
+                right: -35,
+                child: Container(child: copyButton),
+              ),
+            ],
+          ),
           Text(
             'Receipt',
             style: theme.textTheme.bodyLarge!.copyWith(

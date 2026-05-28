@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/custom-widgets/circular_copy_button.dart';
 import 'package:myapp/custom-widgets/display_no_data.dart';
 import 'package:myapp/custom-widgets/headline.dart';
 import 'package:myapp/custom-widgets/primary_button.dart';
@@ -26,7 +27,7 @@ class PaymentResultPage extends StatelessWidget {
       body: SafeArea(
         child: ListView(
           physics: ScrollPhysics(parent: NeverScrollableScrollPhysics()),
-          padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 32),
+          padding: EdgeInsets.symmetric(horizontal: 16.0),
           children: [
             SizedBox(
               child: Column(
@@ -52,6 +53,9 @@ class PaymentResultPage extends StatelessWidget {
             SizedBox(height: 20),
 
             ReceiptContainer(
+              copyButton: CircularCopyButton(
+                targetTextToCopy: data.transactionNumber,
+              ),
               actions: [
                 {'Transaction No.': data.transactionNumber},
                 {'Biller:': data.billerName},
