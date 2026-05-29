@@ -1,3 +1,4 @@
+import 'package:myapp/data-bank/account_collection.dart';
 import 'package:myapp/data-class/constants/gender_enum.dart';
 import 'package:myapp/data-class/constants/text_section_enum.dart';
 import 'package:myapp/data-class/user_account.dart';
@@ -101,37 +102,50 @@ class ProfileService {
     String? textFieldValue,
     Gender? dropdownValue,
   }) {
-    //If value is not null(It passed the validation)
-    //Saves the values from the TextField (Category Nickname , PhoneNumber , Email , Password , E-Wallet)
-    if (textFieldValue != null) {
-      switch (textSection) {
-        case TextSection.nickname:
-          loggedUser.nickname = textFieldValue;
-          break;
-        case TextSection.phoneNumber:
-          loggedUser.phoneNumber =
-              int.tryParse(textFieldValue) ?? loggedUser.phoneNumber;
-          break;
-        case TextSection.email:
-          loggedUser.email = textFieldValue;
-          break;
-        case TextSection.password:
-          loggedUser.password = textFieldValue;
-          break;
-        case TextSection.eWallet:
-          loggedUser.ewallet = int.tryParse(textFieldValue) ?? 0;
-          break;
-        default:
-          null;
-      }
-    }
-    //If chosenValue is not null(DropDown has value)
-    //Saves the values from the Dropdown (Gender)
-    if (dropdownValue != null) {
-      switch (textSection) {
-        case TextSection.gender:
-          loggedUser.gender = dropdownValue;
-          break;
+    final AccountCollection accountCollection = AccountCollection();
+    for (var account in accountCollection.accountDb) {
+      if (account.email == loggedUser.email) {
+        //If value is not null(It passed the validation)
+        //Saves the values from the TextField (Category Nickname , PhoneNumber , Email , Password , E-Wallet)
+        if (textFieldValue != null) {
+          switch (textSection) {
+            case TextSection.nickname:
+              loggedUser.nickname = textFieldValue;
+              account.nickname = textFieldValue;
+
+              break;
+            case TextSection.phoneNumber:
+              loggedUser.phoneNumber =
+                  int.tryParse(textFieldValue) ?? loggedUser.phoneNumber;
+              account.phoneNumber = int.tryParse(textFieldValue) ?? 0;
+              break;
+            case TextSection.email:
+              loggedUser.email = textFieldValue;
+              account.email = textFieldValue;
+              break;
+            case TextSection.password:
+              loggedUser.password = textFieldValue;
+              account.password = textFieldValue;
+              break;
+            case TextSection.eWallet:
+              loggedUser.ewallet = int.tryParse(textFieldValue) ?? 0;
+              account.ewallet = int.tryParse(textFieldValue) ?? 0;
+              break;
+            default:
+              null;
+          }
+        }
+
+        //If chosenValue is not null(DropDown has value)
+        //Saves the values from the Dropdown (Gender)
+        if (dropdownValue != null) {
+          switch (textSection) {
+            case TextSection.gender:
+              loggedUser.gender = dropdownValue;
+              account.gender = dropdownValue;
+              break;
+          }
+        }
       }
     }
 

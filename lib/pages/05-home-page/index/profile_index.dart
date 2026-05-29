@@ -558,7 +558,9 @@ class _ProfileIndexState extends State<ProfileIndex> {
       height: value,
       child: FilledButton.icon(
         icon: _isEditing ? SizedBox.shrink() : Icon(Icons.logout),
-        onPressed: () {},
+        onPressed: () {
+          Navigator.popAndPushNamed(context, '/login');
+        },
         label: _isEditing ? SizedBox.shrink() : Text('Logout'),
         style: FilledButton.styleFrom(
           backgroundColor: theme.colorScheme.secondaryContainer,

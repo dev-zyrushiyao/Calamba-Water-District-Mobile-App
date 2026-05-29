@@ -64,7 +64,7 @@ class MyApp extends StatelessWidget {
         ),
         colorScheme: designSystem.cwdThemeColor(),
       ),
-      initialRoute: '/home',
+      initialRoute: '/login',
       routes: {
         '/login': (context) => const LoginPage(),
         //Sign up page

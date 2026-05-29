@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:myapp/custom-widgets/colored_container.dart';
+import 'package:myapp/custom-widgets/display_no_data.dart';
 
 import 'package:myapp/custom-widgets/headline.dart';
 import 'package:myapp/custom-widgets/separation_divider.dart';
@@ -24,7 +25,8 @@ class AccountIndex extends StatefulWidget {
 class _AccountIndexState extends State<AccountIndex>
     with TickerProviderStateMixin {
   //User Account
-  final UserAccount _loggedUser = AccountType().owner;
+
+  final _loggedUser = AccountType().owner;
 
   //form key
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -63,7 +65,7 @@ class _AccountIndexState extends State<AccountIndex>
   void _createSlidingController() {
     //add sliding controller of linked accounts
 
-    if (_loggedUser.linkedAccounts.isNotEmpty) {
+    if (_loggedUser!.linkedAccounts.isNotEmpty) {
       //if user has linked accounts -> create a controller
       // if target is 5 and current is 2, it will add 3 controllers
       while (_slidableController.length < _loggedUser.linkedAccounts.length) {
@@ -231,7 +233,8 @@ class _AccountIndexState extends State<AccountIndex>
   //Main UI
   @override
   Widget build(BuildContext context) {
-    ThemeData theme = Theme.of(context);
+    final ThemeData theme = Theme.of(context);
+
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),

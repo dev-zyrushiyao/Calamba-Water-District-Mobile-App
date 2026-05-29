@@ -14,5 +14,9 @@
 //Done- REFRESH THE AMOUNT on the dashboard when its reload
 //DONE - Create a textbox and add message to chatlog
 //DONE - Fix the the Positioned element on Payment Page (Web)
-//WORKING - Add a copy the transaction number from receipt
+//Done - Add a copy the transaction number from receipt
 //- Work on the Creation of User Account
+// - Add a gender drop down on Signup and refactor the saving method of signup (add value of gender)
+// - refactor forgotpassword button
+// - refactor boarding page 
+//DONE - add a function (Logout button ProfileIndex)

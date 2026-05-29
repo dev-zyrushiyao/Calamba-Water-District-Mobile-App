@@ -11,8 +11,9 @@ class AccountType {
   // 3. The factory constructor always returns the SAME instance
   factory AccountType() => _instance;
 
+  //placeholder
   UserAccount owner = UserAccount(
-    'Zy',
+    'ZyrusHiyao',
     09123456789,
     Gender.female,
     'myemail@email.com',
