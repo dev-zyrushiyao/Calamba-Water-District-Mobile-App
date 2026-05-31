@@ -19,11 +19,15 @@ class _HomeIndexState extends State<HomeIndex> {
   @override
   void initState() {
     super.initState();
+
+    debugPrint('Current logged: ${_loggedUser.nickname}');
   }
 
   @override
   Widget build(BuildContext context) {
-    ThemeData theme = Theme.of(context);
+    //Updates the value of _loggedUser to any of the account logged in
+
+    final ThemeData theme = Theme.of(context);
 
     return SafeArea(
       child: Padding(
@@ -53,10 +57,7 @@ class _HomeIndexState extends State<HomeIndex> {
 
             Align(
               alignment: Alignment.centerLeft,
-              child: Text(
-                'Dashboard',
-                style: Theme.of(context).textTheme.headlineMedium,
-              ),
+              child: Text('Dashboard', style: theme.textTheme.headlineMedium),
             ),
 
             const SizedBox(height: 13.0),

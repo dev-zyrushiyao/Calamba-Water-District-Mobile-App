@@ -10,8 +10,10 @@ import 'package:myapp/data-class/constants/gender_enum.dart';
 import 'package:flutter/services.dart';
 import 'package:myapp/data-class/constants/text_section_enum.dart';
 import 'package:myapp/data-class/user_account.dart';
+import 'package:myapp/services/masking_service.dart';
 import 'package:myapp/services/profile_service.dart';
 import 'package:myapp/services/user_interface_service.dart';
+import 'package:myapp/services/validator_service.dart';
 
 class ProfileIndex extends StatefulWidget {
   const ProfileIndex({super.key});
@@ -27,6 +29,8 @@ class _ProfileIndexState extends State<ProfileIndex> {
   //services
   final _profileService = ProfileService();
   final _userInterfaceService = UserInterfaceService();
+  final _validatorService = ValidatorService();
+  final _maskingService = MaskingService();
 
   //Shape container animation
   double _containerHeight = 0;
@@ -97,12 +101,9 @@ class _ProfileIndexState extends State<ProfileIndex> {
     //invoke at initState
     //Add Gender Enum on the Dropdownlist
     //Sample output: value = Gender.male , Text('Male')
-    for (var value in Gender.values) {
+    for (var item in Gender.values) {
       _dropDownItems.add(
-        DropdownMenuItem(
-          value: value,
-          child: Text(_profileService.letterCapitalization(value)),
-        ),
+        DropdownMenuItem(value: item, child: Text(item.value)),
       );
     }
   }
@@ -335,12 +336,12 @@ class _ProfileIndexState extends State<ProfileIndex> {
           SizedBox(
             width: double.infinity,
             child: Text(
-              _profileService.letterCapitalization(_textSection[index]),
+              _textSection[index].value,
               style: theme.textTheme.bodyLarge,
             ),
           ),
           DropdownButtonFormField<Gender>(
-            hint: Text(_profileService.letterCapitalization(_chosenValue!)),
+            hint: Text(_chosenValue!.value),
             items: _dropDownItems,
             isExpanded: true,
             onSaved: (value) {
@@ -394,7 +395,7 @@ class _ProfileIndexState extends State<ProfileIndex> {
   Widget _buildFormTextFields(int index) {
     return FormEditableTextfield(
       textController: _textController[index],
-      textSection: _profileService.letterCapitalization(_textSection[index]),
+      textSection: _textSection[index].value,
       isHidden: //Hides if character if the textfield is TextSection.password, toggle is trigger by suffix Icon:  __buildIconPasswordButton()
       _profileService.hideCharactersFrom(
         textSection: _textSection[index],
@@ -407,9 +408,10 @@ class _ProfileIndexState extends State<ProfileIndex> {
           ? _buildIconPasswordButton(_textSection[index])
           : null,
       validator: (value) {
-        return _profileService.validateInputFrom(
+        return _validatorService.validateInputFrom(
           value: value,
           textSection: _textSection[index],
+          loggedUser: _loggedUser,
         );
       },
       onSaved: (value) {
@@ -417,17 +419,17 @@ class _ProfileIndexState extends State<ProfileIndex> {
         //saves only from the TextSection enum : nickname, phoneNumber, email, password, _ , eWallet
         //onSaved() automatically loops all the values of the form to save
         if (value != null) {
-          _profileService.saveFormInformationFrom(
-            loggedUser: _loggedUser,
-            textSection: _textSection[index],
-            textFieldValue: value,
-          );
-
           //re-updates the display
           //onSaved() automatically loops all the values of the form to save
           //_LoggedUserValues now equals to the value saved on form instead of controller text.
           //reset the password obscure -> isHidden variable back to default value : true
           setState(() {
+            _profileService.saveFormInformationFrom(
+              loggedUser: _loggedUser,
+              textSection: _textSection[index],
+              textFieldValue: value,
+            );
+
             _loggedUserValues[_textSection[index]] = value;
             _isHidden = true;
           });
@@ -449,7 +451,7 @@ class _ProfileIndexState extends State<ProfileIndex> {
           child: SizedBox(
             width: double.infinity,
             child: Text(
-              '${_profileService.letterCapitalization(_textSection[index])}:',
+              '${_textSection[index].value}:',
               style: theme.textTheme.bodyLarge!.copyWith(
                 fontWeight: FontWeight.bold,
               ),
@@ -463,7 +465,7 @@ class _ProfileIndexState extends State<ProfileIndex> {
             TextSection.phoneNumber => SizedBox(
               width: double.infinity,
               child: Text(
-                _profileService.maskPhoneNumber(
+                _maskingService.maskPhoneNumber(
                   _loggedUserValues[_textSection[index]],
                 ),
 
@@ -484,7 +486,7 @@ class _ProfileIndexState extends State<ProfileIndex> {
             TextSection.gender => SizedBox(
               width: double.infinity,
               child: Text(
-                _profileService.letterCapitalization(_chosenValue!),
+                _chosenValue!.value,
                 style: theme.textTheme.bodyLarge,
               ),
             ),
@@ -559,7 +561,11 @@ class _ProfileIndexState extends State<ProfileIndex> {
       child: FilledButton.icon(
         icon: _isEditing ? SizedBox.shrink() : Icon(Icons.logout),
         onPressed: () {
-          Navigator.popAndPushNamed(context, '/login');
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            '/login',
+            (route) => false,
+          );
         },
         label: _isEditing ? SizedBox.shrink() : Text('Logout'),
         style: FilledButton.styleFrom(

@@ -3,6 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:myapp/custom-widgets/headline.dart';
 import 'package:myapp/custom-widgets/primary_button.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:myapp/data-class/constants/gender_enum.dart';
+
+import 'package:myapp/services/validator_service.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -18,71 +21,37 @@ class SignupPage extends StatefulWidget {
 // Mobile no. section container-column (text (row[text-textfield]))
 
 class _SignupPageState extends State<SignupPage> {
+  //service
+  final ValidatorService _validatorService = ValidatorService();
+
+  //boolean trigger for obscure text
   bool _isHidden = true;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  Map<String, dynamic> registeredForm = {
+  final Map<String, dynamic> _registeredForm = {
     'nickname': null,
     'email': null,
+    'gender': null,
     'password': null,
     'phoneNumber': null,
     'ewallet': null,
   };
 
-  String? _nicknameValidator(String? value) {
-    return (value != null && value.contains(RegExp(r'[0-9!@#$%^&*()]')))
-        ? 'Invalid character '
-        : null;
+  final List<DropdownMenuItem<Gender>> _dropdownItems = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _addDropdown();
   }
 
-  String? _emailValidator(String? value) {
-    //r'''^[!@#$%^&*()_\-+~`\[\]|;:{}'" <>?,./\\]''', including <space>
-    final RegExp specialCharacter = RegExp(r'[\s!-/:-@\[-`{-~]');
-
-    //[underscore , @ and dot] not included
-    //r'''[!#$%^&*()\-+~`\[\]|;:{}'" <>?,/\\]''',
-    final RegExp specialCharacterWithException = RegExp(r'[\s!-\-/:-?\[-^`|~]');
-
-    return (value == null || value.isEmpty)
-        ? 'Email is required'
-        : (value.startsWith(specialCharacter))
-        ? 'Invalid email: cannot start with special character'
-        : (value.contains(specialCharacterWithException))
-        ? 'Invalid character detected'
-        : (!value.contains('@'))
-        ? 'Email require @ symbol'
-        : (value.endsWith('.com')) || (value.endsWith('.ph'))
-        ? null
-        : 'Invalid Email format';
-  }
-
-  String? _passwordValidator(String? value) {
-    return (value == null || value.isEmpty)
-        ? 'Password is required'
-        : (value.contains(RegExp(r'[\s]')))
-        ? 'Password Should not include <white space>'
-        : (value.length < 10)
-        ? 'Not enough password character'
-        : null;
-  }
-
-  String? _phoneNumberValidator(String? value) {
-    return (value != null && value.length < 11)
-        ? 'Invalid number'
-        : value!.contains(RegExp(r'^09\d{9}$'))
-        ? null
-        : 'Please put your 11 digit mobile number';
-  }
-
-  String? _eWalletValidator(String? value) {
-    return (value == null || value.isEmpty)
-        ? 'Please add E-Wallet account'
-        : (value.length == 12 &&
-              value.contains(RegExp(r'[0-9]')) &&
-              (value.contains(RegExp(r'^639\d{9}$'))))
-        ? null
-        : 'Invalid format (needs Area Code without the \'+\' and 11 digit mobile number)';
+  void _addDropdown() {
+    for (var item in Gender.values) {
+      _dropdownItems.add(
+        DropdownMenuItem(value: item, child: Text(item.value)),
+      );
+    }
   }
 
   @override
@@ -123,9 +92,9 @@ class _SignupPageState extends State<SignupPage> {
                     hintText: 'Enter your nickname',
                     maxLength: 15,
                     validator: (value) {
-                      return _nicknameValidator(value);
+                      return _validatorService.nicknameValidator(value);
                     },
-                    onSaved: (value) => registeredForm['nickname'] = value,
+                    onSaved: (value) => _registeredForm['nickname'] = value,
                     theme: theme,
                   ),
 
@@ -136,9 +105,9 @@ class _SignupPageState extends State<SignupPage> {
                     hintText: 'Enter valid E-mail',
                     maxLength: 30,
                     validator: (value) {
-                      return _emailValidator(value);
+                      return _validatorService.emailValidator(value);
                     },
-                    onSaved: (value) => registeredForm['email'] = value,
+                    onSaved: (value) => _registeredForm['email'] = value,
                     theme: theme,
                   ),
 
@@ -160,11 +129,13 @@ class _SignupPageState extends State<SignupPage> {
                     ),
                     hintText: 'Enter password',
                     validator: (value) {
-                      return _passwordValidator(value);
+                      return _validatorService.passwordValidator(value);
                     },
-                    onSaved: (value) => registeredForm['password'] = value,
+                    onSaved: (value) => _registeredForm['password'] = value,
                     theme: theme,
                   ),
+
+                  _buildDropdown(theme),
 
                   _buildTextField(
                     title: 'Mobile No.',
@@ -174,10 +145,10 @@ class _SignupPageState extends State<SignupPage> {
                     hintText: '09123456789',
                     maxLength: 11,
                     validator: (value) {
-                      return _phoneNumberValidator(value);
+                      return _validatorService.phoneNumberValidator(value);
                     },
                     onSaved: (value) =>
-                        registeredForm['phoneNumber'] = int.tryParse(value!),
+                        _registeredForm['phoneNumber'] = int.tryParse(value!),
                     theme: theme,
                   ),
 
@@ -189,10 +160,10 @@ class _SignupPageState extends State<SignupPage> {
                     hintText: '639123456789',
                     maxLength: 12,
                     validator: (value) {
-                      return _eWalletValidator(value);
+                      return _validatorService.eWalletValidator(value);
                     },
                     onSaved: (value) =>
-                        registeredForm['ewallet'] = int.tryParse(value!),
+                        _registeredForm['ewallet'] = int.tryParse(value!),
                     theme: theme,
                   ),
 
@@ -204,7 +175,7 @@ class _SignupPageState extends State<SignupPage> {
                         Navigator.pushNamed(
                           context,
                           '/accountverification',
-                          arguments: registeredForm,
+                          arguments: _registeredForm,
                         );
                       }
                     },
@@ -249,6 +220,31 @@ class _SignupPageState extends State<SignupPage> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildDropdown(ThemeData theme) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          style: theme.textTheme.bodyLarge!.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
+          'Gender',
+        ),
+        DropdownButtonFormField(
+          items: _dropdownItems,
+          onChanged: (_) {},
+          decoration: InputDecoration(
+            errorStyle: theme.textTheme.labelSmall?.copyWith(color: Colors.red),
+          ),
+          validator: (value) {
+            return _validatorService.genderValidator(value);
+          },
+          onSaved: (value) => _registeredForm['gender'] = value,
+        ),
+      ],
     );
   }
 
@@ -396,7 +392,7 @@ class _SignupPageState extends State<SignupPage> {
           ),
           onSaved: onSaved,
           maxLength: maxLength,
-          autovalidateMode: AutovalidateMode.onUserInteraction,
+          autovalidateMode: AutovalidateMode.onUserInteractionIfError,
           validator: validator,
         ),
       ],

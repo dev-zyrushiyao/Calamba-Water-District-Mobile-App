@@ -21,14 +21,12 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  //User Logged
-  final AccountType _accountType = AccountType();
-
   //Password character
   bool _isHidden = true;
 
   //Account simulation DB
   final AccountCollection _accountCollection = AccountCollection();
+  final AccountType _accountType = AccountType();
 
   //validation
   bool? _isCorrectLogin;
@@ -49,7 +47,8 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
-  void loggedTheUser(UserAccount account) {
+  Future<void> loggedTheUser(UserAccount account) async {
+    //Direct change values
     _accountType.owner.nickname = account.nickname;
     _accountType.owner.phoneNumber = account.phoneNumber;
     _accountType.owner.gender = account.gender;
@@ -85,7 +84,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
 
                 if (_isCorrectLogin != null)
-                  if (_isCorrectLogin == false)
+                  if (_isCorrectLogin != true)
                     Text(
                       'Login information is incorrect',
                       style: theme.textTheme.labelSmall?.copyWith(
@@ -116,7 +115,7 @@ class _LoginPageState extends State<LoginPage> {
                   label: 'Login',
                   height: _textFieldHeight,
                   width: _textFieldWidth,
-                  onPressed: () {
+                  onPressed: () async {
                     if (_accountCollection.accountDb.isEmpty) {
                       debugPrint('the DB is empty');
                       //display a incorrect login if there is no registered account
@@ -129,14 +128,18 @@ class _LoginPageState extends State<LoginPage> {
                             (account.password == _passwordController.text)) {
                           setState(() {
                             _isCorrectLogin = true;
-
-                            FocusScope.of(context).unfocus();
-                            Future.delayed(Duration(seconds: 3), () {
-                              loggedTheUser(account);
-                            });
-
-                            Navigator.popAndPushNamed(context, '/boarding');
                           });
+
+                          await loggedTheUser(account);
+
+                          await Future.delayed(Duration(milliseconds: 500), () {
+                            if (!context.mounted) return;
+                            FocusScope.of(context).unfocus();
+                          });
+
+                          if (!context.mounted) return;
+                          Navigator.popAndPushNamed(context, '/boarding');
+                          break;
                         } else {
                           setState(() {
                             _isCorrectLogin = false;

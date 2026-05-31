@@ -5,6 +5,7 @@ import 'package:myapp/custom-widgets/display_no_data.dart';
 import 'package:myapp/custom-widgets/headline.dart';
 import 'package:myapp/data-class/bill.dart';
 import 'package:myapp/data-class/water_account.dart';
+import 'package:myapp/services/masking_service.dart';
 import 'package:myapp/services/user_interface_service.dart';
 
 class BillingPage extends StatelessWidget {
@@ -14,7 +15,7 @@ class BillingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final data = ModalRoute.of(context)?.settings.arguments as Map?;
 
-    final UserInterfaceService userInterfaceService = UserInterfaceService();
+    final MaskingService maskingService = MaskingService();
     final ThemeData theme = Theme.of(context);
 
     if (data == null) {
@@ -45,7 +46,7 @@ class BillingPage extends StatelessWidget {
                   ),
                   child: Headline(
                     headline:
-                        '${userInterfaceService.formatAccountNumber(accountNumber: userData.accountNumber)} Bills',
+                        '${maskingService.formatAccountNumber(accountNumber: userData.accountNumber)} Bills',
                   ),
                 ),
                 if (billList.isNotEmpty)

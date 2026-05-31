@@ -5,11 +5,14 @@ import 'package:myapp/data-class/user_account.dart';
 import 'package:flutter/material.dart';
 
 class ProfileService {
-  //Value of Enum is capitalized for UI Display
-  //for example _LoggedUser.gender == Gender.male -> it will be converted to Male to Display
-  //the original value of enum still untouched
-  //Execution sample: List<TextSection> -> letterCapitalization(textSection[index]) -> Display a String of modified name
+  @Deprecated(
+    'Do not use it if your enum have a value constructor to extract the same value result as this method',
+  )
   String letterCapitalization(Enum value) {
+    //Value of Enum is capitalized for UI Display
+    //for example _LoggedUser.gender == Gender.male -> it will be converted to Male to Display
+    //the original value of enum still untouched
+    //Execution sample: List<TextSection> -> letterCapitalization(textSection[index]) -> Display a String of modified name
     switch (value) {
       case Gender _:
         return value.name == 'lgbt'
@@ -41,32 +44,6 @@ class ProfileService {
       default:
         return throw ArgumentError.notNull('Null value has detected');
     }
-  }
-
-  String maskPhoneNumber(String phoneNumberInString) {
-    //split the String character into a list (for example: "MASK" -> ['M' , 'A' , 'S' , 'K'])
-    List<String> letterSplit = phoneNumberInString.split('');
-    //constant values
-    const int characterToMask = 8;
-    const String maskingCharacter = 'X';
-    const String separatorCharacter = '-';
-
-    //Mask with 'X' the first 8 digit character of the list
-    // letterSplit = ['X' , 'X' , 'X' ,'X' ,'X' ,'X' ,'X' , 'X' , 9 , 10 , 11]
-    for (var i = 0; i < characterToMask; i++) {
-      letterSplit[i] = maskingCharacter;
-    }
-
-    // add '-' on the 4th index , since the list grow the next iteration is 5
-    //Trigger is on the 4th index and the 9th index
-    // letterSplit = ['X' , 'X' , 'X' ,'X' '-' ,'X' ,'X' ,'X' , 'X' , '-' , 9 , 10 , 11]
-    for (var i = 4; i < letterSplit.length; i += 5) {
-      letterSplit.insert(i, separatorCharacter);
-    }
-
-    //join() is to merge the List LetterSplit into a single string
-    //['X' , 'X' , 'X' ,'X' '-' ,'X' ,'X' ,'X' , 'X' , '-' , 9 , 10 , 11] -> 'XXXX-XXXX-91011
-    return letterSplit.join();
   }
 
   //Shrinking Animation of Profile Container
@@ -177,71 +154,6 @@ class ProfileService {
       TextSection.email => 30,
       TextSection.password => 30,
       TextSection.eWallet => 12,
-      _ => null,
-    };
-  }
-
-  //Validation for the Looped Custom Widget: FormEditableTextfield
-  //Dropdown has no validation because it use enum value as default
-  String? validateInputFrom({
-    required String? value,
-    required TextSection textSection,
-  }) {
-    //RegexTranslator: https://playground.pomsky-lang.org/
-    //r'''^[!@#$%^&*()_\-+~`\[\]|;:{}'" <>?,./\\]''', including <space>
-    final RegExp specialCharacter = RegExp(r'[\s!-/:-@\[-`{-~]');
-
-    //Any number (whole , decimal , negative , positive)
-    final RegExp anyNumber = RegExp(r'[\d+\.?\d*]');
-
-    //Special character excluding <space>
-    final RegExp specialCharWithoutSpace = RegExp((r'[!-/:-@\[-`{-~]'));
-
-    //[underscore , @ and dot] not included
-    //r'''[!#$%^&*()\-+~`\[\]|;:{}'" <>?,/\\]''',
-    final RegExp specialCharacterWithException = RegExp(r'[\s!-\-/:-?\[-^`|~]');
-    return switch (textSection) {
-      TextSection.nickname =>
-        (value != null && value.length < 2)
-            ? 'Please put 2 or more characters'
-            : (value!.contains(specialCharWithoutSpace) ||
-                  (value.contains(anyNumber)))
-            ? 'Invalid Character'
-            : null,
-      TextSection.phoneNumber =>
-        (value != null && value.length < 11)
-            ? 'Invalid number'
-            : value!.contains(RegExp(r'^09\d{9}$'))
-            ? null
-            : 'Please put your 11 digit mobile number',
-      TextSection.email =>
-        (value == null || value.isEmpty)
-            ? 'Email is required'
-            : (value.startsWith(specialCharacter))
-            ? 'Invalid email: cannot start with special character'
-            : (value.contains(specialCharacterWithException))
-            ? 'Invalid character detected'
-            : (!value.contains('@'))
-            ? 'Email require @ symbol'
-            : (value.endsWith('.com')) || (value.endsWith('.ph'))
-            ? null
-            : 'Invalid Email format',
-      TextSection.password =>
-        (value == null || value.isEmpty)
-            ? 'Password is required'
-            : (value.contains(RegExp(r'[\s]')))
-            ? 'Password Should not include <white space>'
-            : (value.length < 10)
-            ? 'Not enough password character'
-            : null,
-      TextSection.eWallet =>
-        (value == null || value.isEmpty)
-            ? 'Please add E-Wallet account'
-            : (value.length == 12 &&
-                  value.contains(RegExp(r'[0-9]')) &&
-                  (value.contains(RegExp(r'^639\d{9}$'))))
-            ? null
-            : 'Invalid format (needs Area Code without the \'+\' and 11 digit mobile number)',
       _ => null,
     };
   }

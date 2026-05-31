@@ -1,7 +1,11 @@
 enum Gender {
-  male,
-  female,
-  lgbt;
+  male('Male'),
+  female('Female'),
+  lgbt('LGBT');
+
+  final String value;
+
+  const Gender(this.value);
 
   String getProfileDirectory() {
     switch (this) {

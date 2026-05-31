@@ -9,6 +9,7 @@ import 'package:myapp/data-class/constants/support_category_enum.dart';
 import 'package:myapp/data-class/report.dart';
 import 'package:myapp/data-class/ticket.dart';
 import 'package:myapp/data-class/user_account.dart';
+import 'package:myapp/services/masking_service.dart';
 import 'package:myapp/services/support_service.dart';
 import 'package:myapp/services/user_interface_service.dart';
 
@@ -26,6 +27,7 @@ class _SupportIndexState extends State<SupportIndex> {
   //service
   final SupportService _supportService = SupportService();
   final UserInterfaceService _userInterfaceService = UserInterfaceService();
+  final MaskingService _maskingService = MaskingService();
 
   final List<DropdownMenuEntry<dynamic>> _categoryDropDownItem = [];
   final TextEditingController _categoryController = TextEditingController();
@@ -71,7 +73,7 @@ class _SupportIndexState extends State<SupportIndex> {
           DropdownMenuEntry(
             value: account.accountNumber,
             label:
-                '${account.accountName} (${_userInterfaceService.formatAccountNumber(accountNumber: account.accountNumber)}) ',
+                '${account.accountName} (${_maskingService.formatAccountNumber(accountNumber: account.accountNumber)}) ',
           ),
         );
       }

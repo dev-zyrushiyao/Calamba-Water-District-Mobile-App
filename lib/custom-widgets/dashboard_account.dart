@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:myapp/custom-widgets/primary_button.dart';
 import 'package:myapp/custom-widgets/status_indicator.dart';
 import 'package:myapp/data-class/water_account.dart';
+import 'package:myapp/services/masking_service.dart';
 
 import 'package:myapp/services/user_interface_service.dart';
 
@@ -19,10 +20,12 @@ class DashboardDisplay extends StatelessWidget {
   Widget build(BuildContext context) {
     //service
     final UserInterfaceService userInterfaceService = UserInterfaceService();
-    double deviceWidth = MediaQuery.of(context).size.width;
+    final MaskingService maskingService = MaskingService();
+    final double deviceWidth = MediaQuery.of(context).size.width;
+    final ThemeData theme = Theme.of(context);
 
     return Container(
-      padding: EdgeInsets.all(23.0),
+      padding: const EdgeInsets.all(23.0),
       width: deviceWidth,
       decoration: BoxDecoration(
         color: Color(0xFFEEEEFA),
@@ -45,22 +48,22 @@ class DashboardDisplay extends StatelessWidget {
             children: [
               Text(
                 waterAccount.accountName,
-                style: Theme.of(
-                  context,
-                ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+                style: theme.textTheme.titleLarge?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               Text(
-                userInterfaceService.formatAccountNumber(
+                maskingService.formatAccountNumber(
                   accountNumber: waterAccount.accountNumber,
                 ),
-                style: Theme.of(context).textTheme.titleMedium,
+                style: theme.textTheme.titleMedium,
               ),
               Row(
                 spacing: 7.0,
                 children: [
                   Text(
                     'Status:',
-                    style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                    style: theme.textTheme.labelSmall!.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -69,11 +72,11 @@ class DashboardDisplay extends StatelessWidget {
               ),
               Text(
                 'Previous Bill: ${waterAccount.previousBill}',
-                style: Theme.of(context).textTheme.labelSmall,
+                style: theme.textTheme.labelSmall,
               ),
               Text(
                 'Last Reading: ${waterAccount.lastReading} m³',
-                style: Theme.of(context).textTheme.labelSmall,
+                style: theme.textTheme.labelSmall,
               ),
             ],
           ),
@@ -87,15 +90,15 @@ class DashboardDisplay extends StatelessWidget {
                 waterAccount.remainingDayDue == 0
                     ? 'Due today'
                     : 'Due in ${waterAccount.remainingDayDue} days',
-                style: Theme.of(
-                  context,
-                ).textTheme.labelSmall!.copyWith(fontWeight: FontWeight.w600),
+                style: theme.textTheme.labelSmall!.copyWith(
+                  fontWeight: FontWeight.w600,
+                ),
               ),
-              Text('Balance', style: Theme.of(context).textTheme.titleLarge),
+              Text('Balance', style: theme.textTheme.titleLarge),
               Text(
                 '₱ ${waterAccount.balance.toStringAsFixed(2)}',
 
-                style: Theme.of(context).textTheme.headlineSmall,
+                style: theme.textTheme.headlineSmall,
               ),
               if (waterAccount.isActive == true) primaryButton,
             ],

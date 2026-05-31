@@ -1,0 +1,155 @@
+import 'package:collection/collection.dart';
+import 'package:myapp/data-bank/account_collection.dart';
+import 'package:myapp/data-class/constants/gender_enum.dart';
+import 'package:myapp/data-class/constants/text_section_enum.dart';
+import 'package:myapp/data-class/user_account.dart';
+
+class ValidatorService {
+  bool verifyAccount(String? emailInput) {
+    final AccountCollection accountCollection = AccountCollection();
+    final listOfAccounts = accountCollection.accountDb;
+    for (var account in listOfAccounts) {
+      if (emailInput == account.email) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  //Search User email to reset
+  UserAccount? retrieveAccount(String? emailInput) {
+    final AccountCollection accountCollection = AccountCollection();
+    final listOfAccounts = accountCollection.accountDb;
+    return listOfAccounts.firstWhereOrNull(
+      (accounts) => accounts.email == emailInput,
+    );
+  }
+
+  //Display reset password validation
+  String? resetEmailValidator(String? value) {
+    final AccountCollection accountCollection = AccountCollection();
+    final listOfAccounts = accountCollection.accountDb;
+
+    for (var userAccount in listOfAccounts) {
+      if (userAccount.email == value) {
+        return null;
+      }
+    }
+
+    return 'Account not found';
+  }
+
+  String? nicknameValidator(String? value) {
+    //Any number (whole , decimal , negative , positive)
+    final RegExp anyNumber = RegExp(r'[\d+\.?\d*]');
+
+    //Special character excluding <space>
+    final RegExp specialCharWithoutSpace = RegExp((r'[!-/:-@\[-`{-~]'));
+
+    return (value != null && value.length < 2)
+        ? 'Please put 2 or more characters'
+        : (value!.contains(specialCharWithoutSpace) ||
+              (value.contains(anyNumber)))
+        ? 'Invalid Character'
+        : null;
+  }
+
+  String? emailValidator(String? value, [UserAccount? loggedUser]) {
+    //r'''^[!@#$%^&*()_\-+~`\[\]|;:{}'" <>?,./\\]''', including <space>
+    final RegExp specialCharacter = RegExp(r'[\s!-/:-@\[-`{-~]');
+
+    //[underscore , @ and dot] not included
+    //r'''[!#$%^&*()\-+~`\[\]|;:{}'" <>?,/\\]''',
+    final RegExp specialCharacterWithException = RegExp(r'[\s!-\-/:-?\[-^`|~]');
+    bool? isEmailExist = false;
+
+    const emailMinimumLength = 5;
+
+    //added UserAccount? because this method is also used in SignUp Page
+    //where the UserAccount does not exist yet
+    //Parameter UserAccount is optional
+    //if loggedUser exist and email of user is different from the textfield
+    //proceed to verify the account
+    //then proceed the validation for saving
+    //else if loggedUser exist and same value in the textfield email , skip verifyAccount()
+    //then just proceed to the rest of validation.
+    if (loggedUser != null) {
+      if (loggedUser.email != value) {
+        //if user update its nickname this will prevent it from doing email check
+        isEmailExist = verifyAccount(value);
+      } else {
+        isEmailExist = false;
+      }
+    }
+
+    return (value == null || value.isEmpty)
+        ? 'Email is required'
+        : (isEmailExist)
+        ? 'Email is already taken'
+        : (value.length < emailMinimumLength)
+        ? 'Not a valid email length'
+        : (value.startsWith(specialCharacter))
+        ? 'Invalid email: cannot start with special character'
+        : (value.contains(specialCharacterWithException))
+        ? 'Invalid character detected'
+        : (!value.contains('@'))
+        ? 'Email require @ symbol'
+        : (value.endsWith('.com')) || (value.endsWith('.ph'))
+        ? null
+        : 'Invalid Email format';
+  }
+
+  String? passwordValidator(String? value) {
+    return (value == null || value.isEmpty)
+        ? 'Password is required'
+        : (value.contains(RegExp(r'[\s]')))
+        ? 'Password Should not include <white space>'
+        : (value.length < 10)
+        ? 'Not enough password character'
+        : null;
+  }
+
+  String? phoneNumberValidator(String? value) {
+    return (value != null && value.length < 11)
+        ? 'Invalid number'
+        : value!.contains(RegExp(r'^09\d{9}$'))
+        ? null
+        : 'Please put your 11 digit mobile number';
+  }
+
+  String? eWalletValidator(String? value) {
+    return (value == null || value.isEmpty)
+        ? 'Please add E-Wallet account'
+        : (value.length == 12 &&
+              value.contains(RegExp(r'[0-9]')) &&
+              (value.contains(RegExp(r'^639\d{9}$'))))
+        ? null
+        : 'Invalid format (needs Area Code without the \'+\' and 11 digit mobile number)';
+  }
+
+  String? genderValidator(Gender? value) {
+    if (value == null) {
+      return 'Please select a gender';
+    } else {
+      return null;
+    }
+  }
+
+  //Validation for the Looped Custom Widget: FormEditableTextfield
+  //Dropdown has no validation because it use enum value as default
+  //This is invoked at ProfileIndex Page
+  String? validateInputFrom({
+    required String? value,
+    required TextSection textSection,
+    required UserAccount loggedUser,
+  }) {
+    return switch (textSection) {
+      TextSection.nickname => nicknameValidator(value),
+      TextSection.phoneNumber => phoneNumberValidator(value),
+      TextSection.email => emailValidator(value, loggedUser),
+      TextSection.password => passwordValidator(value),
+      TextSection.eWallet => eWalletValidator(value),
+      _ => null,
+    };
+  }
+}

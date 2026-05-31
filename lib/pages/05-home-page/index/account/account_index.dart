@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:myapp/custom-widgets/colored_container.dart';
-import 'package:myapp/custom-widgets/display_no_data.dart';
 
 import 'package:myapp/custom-widgets/headline.dart';
 import 'package:myapp/custom-widgets/separation_divider.dart';
 import 'package:myapp/custom-widgets/silver_dotted_border.dart';
 import 'package:myapp/custom-widgets/status_indicator.dart';
 import 'package:myapp/data-bank/account_type.dart';
-import 'package:myapp/data-class/user_account.dart';
+
 import 'package:myapp/data-class/water_account.dart';
 
 import 'package:myapp/services/link_account_service.dart';
-
-import 'package:myapp/services/user_interface_service.dart';
+import 'package:myapp/services/masking_service.dart';
 
 class AccountIndex extends StatefulWidget {
   const AccountIndex({super.key});
@@ -36,8 +34,8 @@ class _AccountIndexState extends State<AccountIndex>
       TextEditingController();
 
   //service
-  final UserInterfaceService _userInterfaceService = UserInterfaceService();
   final LinkAccountService _linkAccountService = LinkAccountService();
+  final MaskingService _maskingService = MaskingService();
 
   //controller
   final List<SlidableController> _slidableController = [];
@@ -65,7 +63,7 @@ class _AccountIndexState extends State<AccountIndex>
   void _createSlidingController() {
     //add sliding controller of linked accounts
 
-    if (_loggedUser!.linkedAccounts.isNotEmpty) {
+    if (_loggedUser.linkedAccounts.isNotEmpty) {
       //if user has linked accounts -> create a controller
       // if target is 5 and current is 2, it will add 3 controllers
       while (_slidableController.length < _loggedUser.linkedAccounts.length) {
@@ -104,9 +102,9 @@ class _AccountIndexState extends State<AccountIndex>
       context: context,
       builder: (context) {
         return AlertDialog.adaptive(
-          icon: Icon(Icons.delete),
-          title: Text('Unlink this account?'),
-          content: Text(
+          icon: const Icon(Icons.delete),
+          title: const Text('Unlink this account?'),
+          content: const Text(
             'Local transaction history for this account will be removed from this device.',
           ),
           actions: [
@@ -114,7 +112,7 @@ class _AccountIndexState extends State<AccountIndex>
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
             ),
             TextButton(
               onPressed: () {
@@ -145,7 +143,7 @@ class _AccountIndexState extends State<AccountIndex>
             //StateSetter setDialogue work the same as setState
             //setDialogState only refresh the dialog box
             return AlertDialog(
-              title: Text('Update Name'),
+              title: const Text('Update Name'),
               content: Form(
                 key: _formKey,
                 child: Column(
@@ -196,7 +194,7 @@ class _AccountIndexState extends State<AccountIndex>
                               _dialogTextfieldController.clear();
                             });
                           },
-                          child: Text('Cancel'),
+                          child: const Text('Cancel'),
                         ),
 
                         TextButton(
@@ -278,10 +276,8 @@ class _AccountIndexState extends State<AccountIndex>
                             itemCount: _loggedUser.linkedAccounts.length,
                             separatorBuilder: (context, index) => Column(
                               children: [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 20,
-                                  ),
+                                const Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 20),
                                   child: SizedBox(
                                     child: SeparationDivider(thickness: 1.0),
                                   ),
@@ -415,7 +411,7 @@ class _AccountIndexState extends State<AccountIndex>
                         spacing: 7,
                         children: [
                           Text(
-                            _userInterfaceService.formatAccountNumber(
+                            _maskingService.formatAccountNumber(
                               accountNumber: _loggedUser
                                   .linkedAccounts[index]
                                   .accountNumber,
@@ -450,9 +446,9 @@ class _AccountIndexState extends State<AccountIndex>
           //_slidingvalue[index] || _slidingController[index].animation.value as turns property value
           //_getTheSlidingValue is now Deprecated, please use _slidingController[index].animation.value directly on turns as dynamic double
           turns: (-_slidableController[index].animation.value / 2),
-          duration: Duration(microseconds: 500),
+          duration: const Duration(microseconds: 500),
           curve: Curves.easeIn,
-          child: Icon(Icons.drag_handle),
+          child: const Icon(Icons.drag_handle),
         );
       },
     );
@@ -474,7 +470,7 @@ class _AccountIndexState extends State<AccountIndex>
           });
         },
         style: FilledButton.styleFrom(
-          padding: EdgeInsetsGeometry.all(20.0),
+          padding: const EdgeInsetsGeometry.all(20.0),
           backgroundColor: theme.colorScheme.primaryContainer,
         ),
         icon: Icon(Icons.add_circle_outline_rounded),

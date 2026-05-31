@@ -5,7 +5,6 @@ import 'package:myapp/custom-widgets/primary_button.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:myapp/data-bank/account_collection.dart';
-import 'package:myapp/data-class/constants/gender_enum.dart';
 import 'package:myapp/data-class/user_account.dart';
 
 class AccountVerificationPage extends StatefulWidget {
@@ -75,7 +74,7 @@ class _AccountVerificationPageState extends State<AccountVerificationPage> {
       UserAccount(
         data['nickname'],
         data['phoneNumber'],
-        Gender.male,
+        data['gender'],
         data['email'],
         data['password'],
         data['ewallet'],

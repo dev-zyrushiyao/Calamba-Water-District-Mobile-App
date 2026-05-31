@@ -1,24 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/custom-widgets/headline.dart';
 import 'package:myapp/custom-widgets/primary_button.dart';
+import 'package:myapp/data-class/user_account.dart';
 
-class ForgotPasswordPage extends StatelessWidget {
+import 'package:myapp/services/validator_service.dart';
+
+class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({super.key});
 
   @override
+  State<ForgotPasswordPage> createState() => _ForgotPasswordPageState();
+}
+
+class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final _validatorService = ValidatorService();
+
+  UserAccount? searchedUser;
+  @override
   Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+
     return Scaffold(
-      appBar: AppBar(title: Text('Account Recovery')),
+      appBar: AppBar(title: const Text('Account Recovery')),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
-
             children: [
-              SizedBox(height: 150),
+              const SizedBox(height: 150),
 
-              Headline(
+              const Headline(
                 headline: 'Forgot Password',
                 subHeadline:
                     'Need a hand? Provide your email address and we will send you a link to securely update your password.',
@@ -27,82 +40,97 @@ class ForgotPasswordPage extends StatelessWidget {
                 spacing: 10,
               ),
 
-              SizedBox(height: 45),
+              const SizedBox(height: 45),
 
               SizedBox(
                 width: double.infinity,
                 child: Text(
                   'Email',
-                  style: Theme.of(
-                    context,
-                  ).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
-                ),
-              ),
-              TextFormField(
-                keyboardType: TextInputType.name,
-                decoration: InputDecoration(
-                  hintText: 'Enter your registered email address',
-                  hintStyle: TextStyle(
-                    color: Theme.of(context).colorScheme.onPrimaryFixedVariant,
-                  ),
-
-                  //error style for validator property (InputDecoration)
-                  errorStyle: Theme.of(context).textTheme.labelSmall!.copyWith(
-                    color: Theme.of(context).colorScheme.error,
+                  style: theme.textTheme.bodyLarge!.copyWith(
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-                onSaved: (String? value) {
-                  // This optional block of code can be used to run
-                  // code when the user saves the form.
-                },
-                autovalidateMode: AutovalidateMode.onUnfocus,
-                validator: (String? value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Email is required';
-                  }
-                  //email validation that requires the user to enter a valid email
-                  //that contains '@' + '.com' OR '.ph'
-                  if (value.contains('@') &&
-                      value.endsWith('.com') ^ value.endsWith('.ph')) {
-                    return null;
-                  } else {
-                    return 'Invalid email';
-                  }
-                },
               ),
+              Form(key: _formKey, child: _buildTextField(theme)),
 
-              SizedBox(height: 35),
+              const SizedBox(height: 35),
 
               PrimaryButton(
                 label: 'Reset Password',
-                onPressed: () {
-                  Navigator.pushNamed(context, '/forgotpasswordresult');
+                onPressed: () async {
+                  if (_formKey.currentState!.validate()) {
+                    _formKey.currentState!.save();
+
+                    await Future.delayed(Duration(seconds: 1), () {});
+
+                    if (!context.mounted) return;
+
+                    final user = searchedUser;
+
+                    if (user != null) {
+                      debugPrint('NOTE: IF: $searchedUser');
+                      Navigator.pushNamed(
+                        context,
+                        '/forgotpasswordresult',
+                        arguments: user.email,
+                      );
+                    } else {
+                      throw ArgumentError(
+                        'Account is not found , reset password is terminated',
+                      );
+                    }
+                  }
                 },
               ),
 
-              SizedBox(height: 160),
+              const SizedBox(height: 160),
 
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Quick Reminder:',
-                    textAlign: TextAlign.left,
-                    style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                      fontWeight: FontWeight.bold,
-                      // backgroundColor: Colors.blue[200],
-                    ),
-                  ),
-                  Text(
-                    'If it doesn\'t appear in your inbox within a few minutes, it might be in your Spam folder.',
-                    style: Theme.of(context).textTheme.labelSmall,
-                  ),
-                ],
-              ),
+              _buildQuickReminder(theme),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildQuickReminder(ThemeData theme) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Quick Reminder:',
+          textAlign: TextAlign.left,
+          style: theme.textTheme.labelSmall!.copyWith(
+            fontWeight: FontWeight.bold,
+            // backgroundColor: Colors.blue[200],
+          ),
+        ),
+        Text(
+          'If it doesn\'t appear in your inbox within a few minutes, it might be in your Spam folder.',
+          style: theme.textTheme.labelSmall,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTextField(ThemeData theme) {
+    final validationService = ValidatorService();
+    return TextFormField(
+      keyboardType: TextInputType.name,
+      decoration: InputDecoration(
+        hintText: 'Enter your registered email address',
+        hintStyle: TextStyle(color: theme.colorScheme.onPrimaryFixedVariant),
+        errorStyle: theme.textTheme.labelSmall!.copyWith(
+          color: theme.colorScheme.error,
+        ),
+      ),
+      onSaved: (String? value) {
+        searchedUser = _validatorService.retrieveAccount(value);
+      },
+      autovalidateMode: AutovalidateMode.onUserInteractionIfError,
+      validator: (value) {
+        return validationService.resetEmailValidator(value);
+      },
     );
   }
 }

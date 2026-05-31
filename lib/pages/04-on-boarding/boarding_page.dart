@@ -54,35 +54,28 @@ class _BoardingPageOneState extends State<BoardingPageOne> {
               ),
             ),
 
-            if (_currentPageActive == 1)
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 39.0),
-                child: BoardingCaption(
+            // if (_currentPageActive == 1)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 39.0),
+              child: switch (_currentPageActive) {
+                1 => const BoardingCaption(
                   title: 'Skip the Line, Pay Online',
                   caption:
                       'View and settle your Calamba Water District bills anytime, anywhere. Secure, fast, and hassle-free',
                 ),
-              ),
-
-            if (_currentPageActive == 2)
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 39.0),
-                child: BoardingCaption(
+                2 => const BoardingCaption(
                   title: 'Manage Multiple Accounts',
                   caption:
                       'Easily add and monitor water bills for your home, business, or relatives—all in one single app.',
                 ),
-              ),
-
-            if (_currentPageActive == 3)
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 39.0),
-                child: BoardingCaption(
+                3 => const BoardingCaption(
                   title: 'Track & Connect',
                   caption:
                       'Access your full payment history, download official receipts, and get instant support whenever you need help.',
                 ),
-              ),
+                _ => SizedBox.shrink(),
+              },
+            ),
 
             const SizedBox(height: 70),
 
@@ -130,7 +123,9 @@ class _BoardingPageOneState extends State<BoardingPageOne> {
                         _currentPageActive++;
                       });
                     } else {
-                      Navigator.popAndPushNamed(context, '/home');
+                      setState(() {
+                        Navigator.popAndPushNamed(context, '/home');
+                      });
                     }
                   },
                 ),
