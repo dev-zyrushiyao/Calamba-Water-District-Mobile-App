@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:myapp/custom-widgets/display_no_data.dart';
 import 'package:myapp/custom-widgets/primary_button.dart';
 import 'package:myapp/data-bank/account_type.dart';
+import 'package:myapp/data-class/constants/payment_method_enum.dart';
 import 'package:myapp/data-class/user_account.dart';
 import 'package:myapp/data-class/water_account.dart';
 
@@ -73,11 +74,11 @@ class _MyWidgetState extends State<PaymentPage> {
     }
 
     return Scaffold(
-      appBar: AppBar(title: Text('Payment')),
+      appBar: AppBar(title: const Text('Payment')),
       body: SizedBox(
         child: ListView(
-          physics: const ScrollPhysics(parent: NeverScrollableScrollPhysics()),
-          padding: EdgeInsets.symmetric(horizontal: 16.0),
+          physics: const NeverScrollableScrollPhysics(),
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
           children: [
             const SizedBox(height: 20),
             _buildTextField(data, currencySign, theme),
@@ -134,10 +135,10 @@ class _MyWidgetState extends State<PaymentPage> {
         Positioned(top: -40, child: _buildTransactioNotice(theme)),
         Container(
           width: double.infinity,
-          padding: EdgeInsets.all(27),
+          padding: const EdgeInsets.all(27),
 
           decoration: BoxDecoration(
-            color: Color(0xFF5456A7),
+            color: const Color(0xFF5456A7),
             borderRadius: BorderRadius.circular(7.0),
           ),
           child: Text(
@@ -158,9 +159,9 @@ class _MyWidgetState extends State<PaymentPage> {
       alignment: Alignment.centerLeft,
       child: Container(
         width: 250,
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(10),
             topRight: Radius.circular(10),
           ),
@@ -170,7 +171,7 @@ class _MyWidgetState extends State<PaymentPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           spacing: 10,
           children: [
-            Icon(Icons.warning_amber_rounded),
+            const Icon(Icons.warning_amber_rounded),
             Text('Transaction Notice', style: theme.textTheme.bodyLarge),
           ],
         ),
@@ -197,7 +198,10 @@ class _MyWidgetState extends State<PaymentPage> {
                       width: 44,
                       'assets/mobile-app/onboarding/gcash-vector-logo-seeklogo/gcash-seeklogo-2.svg',
                     ),
-                    Text('GCash', style: theme.textTheme.bodyLarge),
+                    Text(
+                      PaymentMethod.gCash.value,
+                      style: theme.textTheme.bodyLarge,
+                    ),
                   ],
                 ),
               ),
@@ -260,13 +264,13 @@ class _MyWidgetState extends State<PaymentPage> {
                           text:
                               '$currencySign ${data.balance.toStringAsFixed(2)}',
                           style: theme.textTheme.labelSmall?.copyWith(
-                            color: Color(0xFF664D03),
+                            color: const Color(0xFF664D03),
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                       ],
                       style: theme.textTheme.labelSmall?.copyWith(
-                        color: Color(0xFF664D03),
+                        color: const Color(0xFF664D03),
                       ),
                     ),
                   ),

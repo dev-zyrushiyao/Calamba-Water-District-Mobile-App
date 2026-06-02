@@ -1,13 +1,7 @@
+import 'package:myapp/data-class/constants/news_status_enum.dart';
 import 'package:myapp/data-class/news_information.dart';
 
 class NewsData {
-  //map
-  final Map<String, String> _newsStatus = {
-    'ongoing': 'On Going Repair',
-    'resolved': 'Issue Resolved',
-    'monitoring': 'Currently Monitoring',
-  };
-
   final List<NewsInformation> _listOfNews = [];
 
   List<NewsInformation> _generateNewsPlaceholder() {
@@ -18,7 +12,7 @@ class NewsData {
         dateWord: 'March-22',
         title:
             'CWD Celebrates World Water Day 2026: Glacier Preservation Awareness',
-        status: _newsStatus['resolved'],
+        status: NewsStatus.monitoring.value,
         paragraph1: ['placeholder paragraph'],
       ),
 
@@ -26,7 +20,7 @@ class NewsData {
         dateNum: '03-18-2026',
         dateWord: 'March-18',
         title: 'Water Conservation Workshop for Calamba City Public Schools',
-        status: _newsStatus['ongoing'],
+        status: NewsStatus.ongoing.value,
         paragraph1: ['placeholder paragraph'],
       ),
 
@@ -34,7 +28,7 @@ class NewsData {
         dateNum: '03-12-2026',
         dateWord: 'March-12',
         title: 'Emergency Pipe Repair: Lakeview Subd. Main Entrance',
-        status: _newsStatus['ongoing'],
+        status: NewsStatus.resolved.value,
         paragraph1: ['placeholder paragraph'],
       ),
 
@@ -42,7 +36,7 @@ class NewsData {
         dateNum: '03-09-2026',
         dateWord: 'March-09',
         title: '"Walk In Her Shoes" Activity Honors Women in the Water Sector',
-        status: _newsStatus['ongoing'],
+        status: NewsStatus.resolved.value,
         paragraph1: ['placeholder paragraph'],
       ),
     ]);
@@ -56,7 +50,7 @@ class NewsData {
         dateNum: '03-25-2026',
         dateWord: 'March-25',
         title: 'Notice of Scheduled Interconnection: Brgy. Mayapa Area',
-        status: _newsStatus['ongoing'],
+        status: NewsStatus.ongoing.value,
         paragraph1: [
           'The Calamba Water District (CWD) has issued an urgent advisory following a major pipe burst reported early this morning at the Main Entrance of Lakeview Subdivision.',
           'The rupture was identified in a primary 8-inch distribution line, causing significant water loss and localized flooding near the subdivision gates.',

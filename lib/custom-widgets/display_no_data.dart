@@ -12,7 +12,7 @@ class _MyWidgetState extends State<DisplayNoData> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: Center(child: Text('404 Data not found')),
+      body: const Center(child: Text('404 Data not found')),
     );
   }
 }

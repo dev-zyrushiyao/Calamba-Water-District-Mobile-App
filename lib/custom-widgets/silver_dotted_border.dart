@@ -16,9 +16,10 @@ class SilverDottedBorder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //DottedBorder Widget is a Dependency from Pub.dev
     return Expanded(
       child: Padding(
-        padding: EdgeInsetsGeometry.all(8),
+        padding: const EdgeInsetsGeometry.all(8),
         child: SizedBox(
           height: height,
           width: double.infinity,
@@ -27,7 +28,7 @@ class SilverDottedBorder extends StatelessWidget {
               color: Colors.grey[400]!,
               strokeWidth: 4,
               radius: const Radius.circular(13.0),
-              dashPattern: [20, 10],
+              dashPattern: const [20, 10],
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,

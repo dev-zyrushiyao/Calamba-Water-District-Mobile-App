@@ -22,7 +22,7 @@ class MorphShape {
 
   //Round
   final MorphableShapeBorder _shape3 = CircleShapeBorder(
-    border: DynamicBorderSide(width: 1, color: Colors.transparent),
+    border: const DynamicBorderSide(width: 1, color: Colors.transparent),
   );
 
   //octagon

@@ -15,9 +15,9 @@ class AccountInformationPage extends StatelessWidget {
       context: context,
       builder: (dialogBoxContext) {
         return AlertDialog.adaptive(
-          icon: Icon(Icons.delete),
-          title: Text('Unlink this account?'),
-          content: Text(
+          icon: const Icon(Icons.delete),
+          title: const Text('Unlink this account?'),
+          content: const Text(
             'Local transaction history for this account will be removed from this device.',
           ),
           actions: [
@@ -25,7 +25,7 @@ class AccountInformationPage extends StatelessWidget {
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
             ),
             TextButton(
               onPressed: () {
@@ -37,7 +37,7 @@ class AccountInformationPage extends StatelessWidget {
                 Navigator.pop(dialogBoxContext);
                 Navigator.pop(context, 'delete');
               },
-              child: Text('Unlink'),
+              child: const Text('Unlink'),
             ),
           ],
         );
@@ -92,7 +92,7 @@ class AccountInformationPage extends StatelessWidget {
 
           //Account Information
           Container(
-            padding: EdgeInsets.symmetric(vertical: 23),
+            padding: const EdgeInsets.symmetric(vertical: 23),
             child: Column(
               spacing: 7.0,
               children: [
@@ -127,7 +127,7 @@ class AccountInformationPage extends StatelessWidget {
           ),
 
           Container(
-            padding: EdgeInsets.symmetric(vertical: 26),
+            padding: const EdgeInsets.symmetric(vertical: 26),
             child: Column(
               spacing: 18,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -155,7 +155,7 @@ class AccountInformationPage extends StatelessWidget {
 
           //Transacitions
           Container(
-            padding: EdgeInsets.symmetric(vertical: 30),
+            padding: const EdgeInsets.symmetric(vertical: 30),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               spacing: 30,

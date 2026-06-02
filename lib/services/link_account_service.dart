@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:myapp/data-class/bill.dart';
 import 'package:myapp/data-class/constants/month_enum.dart';
+import 'package:myapp/data-class/constants/water_account_status_enum.dart';
 import 'package:myapp/data-class/user_account.dart' show UserAccount;
 import 'package:myapp/data-class/water_account.dart' show WaterAccount;
 
@@ -225,7 +226,7 @@ class LinkAccountService {
       WaterAccount(
         accountNumber: linkedAccountForm['accountNumber'],
         accountName: linkedAccountForm['accountName'],
-        isActive: true, //default value
+        isActive: WaterAccountStatus.active, //default value
         previousBill: generateNumber<double>(minValue: 150, maxValue: 700),
         lastReading: generatedPreviousReading,
         dueDay: generatedDueDay,

@@ -22,7 +22,7 @@ class ReceiptPage extends StatelessWidget {
     }
 
     return Scaffold(
-      appBar: AppBar(title: Text('Receipt')),
+      appBar: AppBar(title: const Text('Receipt')),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Column(
@@ -42,7 +42,7 @@ class ReceiptPage extends StatelessWidget {
             SizedBox(
               height: 600,
               child: ListView.separated(
-                padding: EdgeInsets.symmetric(vertical: 20),
+                padding: const EdgeInsets.symmetric(vertical: 20),
                 separatorBuilder: (context, index) =>
                     const SizedBox(height: 30),
                 itemCount: data.length,

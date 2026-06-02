@@ -6,7 +6,6 @@ import 'package:myapp/custom-widgets/headline.dart';
 import 'package:myapp/data-class/bill.dart';
 import 'package:myapp/data-class/water_account.dart';
 import 'package:myapp/services/masking_service.dart';
-import 'package:myapp/services/user_interface_service.dart';
 
 class BillingPage extends StatelessWidget {
   const BillingPage({super.key});
@@ -22,13 +21,13 @@ class BillingPage extends StatelessWidget {
       return DisplayNoData();
     }
 
-    var billList = data['reversedListData'] as List<Bill>;
-    var userData = data['userData'] as WaterAccount;
+    final billList = data['reversedListData'] as List<Bill>;
+    final userData = data['userData'] as WaterAccount;
 
     return Scaffold(
       appBar: AppBar(title: const Text('Billing')),
       body: ListView(
-        padding: EdgeInsets.symmetric(horizontal: 16.0),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
         physics: const ScrollPhysics(parent: NeverScrollableScrollPhysics()),
         children: [
           const SizedBox(height: 60),
@@ -81,7 +80,7 @@ class BillingPage extends StatelessWidget {
                     ),
                   )
                 else
-                  DottedBorder(child: Text('No bills to Show')),
+                  const DottedBorder(child: Text('No bills to Show')),
               ],
             ),
           ),

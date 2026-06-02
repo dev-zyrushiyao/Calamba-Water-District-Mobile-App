@@ -176,7 +176,7 @@ class _ProfileIndexState extends State<ProfileIndex> {
           clipBehavior: Clip.hardEdge,
           child: TweenAnimationBuilder<double>(
             tween: Tween<double>(begin: 0, end: _containerHeight),
-            duration: Duration(seconds: 1),
+            duration: const Duration(seconds: 1),
             curve: Curves.easeOutBack,
             builder: (context, value, _) {
               return _buildProfileContainer(value, theme);
@@ -195,7 +195,7 @@ class _ProfileIndexState extends State<ProfileIndex> {
                 //Edit Toggle Button
                 _buildEditButton(theme),
 
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
 
                 //Editing Form
                 _isEditing
@@ -207,7 +207,7 @@ class _ProfileIndexState extends State<ProfileIndex> {
                             padding: EdgeInsets.zero,
                             itemCount: _textController.length,
                             separatorBuilder: (context, index) =>
-                                SizedBox(height: 20.0),
+                                const SizedBox(height: 20.0),
                             itemBuilder: (context, index) {
                               return _textSection[index] == TextSection.gender
                                   //if index is Gender section return a dropdown list
@@ -226,7 +226,7 @@ class _ProfileIndexState extends State<ProfileIndex> {
                             parent: ClampingScrollPhysics(),
                           ),
                           separatorBuilder: (context, index) =>
-                              SizedBox(height: 20),
+                              const SizedBox(height: 20),
                           itemCount: _textSection.length,
                           itemBuilder: (context, index) {
                             return _displayUserInformation(index, theme);
@@ -253,7 +253,7 @@ class _ProfileIndexState extends State<ProfileIndex> {
                         begin: 80,
                         end: _isEditing ? 10 : 80,
                       ),
-                      duration: Duration(milliseconds: 600),
+                      duration: const Duration(milliseconds: 600),
                       curve: Curves.easeInOutBack,
                       builder: (context, value, child) {
                         return _buildLogoutButton(value, theme);
@@ -274,8 +274,9 @@ class _ProfileIndexState extends State<ProfileIndex> {
   // ==========================//
 
   Widget _buildProfileContainer(double value, ThemeData theme) {
+    final containerWidth = MediaQuery.of(context).size.width;
     return Container(
-      width: MediaQuery.of(context).size.width,
+      width: containerWidth,
       height: value,
       color: theme.colorScheme.primary,
       child: value < 150

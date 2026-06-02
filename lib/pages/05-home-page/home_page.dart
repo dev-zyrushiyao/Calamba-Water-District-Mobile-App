@@ -42,7 +42,7 @@ class _HomePageState extends State<HomePage> {
                 setState(() {});
               },
               backgroundColor: themeData.colorScheme.secondaryContainer,
-              shape: CircleBorder(),
+              shape: const CircleBorder(),
               child: Icon(Icons.add, color: themeData.colorScheme.onSecondary),
             ),
       bottomNavigationBar: NavigationBar(
@@ -66,10 +66,10 @@ class _HomePageState extends State<HomePage> {
         indicatorColor: themeData.colorScheme.onSecondary,
         selectedIndex: _currentPageIndex,
         backgroundColor: themeData.colorScheme.primary,
-        animationDuration: Duration(milliseconds: 500),
+        animationDuration: const Duration(milliseconds: 500),
         destinations: <Widget>[
           NavigationDestination(
-            selectedIcon: Icon(Icons.home),
+            selectedIcon: const Icon(Icons.home),
             icon: Icon(
               Icons.home_outlined,
               color: themeData.colorScheme.onSecondary,

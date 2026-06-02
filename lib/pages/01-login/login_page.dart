@@ -60,7 +60,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    ThemeData theme = Theme.of(context);
+    final ThemeData theme = Theme.of(context);
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -157,7 +157,7 @@ class _LoginPageState extends State<LoginPage> {
                   spacing: 18.0,
                   children: [
                     _buildGoogleButton(theme),
-                    _buildFacebookutton(theme),
+                    _buildFacebookButton(theme),
                   ],
                 ),
 
@@ -198,7 +198,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _buildFacebookutton(ThemeData theme) {
+  Widget _buildFacebookButton(ThemeData theme) {
     return SizedBox(
       width: _textFieldWidth,
       height: 46,

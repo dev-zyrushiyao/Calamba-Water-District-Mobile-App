@@ -31,10 +31,13 @@ class CircularCopyButton extends StatelessWidget {
       },
       child: Container(
         padding: padding ?? EdgeInsets.zero,
-        decoration: ShapeDecoration(color: Colors.amber, shape: CircleBorder()),
+        decoration: const ShapeDecoration(
+          color: Colors.amber,
+          shape: CircleBorder(),
+        ),
         child: Column(
           children: [
-            Icon(Icons.copy),
+            const Icon(Icons.copy),
             Text('Copy', style: theme.textTheme.labelLarge),
           ],
         ),

@@ -66,7 +66,10 @@ class _NewsIndexState extends State<NewsIndex> {
     //Algorithm: generate 4 items in a list that returns the current year - index
     //For example: current year is 2026
     //The generated list is [currentYear - 0(index) = 2026 , currentYear - 1(index) = 2025 , currentYear - 2(index).. and so on]
-    List<int> yearList = List.generate(4, (index) => _currentYear - index);
+    final List<int> yearList = List.generate(
+      4,
+      (index) => _currentYear - index,
+    );
 
     for (int year in yearList) {
       yearMenu.add(DropdownMenuItem(value: year, child: Text('$year')));
@@ -87,15 +90,12 @@ class _NewsIndexState extends State<NewsIndex> {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
 
-    //Changes the value of list per year
-    //_buildNewsAndUI(_chosenValue, _newsInformationList);
-
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 86),
         child: Column(
           children: [
-            Align(
+            const Align(
               alignment: AlignmentGeometry.centerStart,
               child: Headline(
                 headline: 'News',
@@ -103,7 +103,7 @@ class _NewsIndexState extends State<NewsIndex> {
               ),
             ),
 
-            SizedBox(height: 38),
+            const SizedBox(height: 38),
 
             //Dropdown
             Row(
@@ -122,7 +122,7 @@ class _NewsIndexState extends State<NewsIndex> {
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                     ),
-                    hint: Text('Year'),
+                    hint: const Text('Year'),
                     onChanged: (int? value) {
                       if (value != null) {
                         //updates the dropdown current value
@@ -145,7 +145,7 @@ class _NewsIndexState extends State<NewsIndex> {
               ],
             ),
 
-            SizedBox(height: 33),
+            const SizedBox(height: 33),
 
             //News Display
             Expanded(
@@ -165,7 +165,7 @@ class _NewsIndexState extends State<NewsIndex> {
                       )
                     : ListView.separated(
                         separatorBuilder: (context, index) =>
-                            SizedBox(height: 35),
+                            const SizedBox(height: 35),
                         itemCount: _newsToDisplay.length,
                         itemBuilder: (BuildContext context, int index) {
                           return _newsToDisplay[index];

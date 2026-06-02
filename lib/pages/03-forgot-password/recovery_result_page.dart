@@ -32,7 +32,7 @@ class RecoveryResultPage extends StatelessWidget {
                   Stack(
                     clipBehavior: Clip.none,
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.mail_outline,
                         size: 200,
                         color: Color(0xFFA1A2D0),
@@ -45,7 +45,7 @@ class RecoveryResultPage extends StatelessWidget {
                         child: Container(
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
-                            color: Color(0xFF2E3092),
+                            color: const Color(0xFF2E3092),
                             border: BoxBorder.all(
                               width: 10.0,
                               color: const Color(0xFF252675),

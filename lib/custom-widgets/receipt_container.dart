@@ -15,9 +15,9 @@ class ReceiptContainer extends StatelessWidget {
     ThemeData theme = Theme.of(context);
     return Container(
       clipBehavior: Clip.hardEdge,
-      padding: EdgeInsets.all(20),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Color(0xFF5456A7),
+        color: const Color(0xFF5456A7),
         borderRadius: BorderRadius.circular(7.0),
       ),
       child: Column(

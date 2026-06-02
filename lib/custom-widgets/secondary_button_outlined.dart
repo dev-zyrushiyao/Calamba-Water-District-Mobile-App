@@ -17,24 +17,21 @@ class SecondaryButtonOutlined extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+
     return OutlinedButton(
       onPressed: onPressed,
       style: OutlinedButton.styleFrom(
         padding: EdgeInsets.zero,
         minimumSize: Size(width, height),
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(8.0)),
         ),
-        side: BorderSide(
-          width: 1,
-          color: Theme.of(context).colorScheme.secondaryContainer,
-        ),
+        side: BorderSide(width: 1, color: theme.colorScheme.secondaryContainer),
       ),
       child: Text(
         label,
-        style: TextStyle(
-          color: Theme.of(context).colorScheme.secondaryContainer,
-        ),
+        style: TextStyle(color: theme.colorScheme.secondaryContainer),
       ),
     );
   }

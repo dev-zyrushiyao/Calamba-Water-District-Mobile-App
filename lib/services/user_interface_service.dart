@@ -19,7 +19,7 @@ class UserInterfaceService {
     required DateTime date,
     bool receiptListFormat = false,
   }) {
-    String receiptTimestamp = DateFormat(
+    final String receiptTimestamp = DateFormat(
       receiptListFormat ? "MMM d, yyyy" : "E, MMM d, yyyy 'at' hh:mm a",
     ).format(date);
 
@@ -29,13 +29,15 @@ class UserInterfaceService {
   String convertToCalendarDateFormat(DateTime date, [bool? chatSupportFormat]) {
     if (chatSupportFormat == true) {
       //Sample Format: Sat, May 23, 2026
-      String receiptTimestamp = DateFormat("E , MMM d, hh:mm a").format(date);
+      final String receiptTimestamp = DateFormat(
+        "E , MMM d, hh:mm a",
+      ).format(date);
 
       return receiptTimestamp;
     }
 
     //Sample Format: Sat, May 23, 2026
-    String receiptTimestamp = DateFormat("E , MMM d, yyyy").format(date);
+    final String receiptTimestamp = DateFormat("E , MMM d, yyyy").format(date);
 
     return receiptTimestamp;
   }

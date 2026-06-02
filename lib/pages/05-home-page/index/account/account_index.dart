@@ -214,7 +214,7 @@ class _AccountIndexState extends State<AccountIndex>
                                   }
                                 }
                               : null,
-                          child: Text('Save'),
+                          child: const Text('Save'),
                         ),
                       ],
                     ),
@@ -241,7 +241,7 @@ class _AccountIndexState extends State<AccountIndex>
           children: [
             const SizedBox(height: 85.0),
 
-            Align(
+            const Align(
               alignment: Alignment.bottomLeft,
               child: Headline(
                 headline: 'My Account',
@@ -473,7 +473,7 @@ class _AccountIndexState extends State<AccountIndex>
           padding: const EdgeInsetsGeometry.all(20.0),
           backgroundColor: theme.colorScheme.primaryContainer,
         ),
-        icon: Icon(Icons.add_circle_outline_rounded),
+        icon: const Icon(Icons.add_circle_outline_rounded),
         label: Text('Link Account', style: theme.textTheme.labelLarge),
       ),
     );

@@ -34,7 +34,7 @@ class _ProfileContentDisplayAnimationState
             //Photo Display
             TweenAnimationBuilder<double>(
               tween: Tween<double>(begin: 10, end: widget.photoSize),
-              duration: Duration(milliseconds: 300),
+              duration: const Duration(milliseconds: 300),
               curve: Curves.easeOutBack,
               builder: (context, value, child) {
                 return CircleAvatar(
@@ -56,7 +56,7 @@ class _ProfileContentDisplayAnimationState
                     ? const SizedBox.shrink()
                     : Text(
                         widget.loggedUser.nickname,
-                        style: theme.textTheme.headlineMedium!.copyWith(
+                        style: theme.textTheme.headlineMedium?.copyWith(
                           color: theme.colorScheme.onSecondary,
                           fontSize: value,
                         ),

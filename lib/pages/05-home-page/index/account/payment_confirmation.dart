@@ -33,7 +33,7 @@ class PaymentConfirmation extends StatelessWidget {
     final WaterAccount waterAccount = data['waterAccount'];
 
     return Scaffold(
-      appBar: AppBar(title: Text('Payment Confirmation')),
+      appBar: AppBar(title: const Text('Payment Confirmation')),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 60.0),
@@ -87,8 +87,8 @@ class PaymentConfirmation extends StatelessWidget {
                     context: context,
                     builder: (context) {
                       return AlertDialog.adaptive(
-                        title: Text('Payment Confirmation'),
-                        content: Text(
+                        title: const Text('Payment Confirmation'),
+                        content: const Text(
                           'Are you sure all the information is correct?',
                         ),
                         actions: [
@@ -96,7 +96,7 @@ class PaymentConfirmation extends StatelessWidget {
                             onPressed: () {
                               Navigator.pop(context);
                             },
-                            child: Text('No, cancel'),
+                            child: const Text('No, cancel'),
                           ),
                           TextButton(
                             onPressed: () async {
@@ -141,7 +141,7 @@ class PaymentConfirmation extends StatelessWidget {
                               }
                             },
 
-                            child: Text('Yes, proceed'),
+                            child: const Text('Yes, proceed'),
                           ),
                         ],
                       );

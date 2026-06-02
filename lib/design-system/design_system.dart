@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 class DesignSystem {
   //Color Palette FIGMA
-  ColorScheme cwdThemeColor() {
+  ColorScheme themeColor() {
     return ColorScheme.fromSeed(
       //Deep Sea Theme - 2E3092
       seedColor: const Color(0xFF2E3092),
@@ -22,7 +22,6 @@ class DesignSystem {
     );
   }
 
-  //TYPOGRAPHY FIGMA
   final TextStyle primaryFont = GoogleFonts.montserrat();
   final TextStyle secondaryFont = GoogleFonts.openSans();
 
@@ -32,9 +31,13 @@ class DesignSystem {
       percentage / fontSize;
 
   //Design System - Typography FIGMA
-  TextTheme cwdTypography(TextStyle primaryFont, TextStyle secondaryFont) {
-    var semiBold = FontWeight.w600;
+  TextTheme themeTypography() {
     //figma conversion to flutter letter spacing
+    var semiBold = FontWeight.w600;
+
+    //TYPOGRAPHY FIGMA
+    final TextStyle primaryFont = GoogleFonts.montserrat();
+    final TextStyle secondaryFont = GoogleFonts.openSans();
 
     return TextTheme(
       //PrimaryFont (H1 , H2 , H3 , Headline , Subhead , Caption)
@@ -43,35 +46,35 @@ class DesignSystem {
         fontSize: 28,
         fontWeight: FontWeight.bold,
         letterSpacing: 0.0,
-        color: cwdThemeColor().onPrimary,
+        color: themeColor().onPrimary,
       ), //H1
       headlineMedium: TextStyle(
         fontFamily: primaryFont.fontFamily,
         fontSize: 22,
         fontWeight: semiBold,
         letterSpacing: 0.0,
-        color: cwdThemeColor().onPrimary,
+        color: themeColor().onPrimary,
       ), //H2
       headlineSmall: TextStyle(
         fontFamily: primaryFont.fontFamily,
         fontSize: 20,
         fontWeight: semiBold,
         letterSpacing: _letterSpacingConverter(20.00, 1.5),
-        color: cwdThemeColor().onPrimary,
+        color: themeColor().onPrimary,
       ), //H3
       titleLarge: TextStyle(
         fontFamily: primaryFont.fontFamily,
         fontSize: 17,
         fontWeight: semiBold,
         letterSpacing: _letterSpacingConverter(17.00, 1.5),
-        color: cwdThemeColor().onPrimary,
+        color: themeColor().onPrimary,
       ), //Headline
       titleMedium: TextStyle(
         fontFamily: primaryFont.fontFamily,
         fontSize: 15,
         fontWeight: FontWeight.normal,
         letterSpacing: _letterSpacingConverter(15.00, 1.5),
-        color: cwdThemeColor().onPrimary,
+        color: themeColor().onPrimary,
       ), //Subhead
       labelSmall: TextStyle(
         fontFamily: primaryFont.fontFamily,
@@ -79,7 +82,7 @@ class DesignSystem {
         fontWeight: FontWeight.normal,
         letterSpacing: _letterSpacingConverter(13.00, 1.5),
         height: _lineHeightConverter(13.00, 20.00),
-        color: cwdThemeColor().onPrimary,
+        color: themeColor().onPrimary,
       ), //Caption
       //SecondaryFont (Body , Link , CTA)
       bodyLarge: TextStyle(
@@ -88,21 +91,21 @@ class DesignSystem {
         fontWeight: FontWeight.normal,
         letterSpacing: _letterSpacingConverter(17, 5.0),
         height: _lineHeightConverter(17.00, 25.00),
-        color: cwdThemeColor().onPrimary,
+        color: themeColor().onPrimary,
       ), //Body
       bodySmall: TextStyle(
         fontFamily: primaryFont.fontFamily,
         fontSize: 17,
         fontWeight: FontWeight.bold,
         letterSpacing: 0.0,
-        color: cwdThemeColor().onPrimary,
+        color: themeColor().onPrimary,
       ), //Link
       labelLarge: TextStyle(
         fontFamily: primaryFont.fontFamily,
         fontSize: 17,
         fontWeight: semiBold,
         letterSpacing: 0.0,
-        color: cwdThemeColor().onPrimary,
+        color: themeColor().onPrimary,
       ), //Call-to-Action
     );
   }

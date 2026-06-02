@@ -29,12 +29,12 @@ class BillingContenttState extends State<BillingContentPage> {
         ),
       ),
       body: Padding(
-        padding: EdgeInsetsGeometry.all(16),
+        padding: const EdgeInsetsGeometry.all(16),
         child: Column(
           children: [
             Text('Billing Notice', style: theme.textTheme.headlineSmall),
 
-            SizedBox(height: 5),
+            const SizedBox(height: 5),
 
             //head section
             Container(
@@ -94,7 +94,7 @@ class BillingContenttState extends State<BillingContentPage> {
 
             //3rd Layer
             Container(
-              padding: EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(8.0),
               decoration: BoxDecoration(
                 border: BoxBorder.all(
                   color: theme.colorScheme.primary,
@@ -250,7 +250,7 @@ class BillingContenttState extends State<BillingContentPage> {
 
   Widget _buildSingleBoxHeader(String header, ThemeData theme) {
     return Container(
-      padding: EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(16.0),
       alignment: Alignment.centerLeft,
       width: double.infinity,
       decoration: BoxDecoration(
@@ -270,7 +270,7 @@ class BillingContenttState extends State<BillingContentPage> {
         Container(
           height: 40,
           alignment: Alignment.center,
-          padding: EdgeInsets.all(5.0),
+          padding: const EdgeInsets.all(5.0),
           width: double.infinity,
           decoration: BoxDecoration(
             border: BoxBorder.all(color: theme.colorScheme.primary, width: 1),
@@ -360,7 +360,7 @@ class BillingContenttState extends State<BillingContentPage> {
             alignment: Alignment.center,
             padding: const EdgeInsets.symmetric(vertical: 10),
             decoration: BoxDecoration(
-              color: Color(0xFFEEEEFA),
+              color: const Color(0xFFEEEEFA),
               border: BoxBorder.fromSTEB(
                 bottom: BorderSide(
                   color: theme.colorScheme.primary,

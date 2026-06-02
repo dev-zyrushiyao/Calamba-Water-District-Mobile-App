@@ -1,3 +1,4 @@
+import 'package:myapp/data-class/constants/water_account_status_enum.dart';
 import 'package:myapp/data-class/water_account.dart';
 
 class WaterAccountList {
@@ -7,7 +8,7 @@ class WaterAccountList {
     WaterAccount(
       accountName: 'Zyrus Hiyao',
       accountNumber: 591482637,
-      isActive: true,
+      isActive: WaterAccountStatus.active,
       previousBill: 373.25,
       lastReading: 124.0,
       dueDay: 25,
@@ -21,7 +22,7 @@ class WaterAccountList {
     WaterAccount(
       accountName: 'Paulo Nase',
       accountNumber: 591482637,
-      isActive: true,
+      isActive: WaterAccountStatus.active,
       previousBill: 373.25,
       lastReading: 124.0,
       dueDay: 21,
@@ -35,7 +36,7 @@ class WaterAccountList {
     WaterAccount(
       accountName: 'Felip Suson',
       accountNumber: 415882361,
-      isActive: true,
+      isActive: WaterAccountStatus.active,
       previousBill: 289.25,
       lastReading: 110.0,
       dueDay: 25,
@@ -49,7 +50,7 @@ class WaterAccountList {
     WaterAccount(
       accountName: 'Stell Ajero',
       accountNumber: 415882361,
-      isActive: true,
+      isActive: WaterAccountStatus.active,
       previousBill: 289.25,
       lastReading: 110.0,
       dueDay: 16,
@@ -63,7 +64,7 @@ class WaterAccountList {
     WaterAccount(
       accountName: 'Justin De Dios',
       accountNumber: 415882361,
-      isActive: true,
+      isActive: WaterAccountStatus.active,
       previousBill: 289.25,
       lastReading: 110.0,
       dueDay: 19,

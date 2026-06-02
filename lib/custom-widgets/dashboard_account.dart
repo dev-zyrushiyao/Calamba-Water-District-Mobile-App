@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/custom-widgets/primary_button.dart';
 import 'package:myapp/custom-widgets/status_indicator.dart';
+import 'package:myapp/data-class/constants/water_account_status_enum.dart';
 import 'package:myapp/data-class/water_account.dart';
 import 'package:myapp/services/masking_service.dart';
-
-import 'package:myapp/services/user_interface_service.dart';
 
 class DashboardDisplay extends StatelessWidget {
   const DashboardDisplay({
@@ -19,7 +18,7 @@ class DashboardDisplay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //service
-    final UserInterfaceService userInterfaceService = UserInterfaceService();
+
     final MaskingService maskingService = MaskingService();
     final double deviceWidth = MediaQuery.of(context).size.width;
     final ThemeData theme = Theme.of(context);
@@ -28,7 +27,7 @@ class DashboardDisplay extends StatelessWidget {
       padding: const EdgeInsets.all(23.0),
       width: deviceWidth,
       decoration: BoxDecoration(
-        color: Color(0xFFEEEEFA),
+        color: const Color(0xFFEEEEFA),
         border: BoxBorder.all(
           color: const Color(0xFFC8C8E5),
           width: 3,
@@ -100,7 +99,8 @@ class DashboardDisplay extends StatelessWidget {
 
                 style: theme.textTheme.headlineSmall,
               ),
-              if (waterAccount.isActive == true) primaryButton,
+              if (waterAccount.isActive == WaterAccountStatus.active)
+                primaryButton,
             ],
           ),
         ],

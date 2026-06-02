@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/custom-widgets/appbar_custom_header.dart';
 import 'package:myapp/custom-widgets/circular_copy_button.dart';
 import 'package:myapp/custom-widgets/display_no_data.dart';
 import 'package:myapp/custom-widgets/receipt_container.dart';
@@ -26,26 +27,18 @@ class _MyWidgetState extends State<ReceiptContentPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Transaction #${data.transactionNumber}'),
-            Text(
-              _userInterfaceService.convertReceiptDateFormat(
-                date: data.date,
-                receiptListFormat: true,
-              ),
-              style: theme.textTheme.labelSmall?.copyWith(
-                color: Color(0xFF616161),
-              ),
-            ),
-          ],
+        title: AppbarCustomHeader(
+          title: 'Transaction #${data.transactionNumber}',
+          subtitle: _userInterfaceService.convertReceiptDateFormat(
+            date: data.date,
+            receiptListFormat: true,
+          ),
         ),
       ),
       body: ListView(
         padding: EdgeInsets.symmetric(horizontal: 16.0),
         children: [
-          SizedBox(height: 93),
+          const SizedBox(height: 93),
           SizedBox(
             child: Column(
               spacing: 9.0,
@@ -58,7 +51,7 @@ class _MyWidgetState extends State<ReceiptContentPage> {
               ],
             ),
           ),
-          SizedBox(height: 35),
+          const SizedBox(height: 35),
           ReceiptContainer(
             copyButton: CircularCopyButton(
               targetTextToCopy: data.transactionNumber,

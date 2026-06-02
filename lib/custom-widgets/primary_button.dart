@@ -17,13 +17,15 @@ class PrimaryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+
     return FilledButton(
       onPressed: onPressed,
       style: FilledButton.styleFrom(
         minimumSize: Size(width, height),
         backgroundColor: Colors.transparent,
         padding: EdgeInsets.zero,
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(8.0)),
         ),
       ),
@@ -36,10 +38,7 @@ class PrimaryButton extends StatelessWidget {
           gradient: LinearGradient(
             begin: AlignmentGeometry.topCenter,
             end: AlignmentGeometry.bottomCenter,
-            colors: [
-              Theme.of(context).colorScheme.primaryContainer,
-              Color(0x993A9AC4),
-            ],
+            colors: [theme.colorScheme.primaryContainer, Color(0x993A9AC4)],
           ),
         ),
         child: Container(

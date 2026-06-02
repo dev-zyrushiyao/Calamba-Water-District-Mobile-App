@@ -45,24 +45,22 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     //Figma Design System
     final DesignSystem designSystem = DesignSystem();
+    final designSystemColor = designSystem.themeColor();
+    final designSystemTypography = designSystem.themeTypography();
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         appBarTheme: AppBarTheme(
-          backgroundColor: designSystem.cwdThemeColor().surface,
-          foregroundColor: designSystem.cwdThemeColor().onPrimary,
+          backgroundColor: designSystemColor.surface,
+          foregroundColor: designSystemColor.onPrimary,
           scrolledUnderElevation: 4.0,
-          shadowColor: designSystem.cwdThemeColor().primary,
-          surfaceTintColor: designSystem.cwdThemeColor().primary,
+          shadowColor: designSystemColor.primary,
+          surfaceTintColor: designSystemColor.primary,
         ),
-
         useMaterial3: true,
-        textTheme: designSystem.cwdTypography(
-          designSystem.primaryFont,
-          designSystem.secondaryFont,
-        ),
-        colorScheme: designSystem.cwdThemeColor(),
+        textTheme: designSystemTypography,
+        colorScheme: designSystemColor,
       ),
       initialRoute: '/login',
       routes: {

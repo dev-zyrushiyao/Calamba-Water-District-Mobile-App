@@ -12,6 +12,7 @@ class ShrinkingDivider extends StatefulWidget {
 class _ShrinkingDividerState extends State<ShrinkingDivider> {
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
     return AnimatedContainer(
       alignment: Alignment.centerRight,
       duration: const Duration(milliseconds: 500),
@@ -20,8 +21,8 @@ class _ShrinkingDividerState extends State<ShrinkingDivider> {
       decoration: BoxDecoration(
         border: BoxBorder.all(
           color: widget.activeDivider
-              ? Theme.of(context).colorScheme.primary
-              : Color(0xFFC8C8E5),
+              ? theme.colorScheme.primary
+              : const Color(0xFFC8C8E5),
           width: 5,
           style: BorderStyle.solid,
         ),

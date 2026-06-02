@@ -26,8 +26,8 @@ class PaymentResultPage extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: ListView(
-          physics: ScrollPhysics(parent: NeverScrollableScrollPhysics()),
-          padding: EdgeInsets.symmetric(horizontal: 16.0),
+          physics: const NeverScrollableScrollPhysics(),
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
           children: [
             SizedBox(
               child: Column(
@@ -38,7 +38,7 @@ class PaymentResultPage extends StatelessWidget {
                     color: theme.colorScheme.primary,
                     size: 100,
                   ),
-                  Headline(
+                  const Headline(
                     headline: 'Payment Success!',
                     subHeadline:
                         'Your payment has been received and is currently being processed. A digital receipt has been sent to your email for your records.',
@@ -50,7 +50,7 @@ class PaymentResultPage extends StatelessWidget {
               ),
             ),
 
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
 
             ReceiptContainer(
               copyButton: CircularCopyButton(
@@ -69,7 +69,7 @@ class PaymentResultPage extends StatelessWidget {
               ],
             ),
 
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
 
             PrimaryButton(
               label: 'Return to Account Page',

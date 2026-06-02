@@ -32,7 +32,7 @@ class FormEditableTextfield extends StatefulWidget {
 class _FormEditableTextfieldState extends State<FormEditableTextfield> {
   @override
   Widget build(BuildContext context) {
-    ThemeData theme = Theme.of(context);
+    final ThemeData theme = Theme.of(context);
     return TextFormField(
       maxLength: widget.maxLength,
       controller: widget.textController,
@@ -47,10 +47,10 @@ class _FormEditableTextfieldState extends State<FormEditableTextfield> {
         suffixIcon: widget.suffixIcon,
         label: widget.textSection != null ? Text(widget.textSection!) : null,
         helperStyle: theme.textTheme.labelSmall!.copyWith(
-          color: Theme.of(context).colorScheme.onPrimaryFixedVariant,
+          color: theme.colorScheme.onPrimaryFixedVariant,
         ),
-        errorStyle: Theme.of(context).textTheme.labelSmall!.copyWith(
-          color: Theme.of(context).colorScheme.error,
+        errorStyle: theme.textTheme.labelSmall!.copyWith(
+          color: theme.colorScheme.error,
         ),
       ),
     );

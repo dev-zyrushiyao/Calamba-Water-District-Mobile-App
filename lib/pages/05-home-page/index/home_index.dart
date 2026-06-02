@@ -17,16 +17,7 @@ class _HomeIndexState extends State<HomeIndex> {
   final _loggedUser = AccountType().owner;
 
   @override
-  void initState() {
-    super.initState();
-
-    debugPrint('Current logged: ${_loggedUser.nickname}');
-  }
-
-  @override
   Widget build(BuildContext context) {
-    //Updates the value of _loggedUser to any of the account logged in
-
     final ThemeData theme = Theme.of(context);
 
     return SafeArea(

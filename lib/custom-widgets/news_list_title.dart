@@ -18,7 +18,7 @@ class NewsListTitle extends StatefulWidget {
 class _MyWidgetState extends State<NewsListTitle> {
   @override
   Widget build(BuildContext context) {
-    ThemeData theme = Theme.of(context);
+    final ThemeData theme = Theme.of(context);
     return Row(
       spacing: 35.0,
       mainAxisAlignment: MainAxisAlignment.center,

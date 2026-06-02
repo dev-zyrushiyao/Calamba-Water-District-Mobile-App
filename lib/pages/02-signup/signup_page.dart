@@ -186,7 +186,7 @@ class _SignupPageState extends State<SignupPage> {
           ),
 
           //spacing
-          SizedBox(height: 28),
+          const SizedBox(height: 28),
 
           //other methods
           SizedBox(
@@ -197,9 +197,9 @@ class _SignupPageState extends State<SignupPage> {
             ),
           ),
 
-          SizedBox(height: 13),
+          const SizedBox(height: 13),
 
-          Align(
+          const Align(
             alignment: Alignment.center,
             child: Text(
               'Sign up with',
@@ -207,7 +207,7 @@ class _SignupPageState extends State<SignupPage> {
             ),
           ),
 
-          SizedBox(height: 13),
+          const SizedBox(height: 13),
 
           Center(
             child: Wrap(
@@ -294,7 +294,7 @@ class _SignupPageState extends State<SignupPage> {
           'assets/mobile-app/signin-assets/250px-2023_Facebook_icon.png',
         ),
         style: FilledButton.styleFrom(
-          backgroundColor: Color(0xFFFFFFFF),
+          backgroundColor: const Color(0xFFFFFFFF),
           textStyle: GoogleFonts.outfit(
             fontSize: 14.00,
             fontWeight: FontWeight.normal,
@@ -302,12 +302,12 @@ class _SignupPageState extends State<SignupPage> {
           foregroundColor: theme.colorScheme.onPrimary,
           minimumSize: const Size(284, 46),
           side: BorderSide(
-            color: Color(0xFF747775),
+            color: const Color(0xFF747775),
             width: 1.0,
             style: BorderStyle.solid,
             strokeAlign: BorderSide.strokeAlignInside,
           ),
-          shape: RoundedRectangleBorder(
+          shape: const RoundedRectangleBorder(
             borderRadius: BorderRadiusGeometry.all(Radius.circular(4.0)),
           ),
         ),
@@ -329,21 +329,21 @@ class _SignupPageState extends State<SignupPage> {
           'assets/mobile-app/signin-assets/google logo.png',
         ),
         style: FilledButton.styleFrom(
-          backgroundColor: Color(0xFFFFFFFF),
+          backgroundColor: const Color(0xFFFFFFFF),
           textStyle: GoogleFonts.lexend(
             fontSize: 14.00,
             fontWeight: FontWeight.normal,
           ),
           foregroundColor: theme.colorScheme.onPrimary,
           minimumSize: const Size(284, 46),
-          padding: EdgeInsets.only(right: 0.00),
+          padding: const EdgeInsets.only(right: 0.00),
           side: BorderSide(
-            color: Color(0xFF747775),
+            color: const Color(0xFF747775),
             width: 1.0,
             style: BorderStyle.solid,
             strokeAlign: BorderSide.strokeAlignInside,
           ),
-          shape: RoundedRectangleBorder(
+          shape: const RoundedRectangleBorder(
             borderRadius: BorderRadiusGeometry.all(Radius.circular(4.0)),
           ),
         ),

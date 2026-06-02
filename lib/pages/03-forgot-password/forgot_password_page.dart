@@ -68,7 +68,6 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     final user = searchedUser;
 
                     if (user != null) {
-                      debugPrint('NOTE: IF: $searchedUser');
                       Navigator.pushNamed(
                         context,
                         '/forgotpasswordresult',

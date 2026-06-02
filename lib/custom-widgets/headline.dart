@@ -18,6 +18,7 @@ class Headline extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
     return SizedBox(
       child: Column(
         spacing: spacing,
@@ -26,16 +27,16 @@ class Headline extends StatelessWidget {
           Text(
             headline,
             textAlign: textAlign,
-            style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-              color: Theme.of(context).colorScheme.onPrimary,
+            style: theme.textTheme.headlineLarge!.copyWith(
+              color: theme.colorScheme.onPrimary,
             ),
           ),
           if (subHeadline != null)
             Text(
               subHeadline!,
               textAlign: textAlign,
-              style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                color: Theme.of(context).colorScheme.onPrimary,
+              style: theme.textTheme.titleMedium!.copyWith(
+                color: theme.colorScheme.onPrimary,
               ),
             ),
         ],

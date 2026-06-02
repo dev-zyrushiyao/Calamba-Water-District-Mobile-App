@@ -78,10 +78,10 @@ class _TicketContentState extends State<TicketContent> {
       body: SizedBox(
         child: Column(
           children: [
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
             SizedBox(
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.0),
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -97,13 +97,14 @@ class _TicketContentState extends State<TicketContent> {
                       'Date Occurence: $dateOccurence',
                       style: theme.textTheme.titleMedium,
                     ),
-                    SeparationDivider(),
+                    const SeparationDivider(),
                   ],
                 ),
               ),
             ),
 
             Expanded(
+              //cacheExtent to prevent the chat history to showing the bottom scroll element
               child: ListView.separated(
                 controller: _scrollController,
                 cacheExtent: 99999,
@@ -147,20 +148,22 @@ class _TicketContentState extends State<TicketContent> {
     required ThemeData theme,
   }) {
     return Container(
-      padding: EdgeInsets.all(10.0),
-      color: Color(0xFFCDDDE9),
+      padding: const EdgeInsets.all(15.0),
+      height: 100,
+      alignment: Alignment.topCenter,
+      color: const Color(0xFFCDDDE9),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
         spacing: 13,
         children: [
           Expanded(
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 13, vertical: 3),
+              padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 3),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(7.0),
                 border: BoxBorder.all(
-                  color: Color(0xFF767676),
+                  color: const Color(0xFF767676),
                   width: 1.0,
                   strokeAlign: BorderSide.strokeAlignInside,
                 ),
@@ -174,7 +177,7 @@ class _TicketContentState extends State<TicketContent> {
                 decoration: InputDecoration(
                   suffixIcon: IconButton(
                     onPressed: () {},
-                    icon: RotatedBox(
+                    icon: const RotatedBox(
                       quarterTurns: 3,
                       child: Icon(
                         Icons.attachment_outlined,
@@ -212,12 +215,12 @@ class _TicketContentState extends State<TicketContent> {
             },
             child: Container(
               height: 55,
-              padding: EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: Color(0xFF66B9DD),
+                color: const Color(0xFF66B9DD),
                 borderRadius: BorderRadius.circular(7.0),
               ),
-              child: Icon(Icons.send_rounded),
+              child: const Icon(Icons.send_rounded),
             ),
           ),
         ],
@@ -238,7 +241,7 @@ class _TicketContentState extends State<TicketContent> {
       children: [
         Container(
           //main container of individual date and bubble
-          constraints: BoxConstraints(maxWidth: 250),
+          constraints: const BoxConstraints(maxWidth: 250),
           child: Column(
             //individual bubble pop up
             crossAxisAlignment: chatSupportIndex.role == ChatRole.staff
@@ -262,13 +265,13 @@ class _TicketContentState extends State<TicketContent> {
               ),
               //chat bubble content
               Container(
-                padding: EdgeInsets.all(17),
-                // constraints: BoxConstraints(maxWidth: 250),
+                padding: const EdgeInsets.all(17),
+                // constraints: const BoxConstraints(maxWidth: 250),
                 // width: 250,
                 decoration: BoxDecoration(
                   color: chatSupportIndex.role == ChatRole.staff
-                      ? Color(0xFFFFE69C)
-                      : Color(0xFFDBDBF0),
+                      ? const Color(0xFFFFE69C)
+                      : const Color(0xFFDBDBF0),
                   border: BoxBorder.all(
                     color: theme.colorScheme.onPrimaryFixedVariant,
                   ),

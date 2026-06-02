@@ -249,8 +249,8 @@ class _LinkAccountPageState extends State<LinkAccountPage>
           'Account linking in progress', //accessibility label for screen readers
       isDismissible: false,
       transitionAnimationController: _animationController,
-      backgroundColor: Color(0xFF12133A),
-      sheetAnimationStyle: AnimationStyle(curve: Curves.easeInOutBack),
+      backgroundColor: const Color(0xFF12133A),
+      sheetAnimationStyle: const AnimationStyle(curve: Curves.easeInOutBack),
       context: context,
       builder: (context) {
         return StatefulBuilder(
@@ -290,7 +290,7 @@ class _LinkAccountPageState extends State<LinkAccountPage>
         child: ListView(
           physics: const ScrollPhysics(parent: NeverScrollableScrollPhysics()),
           children: [
-            SizedBox(height: 54),
+            const SizedBox(height: 54),
 
             const Headline(
               headline: 'Link new account',
@@ -456,12 +456,12 @@ class _LinkAccountPageState extends State<LinkAccountPage>
         return _linkAccountService.validateAccountNameTextField(value);
       },
       decoration: InputDecoration(
-        label: Text('Nickname'),
+        label: const Text('Nickname'),
         helperStyle: theme.textTheme.labelSmall!.copyWith(
-          color: Theme.of(context).colorScheme.onPrimaryFixedVariant,
+          color: theme.colorScheme.onPrimaryFixedVariant,
         ),
-        errorStyle: Theme.of(context).textTheme.labelSmall!.copyWith(
-          color: Theme.of(context).colorScheme.error,
+        errorStyle: theme.textTheme.labelSmall!.copyWith(
+          color: theme.colorScheme.error,
         ),
         filled: true,
         fillColor: theme.colorScheme.surface,
@@ -489,12 +489,12 @@ class _LinkAccountPageState extends State<LinkAccountPage>
         }
       },
       decoration: InputDecoration(
-        label: Text('Account Number'),
+        label: const Text('Account Number'),
         helperStyle: theme.textTheme.labelSmall!.copyWith(
-          color: Theme.of(context).colorScheme.onPrimaryFixedVariant,
+          color: theme.colorScheme.onPrimaryFixedVariant,
         ),
-        errorStyle: Theme.of(context).textTheme.labelSmall!.copyWith(
-          color: Theme.of(context).colorScheme.error,
+        errorStyle: theme.textTheme.labelSmall!.copyWith(
+          color: theme.colorScheme.error,
         ),
         filled: true,
         fillColor: theme.colorScheme.surface,

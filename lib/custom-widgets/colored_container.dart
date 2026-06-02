@@ -15,9 +15,9 @@ class _MyWidgetState extends State<ColoredContainer> {
   Widget build(BuildContext context) {
     return Container(
       height: widget.height,
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 32),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
       decoration: BoxDecoration(
-        color: Color(0xFFEEEEFA),
+        color: const Color(0xFFEEEEFA),
         border: BoxBorder.all(
           color: const Color(0xFFC8C8E5),
           width: 3,

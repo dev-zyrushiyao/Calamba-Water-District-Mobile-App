@@ -17,9 +17,9 @@ class TicketPage extends StatelessWidget {
     }
 
     return Scaffold(
-      appBar: AppBar(title: Text('Ticket')),
+      appBar: AppBar(title: const Text('Ticket')),
       body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: 16.0),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Column(
           children: [
             const SizedBox(height: 90),
@@ -52,9 +52,9 @@ class TicketPage extends StatelessWidget {
                     child: Row(
                       spacing: 10,
                       children: [
-                        Text('•'),
+                        const Text('•'),
                         Container(
-                          padding: EdgeInsets.all(8),
+                          padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
                             color: data[index].statusColor,
                             border: Border.all(
@@ -64,7 +64,7 @@ class TicketPage extends StatelessWidget {
                             borderRadius: BorderRadius.circular(13),
                           ),
 
-                          child: Text(data[index].reportStatus.value),
+                          child: const Text('•'),
                         ),
                         Text(
                           'Ticket No. ${data[index].ticketNumber}',
