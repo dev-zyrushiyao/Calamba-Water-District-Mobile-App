@@ -36,7 +36,7 @@ class _MyWidgetState extends State<ReceiptContentPage> {
         ),
       ),
       body: ListView(
-        padding: EdgeInsets.symmetric(horizontal: 16.0),
+        padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
         children: [
           const SizedBox(height: 93),
           SizedBox(

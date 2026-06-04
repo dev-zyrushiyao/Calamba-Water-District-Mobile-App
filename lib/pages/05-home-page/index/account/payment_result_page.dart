@@ -26,7 +26,6 @@ class PaymentResultPage extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: ListView(
-          physics: const NeverScrollableScrollPhysics(),
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           children: [
             SizedBox(

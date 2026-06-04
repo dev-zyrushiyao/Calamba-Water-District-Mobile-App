@@ -77,7 +77,6 @@ class _MyWidgetState extends State<PaymentPage> {
       appBar: AppBar(title: const Text('Payment')),
       body: SizedBox(
         child: ListView(
-          physics: const NeverScrollableScrollPhysics(),
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           children: [
             const SizedBox(height: 20),

@@ -74,7 +74,6 @@ class AccountInformationPage extends StatelessWidget {
         ],
       ),
       body: ListView(
-        physics: const ScrollPhysics(parent: NeverScrollableScrollPhysics()),
         padding: const EdgeInsets.symmetric(horizontal: 16),
         children: [
           const SizedBox(height: 60),

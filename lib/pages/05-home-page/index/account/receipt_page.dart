@@ -39,8 +39,7 @@ class ReceiptPage extends StatelessWidget {
                 child: const Headline(headline: 'Receipt'),
               ),
             ),
-            SizedBox(
-              height: 600,
+            Expanded(
               child: ListView.separated(
                 padding: const EdgeInsets.symmetric(vertical: 20),
                 separatorBuilder: (context, index) =>

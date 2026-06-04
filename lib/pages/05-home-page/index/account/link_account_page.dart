@@ -250,7 +250,7 @@ class _LinkAccountPageState extends State<LinkAccountPage>
       isDismissible: false,
       transitionAnimationController: _animationController,
       backgroundColor: const Color(0xFF12133A),
-      sheetAnimationStyle: const AnimationStyle(curve: Curves.easeInOutBack),
+      sheetAnimationStyle: const AnimationStyle(curve: Curves.easeIn),
       context: context,
       builder: (context) {
         return StatefulBuilder(
@@ -268,8 +268,9 @@ class _LinkAccountPageState extends State<LinkAccountPage>
   //Main UI
   @override
   Widget build(BuildContext context) {
-    ThemeData theme = Theme.of(context);
+    final ThemeData theme = Theme.of(context);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text('Link Account'),
         leading: IconButton(
@@ -286,41 +287,41 @@ class _LinkAccountPageState extends State<LinkAccountPage>
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: ListView(
-          children: [
-            const SizedBox(height: 54),
-
-            const Headline(
-              headline: 'Link new account',
-              subHeadline:
-                  'Enter your account number to track usage and pay bills.',
-            ),
-
-            const SizedBox(height: 30),
-
-            //Size box - A
-            ColoredContainer(
-              // height: 300,
-              child: Form(
-                key: _formKey,
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
+        child: SizedBox(
+          child: Column(
+            children: [
+              Expanded(
                 child: Column(
+                  spacing: 20,
                   children: [
-                    _buildAccountNumberTextField(theme),
-                    _buildAccountNameTextField(theme),
+                    const Headline(
+                      headline: 'Link new account',
+                      subHeadline:
+                          'Enter your account number to track usage and pay bills.',
+                    ),
+                    ColoredContainer(
+                      // height: 300,
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          children: [
+                            _buildAccountNumberTextField(theme),
+                            _buildAccountNameTextField(theme),
 
-                    _buildLinkAlert(),
+                            _buildLinkAlert(),
+                          ],
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
-            ),
 
-            //content-B
-            Container(
-              height: 350,
-              alignment: Alignment.bottomCenter,
-              padding: const EdgeInsets.symmetric(vertical: 20),
-              child: PrimaryButton(
+              //Size box - A
+
+              //content-B
+              PrimaryButton(
                 label: 'Link Account',
                 onPressed: () {
                   _accountDuplicationChecker();
@@ -348,8 +349,8 @@ class _LinkAccountPageState extends State<LinkAccountPage>
                   }
                 },
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

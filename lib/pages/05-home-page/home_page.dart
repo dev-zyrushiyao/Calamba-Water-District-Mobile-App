@@ -34,6 +34,7 @@ class _HomePageState extends State<HomePage> {
     ];
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       floatingActionButton: _currentPageIndex > 0
           ? null
           : FloatingActionButton(
