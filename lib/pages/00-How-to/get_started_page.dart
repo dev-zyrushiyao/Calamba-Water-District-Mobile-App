@@ -17,14 +17,11 @@ class GetStartedPage extends StatelessWidget {
             spacing: 25.0,
             children: [
               const SizedBox(height: 20.0),
-
               Text(
                 'Welcome to the Unofficial Calamba Water District App!',
                 style: theme.textTheme.headlineLarge,
                 textAlign: TextAlign.center,
               ),
-
-              const SizedBox(height: 20.0),
 
               Container(
                 padding: const EdgeInsets.all(8.0),
@@ -47,8 +44,13 @@ class GetStartedPage extends StatelessWidget {
               ),
 
               Text(
-                'This demo doesn\'t connect to a real server. It simulates a database by using data classes, lists, and the singleton pattern to store your information temporarily while the app is openn\n'
+                'This demo doesn\'t connect to a real server. It simulates a database by using data classes, lists, and the singleton pattern to store your information temporarily while the app is open.\n'
                 'Any data entered will be lost when the app is closed or restarted.',
+                style: theme.textTheme.bodyLarge,
+              ),
+
+              Text(
+                'Web rendering engines may cause animations to appear faster than normal. The native mobile application retains the intended animation speeds and transitions.',
                 style: theme.textTheme.bodyLarge,
               ),
 
@@ -59,8 +61,6 @@ class GetStartedPage extends StatelessWidget {
                   fontStyle: FontStyle.italic,
                 ),
               ),
-
-              const SizedBox(height: 50.0),
 
               PrimaryButton(
                 label: 'Next',
