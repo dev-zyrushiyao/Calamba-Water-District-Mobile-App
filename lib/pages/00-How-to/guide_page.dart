@@ -18,6 +18,7 @@ class _MyWidgetState extends State<GuidePage> {
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             spacing: 25.0,
             children: [
               const SizedBox(height: 20.0),
@@ -50,8 +51,7 @@ class _MyWidgetState extends State<GuidePage> {
               ),
 
               Text(
-                '• Some buttons and features may not be fully functional as this UI is a demo \n'
-                'Please use mobile view for the best experience.',
+                '• Some buttons and features may not be fully functional as this UI is a demo. Please use mobile view for the best experience.',
                 style: theme.textTheme.bodyLarge,
               ),
 
@@ -69,6 +69,7 @@ class _MyWidgetState extends State<GuidePage> {
 
               PrimaryButton(
                 label: 'Proceed to App',
+                width: double.infinity,
                 onPressed: () =>
                     Navigator.pushReplacementNamed(context, '/login'),
               ),

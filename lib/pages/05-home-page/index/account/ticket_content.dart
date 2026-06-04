@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:myapp/custom-widgets/display_no_data.dart';
 import 'package:myapp/custom-widgets/separation_divider.dart';
 import 'package:myapp/data-bank/account_type.dart';
@@ -106,8 +107,8 @@ class _TicketContentState extends State<TicketContent> {
             Expanded(
               //cacheExtent to prevent the chat history to showing the bottom scroll element
               child: ListView.separated(
+                scrollCacheExtent: ScrollCacheExtent.pixels(99999),
                 controller: _scrollController,
-                cacheExtent: 99999,
                 padding: const EdgeInsets.symmetric(
                   horizontal: 16.0,
                   vertical: 13.0,

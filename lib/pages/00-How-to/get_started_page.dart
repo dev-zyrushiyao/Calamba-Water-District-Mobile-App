@@ -13,6 +13,7 @@ class GetStartedPage extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             spacing: 25.0,
             children: [
               const SizedBox(height: 20.0),
@@ -63,6 +64,7 @@ class GetStartedPage extends StatelessWidget {
 
               PrimaryButton(
                 label: 'Next',
+                width: double.infinity,
                 onPressed: () =>
                     Navigator.pushReplacementNamed(context, '/guide'),
               ),
