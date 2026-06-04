@@ -70,117 +70,128 @@ class _LoginPageState extends State<LoginPage> {
       backgroundColor: theme.colorScheme.surface,
       body: SafeArea(
         //Logo Email & Password TextField
-        child: Container(
-          padding: const EdgeInsetsDirectional.only(top: 50.00),
-          color: theme.colorScheme.surface,
-          height: deviceHeight,
-          width: deviceWidth,
-          child: Center(
-            child: Column(
-              spacing: 27.00,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: ([
-                //logo
-                SvgPicture.asset(
-                  semanticsLabel: 'Calamba Water District Logo',
-                  fit: BoxFit.contain,
-                  'assets/login-logo.svg',
-                ),
-
-                if (_isCorrectLogin != null)
-                  if (_isCorrectLogin != true)
-                    Text(
-                      'Login information is incorrect',
-                      style: theme.textTheme.labelSmall?.copyWith(
-                        color: Colors.red,
+        child: CustomScrollView(
+          slivers: [
+            SliverFillRemaining(
+              hasScrollBody: false,
+              child: Container(
+                padding: const EdgeInsetsDirectional.only(top: 50.00),
+                color: theme.colorScheme.surface,
+                height: deviceHeight,
+                width: deviceWidth,
+                child: Center(
+                  child: Column(
+                    spacing: 27.00,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: ([
+                      //logo
+                      SvgPicture.asset(
+                        semanticsLabel: 'Calamba Water District Logo',
+                        fit: BoxFit.contain,
+                        'assets/login-logo.svg',
                       ),
-                    ),
 
-                _buildEmailField(theme, _emailController),
+                      if (_isCorrectLogin != null)
+                        if (_isCorrectLogin != true)
+                          Text(
+                            'Login information is incorrect',
+                            style: theme.textTheme.labelSmall?.copyWith(
+                              color: Colors.red,
+                            ),
+                          ),
 
-                _buildPasswordField(theme, _passwordController),
+                      _buildEmailField(theme, _emailController),
 
-                //Forgot Password Text
-                SizedBox(
-                  width: _textFieldWidth,
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.pushNamed(context, '/forgotpassword');
-                    },
-                    child: _buildForgotPasswordText(theme),
+                      _buildPasswordField(theme, _passwordController),
+
+                      //Forgot Password Text
+                      SizedBox(
+                        width: _textFieldWidth,
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.pushNamed(context, '/forgotpassword');
+                          },
+                          child: _buildForgotPasswordText(theme),
+                        ),
+                      ),
+
+                      //login CTA
+                      SecondaryButton(
+                        label: 'Login',
+                        height: _textFieldHeight,
+                        width: _textFieldWidth,
+                        onPressed: () async {
+                          if (_accountCollection.accountDb.isEmpty) {
+                            debugPrint('the DB is empty');
+                            //display a incorrect login if there is no registered account
+                            setState(() {
+                              _isCorrectLogin = false;
+                            });
+                          } else {
+                            for (var account in _accountCollection.accountDb) {
+                              if ((account.email == _emailController.text) &&
+                                  (account.password ==
+                                      _passwordController.text)) {
+                                setState(() {
+                                  _isCorrectLogin = true;
+                                });
+
+                                await loggedTheUser(account);
+
+                                await Future.delayed(
+                                  Duration(milliseconds: 500),
+                                  () {
+                                    if (!context.mounted) return;
+                                    FocusScope.of(context).unfocus();
+                                  },
+                                );
+
+                                if (!context.mounted) return;
+                                Navigator.popAndPushNamed(context, '/boarding');
+                                break;
+                              } else {
+                                setState(() {
+                                  _isCorrectLogin = false;
+                                });
+                              }
+                            }
+                          }
+                        },
+                      ),
+
+                      _buildLoginDivider(theme),
+
+                      //other-method sign in
+                      Column(
+                        spacing: 18.0,
+                        children: [
+                          _buildGoogleButton(theme),
+                          _buildFacebookButton(theme),
+                        ],
+                      ),
+
+                      const SizedBox(height: 10),
+
+                      _buildSignupTextSpan(theme),
+
+                      Column(
+                        children: [
+                          const Text('Version 1.0.0'),
+                          const Text(
+                            'Developed by Zyrus Hiyao',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ]),
                   ),
                 ),
-
-                //login CTA
-                SecondaryButton(
-                  label: 'Login',
-                  height: _textFieldHeight,
-                  width: _textFieldWidth,
-                  onPressed: () async {
-                    if (_accountCollection.accountDb.isEmpty) {
-                      debugPrint('the DB is empty');
-                      //display a incorrect login if there is no registered account
-                      setState(() {
-                        _isCorrectLogin = false;
-                      });
-                    } else {
-                      for (var account in _accountCollection.accountDb) {
-                        if ((account.email == _emailController.text) &&
-                            (account.password == _passwordController.text)) {
-                          setState(() {
-                            _isCorrectLogin = true;
-                          });
-
-                          await loggedTheUser(account);
-
-                          await Future.delayed(Duration(milliseconds: 500), () {
-                            if (!context.mounted) return;
-                            FocusScope.of(context).unfocus();
-                          });
-
-                          if (!context.mounted) return;
-                          Navigator.popAndPushNamed(context, '/boarding');
-                          break;
-                        } else {
-                          setState(() {
-                            _isCorrectLogin = false;
-                          });
-                        }
-                      }
-                    }
-                  },
-                ),
-
-                _buildLoginDivider(theme),
-
-                //other-method sign in
-                Column(
-                  spacing: 18.0,
-                  children: [
-                    _buildGoogleButton(theme),
-                    _buildFacebookButton(theme),
-                  ],
-                ),
-
-                const SizedBox(height: 10),
-
-                _buildSignupTextSpan(theme),
-
-                Column(
-                  children: [
-                    const Text('Version 1.0.0'),
-                    const Text(
-                      'Developed by Zyrus Hiyao',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ],
-                ),
-              ]),
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );
