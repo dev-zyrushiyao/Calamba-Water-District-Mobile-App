@@ -62,6 +62,9 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
 
+    final deviceHeight = MediaQuery.of(context).size.height;
+    final deviceWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: theme.colorScheme.surface,
@@ -70,7 +73,8 @@ class _LoginPageState extends State<LoginPage> {
         child: Container(
           padding: const EdgeInsetsDirectional.only(top: 50.00),
           color: theme.colorScheme.surface,
-          height: double.infinity,
+          height: deviceHeight,
+          width: deviceWidth,
           child: Center(
             child: Column(
               spacing: 27.00,
