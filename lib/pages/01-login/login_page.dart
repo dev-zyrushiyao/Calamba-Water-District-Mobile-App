@@ -81,7 +81,7 @@ class _LoginPageState extends State<LoginPage> {
                 width: deviceWidth,
                 child: Center(
                   child: Column(
-                    spacing: 27.00,
+                    spacing: 27.01,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: ([
                       //logo
