@@ -288,7 +288,6 @@ class _LinkAccountPageState extends State<LinkAccountPage>
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: ListView(
-          physics: const ScrollPhysics(parent: NeverScrollableScrollPhysics()),
           children: [
             const SizedBox(height: 54),
 
