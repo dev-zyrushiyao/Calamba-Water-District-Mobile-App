@@ -107,9 +107,6 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
 
-                //spacing
-                const SizedBox(height: 5.0),
-
                 //login CTA
                 SecondaryButton(
                   label: 'Login',
@@ -164,6 +161,19 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: 10),
 
                 _buildSignupTextSpan(theme),
+
+                Column(
+                  children: [
+                    const Text('Version 1.0.0'),
+                    const Text(
+                      'Developed by Zyrus Hiyao',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ],
+                ),
               ]),
             ),
           ),

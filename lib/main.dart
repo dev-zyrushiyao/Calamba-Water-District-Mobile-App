@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:myapp/pages/00-How-to/get_started_page.dart';
+import 'package:myapp/pages/00-How-to/guide_page.dart';
 
 import 'package:myapp/pages/01-login/login_page.dart';
 import 'package:myapp/pages/02-signup/signup_page.dart';
@@ -34,12 +36,12 @@ void main() async {
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   //RunApp calling the myApp Class
-  runApp(const MyApp());
+  runApp(const CalambaWaterDistrict());
 }
 
 //myApp - calling widget
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class CalambaWaterDistrict extends StatelessWidget {
+  const CalambaWaterDistrict({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +51,7 @@ class MyApp extends StatelessWidget {
     final designSystemTypography = designSystem.themeTypography();
 
     return MaterialApp(
+      title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         appBarTheme: AppBarTheme(
@@ -62,8 +65,12 @@ class MyApp extends StatelessWidget {
         textTheme: designSystemTypography,
         colorScheme: designSystemColor,
       ),
-      initialRoute: '/login',
+      initialRoute: '/getstarted',
       routes: {
+        //how-to
+        '/getstarted': (context) => const GetStartedPage(),
+        '/guide': (context) => const GuidePage(),
+        //login
         '/login': (context) => const LoginPage(),
         //Sign up page
         '/signup': (context) => const SignupPage(),

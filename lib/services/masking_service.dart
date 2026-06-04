@@ -1,5 +1,3 @@
-import 'package:intl/intl.dart';
-
 class MaskingService {
   String maskEmail(String email) {
     const emailMinLength = 5;

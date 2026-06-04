@@ -64,7 +64,7 @@ class TicketPage extends StatelessWidget {
                             borderRadius: BorderRadius.circular(13),
                           ),
 
-                          child: const Text('•'),
+                          child: Text(data[index].reportStatus.value),
                         ),
                         Text(
                           'Ticket No. ${data[index].ticketNumber}',

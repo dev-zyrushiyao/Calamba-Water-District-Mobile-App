@@ -20,7 +20,10 @@
 //DONE - refactor forgotpassword button
 //Done - refactor boarding page
 //Done - refactor custom widgets 
-// - refactor classes (add const / reconstruct) -> SignupPage etc
+//DONE - refactor classes (add const / reconstruct) -> SignupPage etc
 //DONE - Add a email checker if exist for both Signup and ProfileIndex
 //DONEseparate the validator service
 //DONE - add a function (Logout button ProfileIndex)
+//DONE - Add HOWTO AND GUIDE PAGE
+// - Put this project in Github page
+//- Finish documentation 
