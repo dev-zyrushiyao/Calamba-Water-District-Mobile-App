@@ -116,10 +116,19 @@ class _AccountIndexState extends State<AccountIndex>
             ),
             TextButton(
               onPressed: () {
+                var targetContoller = _slidableController.removeAt(index);
+
                 setState(() {
                   linkedAccounts.removeAt(index);
-                  Navigator.pop(context);
                 });
+
+                Navigator.pop(context);
+
+                debugPrint('Unlink Triggered');
+                debugPrint(
+                  'Linked Account and its scrollable controller has been removed from the list',
+                );
+                targetContoller.dispose();
               },
               child: Text('Unlink'),
             ),
@@ -327,7 +336,7 @@ class _AccountIndexState extends State<AccountIndex>
     required ThemeData theme,
   }) {
     return Slidable(
-      key: ValueKey(index),
+      key: ValueKey(linkedAccounts[index].accountNumber),
       controller: _slidableController[index],
       endActionPane: ActionPane(
         motion: const ScrollMotion(),
@@ -378,24 +387,24 @@ class _AccountIndexState extends State<AccountIndex>
                     arguments: _loggedUser.linkedAccounts[index],
                   );
 
+                  //dispose the current Linked Account controller
+                  final targetController = _slidableController.removeAt(index);
+
                   //When the Account Information Page pressed the delete button it will return
                   //a 'delete string to a variable result'
                   //if the condition is met this will delete the current linked account on the list , the slidable controller on the list
                   //and dispose the controller that has been removed from the SlidableController
                   if (result == 'delete') {
+                    debugPrint('Delete Triggered');
                     setState(() {
                       //removed the target UserLinked LinkedAccount
                       _loggedUser.linkedAccounts.removeAt(index);
 
-                      //dispose the current Linked Account controller
-                      final targetController = _slidableController.removeAt(
-                        index,
-                      );
-                      targetController.dispose();
-
                       //after it successfully the item on the list and dipose the controller
                       //the List of LinkedAccount length and the Slidable Controller will be updated
                     });
+
+                    targetController.dispose();
                   }
                 },
                 child: Container(

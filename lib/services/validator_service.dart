@@ -124,7 +124,7 @@ class ValidatorService {
               value.contains(RegExp(r'[0-9]')) &&
               (value.contains(RegExp(r'^639\d{9}$'))))
         ? null
-        : 'Invalid format (needs Area Code without the \'+\' and 11 digit mobile number)';
+        : 'Invalid format (Area Code without the \'+\' and 10 digit mobile number without the leading zero is required)';
   }
 
   String? genderValidator(Gender? value) {

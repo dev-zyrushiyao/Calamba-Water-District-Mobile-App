@@ -23,7 +23,7 @@ class AccountInformationPage extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.pop(context);
+                Navigator.pop(dialogBoxContext);
               },
               child: const Text('Cancel'),
             ),

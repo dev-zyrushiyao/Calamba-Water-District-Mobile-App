@@ -30,195 +30,210 @@ class BillingContenttState extends State<BillingContentPage> {
       ),
       body: Padding(
         padding: const EdgeInsetsGeometry.all(16),
-        child: Column(
-          children: [
-            Text('Billing Notice', style: theme.textTheme.headlineSmall),
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          child: SizedBox(
+            height: MediaQuery.of(context).size.height,
+            child: Column(
+              children: [
+                Text('Billing Notice', style: theme.textTheme.headlineSmall),
 
-            const SizedBox(height: 5),
+                const SizedBox(height: 5),
 
-            //head section
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                // color: Colors.amber,
-                border: BoxBorder.all(
-                  color: theme.colorScheme.primary,
-                  width: 1.5,
-                ),
-              ),
-              child: _buildHeadSection(
-                accountNickname: 'Customer',
-                accountNumber: '${data.accountNumber}',
-                month: data.monthName,
-                theme: theme,
-              ),
-            ),
-
-            //Second Layer
-            Container(
-              decoration: BoxDecoration(
-                border: BoxBorder.all(
-                  color: theme.colorScheme.primary,
-                  width: 1.5,
-                ),
-              ),
-              child: Row(
-                children: [
-                  //Box Reading Rate
-                  Expanded(
-                    child: _buildBoxSection(
-                      category: 'READING RATE',
-                      content: data.readingRate,
-                      theme: theme,
+                //head section
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    // color: Colors.amber,
+                    border: BoxBorder.all(
+                      color: theme.colorScheme.primary,
+                      width: 1.5,
                     ),
                   ),
-                  //Box Due Date
-                  Expanded(
-                    child: _buildBoxSection(
-                      category: 'DUE DATE',
-                      content: data.dueDate,
-                      theme: theme,
-                    ),
+                  child: _buildHeadSection(
+                    accountNickname: 'Customer',
+                    accountNumber: '${data.accountNumber}',
+                    month: data.monthName,
+                    theme: theme,
                   ),
-                  //Box Meter No.
-                  Expanded(
-                    child: _buildBoxSection(
-                      category: 'METER NO.',
-                      content: '${data.meterNumber}',
-                      theme: theme,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            //3rd Layer
-            Container(
-              padding: const EdgeInsets.all(8.0),
-              decoration: BoxDecoration(
-                border: BoxBorder.all(
-                  color: theme.colorScheme.primary,
-                  width: 1.5,
                 ),
-              ),
-              child: Column(
-                children: [
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text('Period', style: theme.textTheme.labelSmall),
-                  ),
-                  Text(
-                    '${data.period['start']} - ${data.period['end']}',
-                    style: theme.textTheme.bodyLarge,
-                  ),
-                ],
-              ),
-            ),
 
-            // 4th container
-            Expanded(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    flex: 2,
-                    child: Column(
-                      children: [
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                //Second Layer
+                Container(
+                  decoration: BoxDecoration(
+                    border: BoxBorder.all(
+                      color: theme.colorScheme.primary,
+                      width: 1.5,
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      //Box Reading Rate
+                      Expanded(
+                        child: _buildBoxSection(
+                          category: 'READING RATE',
+                          content: data.readingRate,
+                          theme: theme,
+                        ),
+                      ),
+                      //Box Due Date
+                      Expanded(
+                        child: _buildBoxSection(
+                          category: 'DUE DATE',
+                          content: data.dueDate,
+                          theme: theme,
+                        ),
+                      ),
+                      //Box Meter No.
+                      Expanded(
+                        child: _buildBoxSection(
+                          category: 'METER NO.',
+                          content: '${data.meterNumber}',
+                          theme: theme,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                //3rd Layer
+                Container(
+                  padding: const EdgeInsets.all(8.0),
+                  decoration: BoxDecoration(
+                    border: BoxBorder.all(
+                      color: theme.colorScheme.primary,
+                      width: 1.5,
+                    ),
+                  ),
+                  child: Column(
+                    children: [
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          'Period',
+                          style: theme.textTheme.labelSmall,
+                        ),
+                      ),
+                      Text(
+                        '${data.period['start']} - ${data.period['end']}',
+                        style: theme.textTheme.bodyLarge,
+                      ),
+                    ],
+                  ),
+                ),
+
+                // 4th container
+                Expanded(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: Column(
                           children: [
-                            Expanded(
-                              flex: 2,
-                              child: Container(
-                                child: _buildDoubleBoxHeader(
-                                  headTitle: 'READINGS',
-                                  theme: theme,
-                                  boxSection: [
-                                    Expanded(
-                                      child: _buildBoxSection(
-                                        category: 'PRESENT',
-                                        content: '${data.presentReading}',
-                                        theme: theme,
-                                      ),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  flex: 2,
+                                  child: Container(
+                                    child: _buildDoubleBoxHeader(
+                                      headTitle: 'READINGS',
+                                      theme: theme,
+                                      boxSection: [
+                                        Expanded(
+                                          child: _buildBoxSection(
+                                            category: 'PRESENT',
+                                            content: '${data.presentReading}',
+                                            theme: theme,
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: _buildBoxSection(
+                                            category: 'PREVIOUS',
+                                            content: '${data.previousReading}',
+                                            theme: theme,
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                    Expanded(
-                                      child: _buildBoxSection(
-                                        category: 'PREVIOUS',
-                                        content: '${data.previousReading}',
-                                        theme: theme,
-                                      ),
-                                    ),
-                                  ],
+                                  ),
                                 ),
-                              ),
+
+                                Expanded(
+                                  flex: 1,
+                                  child: Container(
+                                    child: _buildDoubleBoxHeader(
+                                      headTitle: 'CUM',
+                                      boxSection: [
+                                        Expanded(
+                                          child: _buildBoxSection(
+                                            category: 'USED',
+                                            content: '${data.usedCubicMeters}',
+                                            theme: theme,
+                                          ),
+                                        ),
+                                      ],
+                                      theme: theme,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
 
                             Expanded(
-                              flex: 1,
-                              child: Container(
-                                child: _buildDoubleBoxHeader(
-                                  headTitle: 'CUM',
-                                  boxSection: [
-                                    Expanded(
-                                      child: _buildBoxSection(
-                                        category: 'USED',
-                                        content: '${data.usedCubicMeters}',
-                                        theme: theme,
-                                      ),
-                                    ),
-                                  ],
-                                  theme: theme,
-                                ),
+                              child: _buildSingleBoxHeader(
+                                'FRANCHISE TAX',
+                                theme,
                               ),
+                            ),
+                            Expanded(
+                              child: _buildSingleBoxHeader(
+                                'SEPTAGE MANAGEMENT FEE',
+                                theme,
+                              ),
+                            ),
+                            Expanded(
+                              child: _buildSingleBoxHeader('ARREARS', theme),
+                            ),
+                            Expanded(
+                              child: _buildSingleBoxHeader(
+                                'TOTAL AMOUNT',
+                                theme,
+                              ),
+                            ),
+                            Expanded(
+                              child: _buildSingleBoxHeader('DUE AFRTER', theme),
                             ),
                           ],
                         ),
+                      ),
 
-                        Expanded(
-                          child: _buildSingleBoxHeader('FRANCHISE TAX', theme),
-                        ),
-                        Expanded(
-                          child: _buildSingleBoxHeader(
-                            'SEPTAGE MANAGEMENT FEE',
-                            theme,
+                      //Amount
+                      Expanded(
+                        flex: 1,
+                        child: SizedBox(
+                          height: double.infinity,
+                          child: _buildAmountSection(
+                            category: 'AMOUNT',
+                            content: [
+                              '${data.amount}',
+                              '${data.franchiseTax}',
+                              '${data.septageManagementFee}',
+                              '${data.arrears}',
+                              '${data.totalAmount}',
+                              '${data.dueAfter}',
+                            ],
+                            theme: theme,
                           ),
                         ),
-                        Expanded(
-                          child: _buildSingleBoxHeader('ARREARS', theme),
-                        ),
-                        Expanded(
-                          child: _buildSingleBoxHeader('TOTAL AMOUNT', theme),
-                        ),
-                        Expanded(
-                          child: _buildSingleBoxHeader('DUE AFRTER', theme),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  //Amount
-                  Expanded(
-                    flex: 1,
-                    child: SizedBox(
-                      height: double.infinity,
-                      child: _buildAmountSection(
-                        category: 'AMOUNT',
-                        content: [
-                          '${data.amount}',
-                          '${data.franchiseTax}',
-                          '${data.septageManagementFee}',
-                          '${data.arrears}',
-                          '${data.totalAmount}',
-                          '${data.dueAfter}',
-                        ],
-                        theme: theme,
                       ),
-                    ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -326,12 +341,15 @@ class BillingContenttState extends State<BillingContentPage> {
                 itemCount: content.length,
                 itemBuilder: (context, index) {
                   return Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Container(
                         alignment: Alignment.center,
                         height: 50,
-                        child: Text(content[index]),
+                        child: Text(
+                          content[index],
+                          style: theme.textTheme.bodyLarge,
+                        ),
                       ),
                     ],
                   );
