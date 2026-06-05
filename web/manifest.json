@@ -1,6 +1,6 @@
 {
-    "name": "myapp",
-    "short_name": "myapp",
+    "name": "Calamba Water District Unofficial Demo App",
+    "short_name": "Calamba Water District Demo",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

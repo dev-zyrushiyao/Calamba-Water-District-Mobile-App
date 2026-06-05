@@ -111,7 +111,7 @@ class ValidatorService {
 
   String? phoneNumberValidator(String? value) {
     return (value != null && value.length < 11)
-        ? 'Invalid number'
+        ? 'Phone number is required'
         : value!.contains(RegExp(r'^09\d{9}$'))
         ? null
         : 'Please put your 11 digit mobile number';

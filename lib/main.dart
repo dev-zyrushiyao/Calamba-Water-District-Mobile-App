@@ -51,7 +51,7 @@ class CalambaWaterDistrict extends StatelessWidget {
     final designSystemTypography = designSystem.themeTypography();
 
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Calamba Water District Unofficial Demo App',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         appBarTheme: AppBarTheme(

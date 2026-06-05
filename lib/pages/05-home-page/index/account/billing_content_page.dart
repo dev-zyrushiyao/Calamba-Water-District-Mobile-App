@@ -33,7 +33,7 @@ class BillingContenttState extends State<BillingContentPage> {
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
           child: SizedBox(
-            height: MediaQuery.of(context).size.height,
+            height: 800,
             child: Column(
               children: [
                 Text('Billing Notice', style: theme.textTheme.headlineSmall),
@@ -52,7 +52,8 @@ class BillingContenttState extends State<BillingContentPage> {
                   ),
                   child: _buildHeadSection(
                     accountNickname: 'Customer',
-                    accountNumber: '${data.accountNumber}',
+                    accountNumber:
+                        '${data.accountNumber} and ${MediaQuery.of(context).size.height}',
                     month: data.monthName,
                     theme: theme,
                   ),
@@ -124,111 +125,148 @@ class BillingContenttState extends State<BillingContentPage> {
 
                 // 4th container
                 Expanded(
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        flex: 2,
-                        child: Column(
-                          children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Expanded(
-                                  flex: 2,
-                                  child: Container(
-                                    child: _buildDoubleBoxHeader(
-                                      headTitle: 'READINGS',
-                                      theme: theme,
-                                      boxSection: [
-                                        Expanded(
-                                          child: _buildBoxSection(
-                                            category: 'PRESENT',
-                                            content: '${data.presentReading}',
-                                            theme: theme,
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(minHeight: 500),
+
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          flex: 2,
+                          child: Column(
+                            children: [
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                    flex: 2,
+                                    child: Container(
+                                      child: _buildDoubleBoxHeader(
+                                        headTitle: 'READINGS',
+                                        theme: theme,
+                                        boxSection: [
+                                          Expanded(
+                                            child: _buildBoxSection(
+                                              category: 'PRESENT',
+                                              content: '${data.presentReading}',
+                                              theme: theme,
+                                            ),
                                           ),
-                                        ),
-                                        Expanded(
-                                          child: _buildBoxSection(
-                                            category: 'PREVIOUS',
-                                            content: '${data.previousReading}',
-                                            theme: theme,
+                                          Expanded(
+                                            child: _buildBoxSection(
+                                              category: 'PREVIOUS',
+                                              content:
+                                                  '${data.previousReading}',
+                                              theme: theme,
+                                            ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                ),
 
-                                Expanded(
-                                  flex: 1,
-                                  child: Container(
-                                    child: _buildDoubleBoxHeader(
-                                      headTitle: 'CUM',
-                                      boxSection: [
-                                        Expanded(
-                                          child: _buildBoxSection(
-                                            category: 'USED',
-                                            content: '${data.usedCubicMeters}',
-                                            theme: theme,
+                                  Expanded(
+                                    flex: 1,
+                                    child: Container(
+                                      child: _buildDoubleBoxHeader(
+                                        headTitle: 'CUM',
+                                        boxSection: [
+                                          Expanded(
+                                            child: _buildBoxSection(
+                                              category: 'USED',
+                                              content:
+                                                  '${data.usedCubicMeters}',
+                                              theme: theme,
+                                            ),
                                           ),
-                                        ),
-                                      ],
-                                      theme: theme,
+                                        ],
+                                        theme: theme,
+                                      ),
                                     ),
                                   ),
+                                ],
+                              ),
+
+                              Expanded(
+                                child: ConstrainedBox(
+                                  constraints: const BoxConstraints(
+                                    minHeight: 70,
+                                  ),
+                                  child: _buildSingleBoxHeader(
+                                    'FRANCHISE TAX',
+                                    theme,
+                                  ),
                                 ),
-                              ],
-                            ),
-
-                            Expanded(
-                              child: _buildSingleBoxHeader(
-                                'FRANCHISE TAX',
-                                theme,
                               ),
-                            ),
-                            Expanded(
-                              child: _buildSingleBoxHeader(
-                                'SEPTAGE MANAGEMENT FEE',
-                                theme,
+                              Expanded(
+                                child: ConstrainedBox(
+                                  constraints: const BoxConstraints(
+                                    minHeight: 70,
+                                  ),
+                                  child: _buildSingleBoxHeader(
+                                    'SEPTAGE MANAGEMENT FEE',
+                                    theme,
+                                  ),
+                                ),
                               ),
-                            ),
-                            Expanded(
-                              child: _buildSingleBoxHeader('ARREARS', theme),
-                            ),
-                            Expanded(
-                              child: _buildSingleBoxHeader(
-                                'TOTAL AMOUNT',
-                                theme,
+                              Expanded(
+                                child: ConstrainedBox(
+                                  constraints: const BoxConstraints(
+                                    minHeight: 70,
+                                  ),
+                                  child: _buildSingleBoxHeader(
+                                    'ARREARS',
+                                    theme,
+                                  ),
+                                ),
                               ),
-                            ),
-                            Expanded(
-                              child: _buildSingleBoxHeader('DUE AFRTER', theme),
-                            ),
-                          ],
-                        ),
-                      ),
-
-                      //Amount
-                      Expanded(
-                        flex: 1,
-                        child: SizedBox(
-                          height: double.infinity,
-                          child: _buildAmountSection(
-                            category: 'AMOUNT',
-                            content: [
-                              '${data.amount}',
-                              '${data.franchiseTax}',
-                              '${data.septageManagementFee}',
-                              '${data.arrears}',
-                              '${data.totalAmount}',
-                              '${data.dueAfter}',
+                              Expanded(
+                                child: ConstrainedBox(
+                                  constraints: const BoxConstraints(
+                                    minHeight: 70,
+                                  ),
+                                  child: _buildSingleBoxHeader(
+                                    'TOTAL AMOUNT',
+                                    theme,
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: ConstrainedBox(
+                                  constraints: const BoxConstraints(
+                                    minHeight: 70,
+                                  ),
+                                  child: _buildSingleBoxHeader(
+                                    'DUE AFRTER',
+                                    theme,
+                                  ),
+                                ),
+                              ),
                             ],
-                            theme: theme,
                           ),
                         ),
-                      ),
-                    ],
+
+                        //Amount
+                        Expanded(
+                          flex: 1,
+                          child: SizedBox(
+                            height: double.infinity,
+                            child: _buildAmountSection(
+                              category: 'AMOUNT',
+                              content: [
+                                '${data.amount}',
+                                '${data.franchiseTax}',
+                                '${data.septageManagementFee}',
+                                '${data.arrears}',
+                                '${data.totalAmount}',
+                                '${data.dueAfter}',
+                              ],
+                              theme: theme,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],
@@ -283,10 +321,9 @@ class BillingContenttState extends State<BillingContentPage> {
     return Column(
       children: [
         Container(
-          height: 40,
           alignment: Alignment.center,
           padding: const EdgeInsets.all(5.0),
-          width: double.infinity,
+
           decoration: BoxDecoration(
             border: BoxBorder.all(color: theme.colorScheme.primary, width: 1),
           ),

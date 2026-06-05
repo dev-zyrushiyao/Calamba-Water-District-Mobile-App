@@ -382,7 +382,7 @@ class _SignupPageState extends State<SignupPage> {
             suffixIcon: suffixIcon,
             hintText: hintText,
             counterStyle: theme.textTheme.labelSmall,
-            errorMaxLines: 2,
+            errorMaxLines: 3,
             hintStyle: TextStyle(
               color: theme.colorScheme.onPrimaryFixedVariant,
             ),
