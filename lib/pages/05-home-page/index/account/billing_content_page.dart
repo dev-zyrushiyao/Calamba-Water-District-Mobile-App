@@ -52,8 +52,7 @@ class BillingContenttState extends State<BillingContentPage> {
                   ),
                   child: _buildHeadSection(
                     accountNickname: 'Customer',
-                    accountNumber:
-                        '${data.accountNumber} and ${MediaQuery.of(context).size.height}',
+                    accountNumber: '${data.accountNumber}',
                     month: data.monthName,
                     theme: theme,
                   ),
@@ -237,7 +236,7 @@ class BillingContenttState extends State<BillingContentPage> {
                                     minHeight: 70,
                                   ),
                                   child: _buildSingleBoxHeader(
-                                    'DUE AFRTER',
+                                    'DUE AFTER',
                                     theme,
                                   ),
                                 ),
