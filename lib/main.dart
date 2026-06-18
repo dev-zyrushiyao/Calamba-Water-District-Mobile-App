@@ -65,7 +65,7 @@ class CalambaWaterDistrict extends StatelessWidget {
         textTheme: designSystemTypography,
         colorScheme: designSystemColor,
       ),
-      initialRoute: '/home',
+      initialRoute: '/getstarted',
       routes: {
         //how-to
         '/getstarted': (context) => const GetStartedPage(),
