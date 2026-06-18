@@ -49,13 +49,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> loggedTheUser(UserAccount account) async {
     //Direct change values
-    _accountType.owner.nickname = account.nickname;
-    _accountType.owner.phoneNumber = account.phoneNumber;
-    _accountType.owner.gender = account.gender;
-    _accountType.owner.email = account.email;
-    _accountType.owner.password = account.password;
-    _accountType.owner.ewallet = account.ewallet;
-    _accountType.owner.linkedAccounts = account.linkedAccounts;
+    _accountType.owner = account;
   }
 
   @override

@@ -318,8 +318,6 @@ class _LinkAccountPageState extends State<LinkAccountPage>
                 ),
               ),
 
-              //Size box - A
-
               //content-B
               PrimaryButton(
                 label: 'Link Account',
@@ -403,7 +401,7 @@ class _LinkAccountPageState extends State<LinkAccountPage>
             /*Algorithm : #---------First Build---------#
             #During intial build the end shape is first index (0) of the list
             #The beginning if the index is 0 then use the last index (shape.length -1 because its used inside a bracket length[5-1]) of the list
-            #For example: There a list of 5 shapes , beginning is shape[4] , end is shape[0]. The transition is Shape E to Shape A
+            #For example: There is a list of 5 shapes , beginning is shape[4] , end is shape[0]. The transition is Shape E to Shape A
             #After the transition is completed the onEnd callback is called and set new value to the index 
             #The new value formula is (current index + 1) % size of the list.
             #For example: current index is 0 , the formula will be (0 + 1) then % 5 = this is going to equal to 1.
@@ -503,7 +501,7 @@ class _LinkAccountPageState extends State<LinkAccountPage>
     );
   }
 
-  Widget _buildLoadingDottedAnimation(ThemeData theme) {
+  Widget _buildLoadedDottedText(ThemeData theme) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -549,7 +547,7 @@ class _LinkAccountPageState extends State<LinkAccountPage>
                       color: theme.colorScheme.onSecondary,
                     ),
                   )
-                : _buildLoadingDottedAnimation(theme),
+                : _buildLoadedDottedText(theme),
           ],
         ),
       ),

@@ -89,11 +89,11 @@ class _AccountIndexState extends State<AccountIndex>
   // private methods   //
   // ==================//
 
-  void _closeDialoge(BuildContext context) {
+  void _closeDialog(BuildContext context) {
     return Navigator.pop(context);
   }
 
-  Future<dynamic> _buildUnlinkDialoguBox(
+  Future<dynamic> _buildUnlinkDialogBox(
     BuildContext context,
     int index,
     List<WaterAccount> linkedAccounts,
@@ -110,7 +110,7 @@ class _AccountIndexState extends State<AccountIndex>
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.pop(context);
+                _closeDialog(context);
               },
               child: const Text('Cancel'),
             ),
@@ -196,7 +196,7 @@ class _AccountIndexState extends State<AccountIndex>
                         TextButton(
                           onPressed: () {
                             //close the dialogbox when the button is pressed
-                            _closeDialoge(context);
+                            _closeDialog(context);
 
                             Future.delayed(Duration(seconds: 1), () {
                               //clear the textvalue of controller
@@ -214,7 +214,7 @@ class _AccountIndexState extends State<AccountIndex>
                                       //update the LinkedAccount name
                                       _formKey.currentState!.save();
                                       //close the dialogbox after saving
-                                      _closeDialoge(context);
+                                      _closeDialog(context);
                                       //clear the textvalue of controller
                                       _dialogTextfieldController.clear();
                                       //flip back the boolean to false to make the button disabled again
@@ -343,11 +343,7 @@ class _AccountIndexState extends State<AccountIndex>
         children: [
           SlidableAction(
             onPressed: (context) {
-              _buildUnlinkDialoguBox(
-                context,
-                index,
-                _loggedUser.linkedAccounts,
-              );
+              _buildUnlinkDialogBox(context, index, _loggedUser.linkedAccounts);
             },
             backgroundColor: const Color(0xFFC50014),
             foregroundColor: theme.colorScheme.onSecondary,

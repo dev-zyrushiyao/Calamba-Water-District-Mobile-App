@@ -60,7 +60,7 @@ class _SupportIndexState extends State<SupportIndex> {
     super.dispose();
   }
 
-  void _addDropdownItems() async {
+  void _addDropdownItems() {
     for (var category in SupportCategory.values) {
       _categoryDropDownItem.add(
         DropdownMenuEntry(value: category, label: category.value),
@@ -158,18 +158,6 @@ class _SupportIndexState extends State<SupportIndex> {
         break;
       }
     }
-  }
-
-  Future<Ticket?> retrieveTicket(int generatedTicketNumber) async {
-    for (var linkedAccount in _loggedUser.linkedAccounts) {
-      for (var ticket in linkedAccount.ticket) {
-        if (ticket.ticketNumber == generatedTicketNumber) {
-          return ticket;
-        }
-      }
-    }
-
-    return null;
   }
 
   void _refreshValues() {
@@ -297,8 +285,9 @@ class _SupportIndexState extends State<SupportIndex> {
                                     );
 
                                     Ticket? searchedReceipt =
-                                        await retrieveTicket(
+                                        await _supportService.retrieveTicket(
                                           generatedTicketNumber,
+                                          _loggedUser,
                                         );
 
                                     //guard clause

@@ -29,7 +29,7 @@ class _NewsIndexState extends State<NewsIndex> {
     super.initState();
     //set the default year to latest year
     _chosenValue = _currentYear;
-    _createDropdownIitem();
+    _createDropdownItem();
     _buildNewsAndUI(_chosenValue, _newsInformationList);
   }
 
@@ -61,7 +61,7 @@ class _NewsIndexState extends State<NewsIndex> {
     }
   }
 
-  void _createDropdownIitem() {
+  void _createDropdownItem() {
     //dropdown value
     //Algorithm: generate 4 items in a list that returns the current year - index
     //For example: current year is 2026
@@ -79,7 +79,7 @@ class _NewsIndexState extends State<NewsIndex> {
   void _updateTheNews() {
     //UpdateTheNews is to simulate the Live changes in the news such as title , content and status.
     setState(() {
-      //Overrite the content of the news (if there is changed made like title, status etc)
+      //Overwrites the content of the news (if there changes like title, status etc)
       _newsInformationList = NewsData().createNews();
       //Rebuilds the News UI with the latest value
       _buildNewsAndUI(_chosenValue, _newsInformationList);

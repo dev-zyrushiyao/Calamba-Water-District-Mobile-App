@@ -3,6 +3,7 @@ import 'package:myapp/custom-shapes/profile_border.dart';
 import 'package:myapp/custom-widgets/form_editable_textfield.dart';
 import 'package:myapp/custom-widgets/primary_button.dart';
 import 'package:myapp/custom-widgets/profile_content_display_animation.dart';
+import 'package:myapp/data-bank/account_collection.dart';
 
 import 'package:myapp/data-bank/account_type.dart';
 import 'package:myapp/data-class/constants/gender_enum.dart';
@@ -79,6 +80,18 @@ class _ProfileIndexState extends State<ProfileIndex> {
     _initializeLoggedUserValues();
     _initializeTextControllers();
     _triggerEntranceAnimation();
+
+    debugPrint(
+      'Account Owner Linked Account: ${_loggedUser.linkedAccounts.length}',
+    );
+
+    for (var account in AccountCollection().accountDb) {
+      if (account.email == _loggedUser.email) {
+        debugPrint(
+          'Account DB ${account.email} is found and has linkedAccount of : ${account.linkedAccounts.length}',
+        );
+      }
+    }
   }
 
   @override
@@ -552,13 +565,13 @@ class _ProfileIndexState extends State<ProfileIndex> {
     );
   }
 
-  Widget _buildLogoutButton(double value, ThemeData theme) {
+  Widget _buildLogoutButton(double heightValue, ThemeData theme) {
     return Container(
       decoration: const BoxDecoration(),
       clipBehavior: Clip.hardEdge,
       width: 375.0,
       padding: const EdgeInsets.all(10),
-      height: value,
+      height: heightValue,
       child: FilledButton.icon(
         icon: _isEditing ? SizedBox.shrink() : Icon(Icons.logout),
         onPressed: () {

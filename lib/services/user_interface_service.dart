@@ -43,6 +43,9 @@ class UserInterfaceService {
   }
 
   //Account status color
+  @Deprecated(
+    'Do not use this because LinkedAccount already has a getter color for status',
+  )
   Color getAccountStatusColor(bool isActive) {
     if (isActive) {
       return Color(0xFFC8F2CF);

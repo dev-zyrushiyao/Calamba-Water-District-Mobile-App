@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:myapp/data-bank/account_collection.dart';
 import 'package:myapp/data-class/bill.dart';
 import 'package:myapp/data-class/constants/month_enum.dart';
 import 'package:myapp/data-class/constants/water_account_status_enum.dart';
@@ -220,8 +221,6 @@ class LinkAccountService {
 
     //store the map values to the UserObject water account to simulate database saving (one to many relationship)
     //add to the linkedaccount list of UserObject (Owner/Currently Logged in User)
-    //add empty bracket for bill , receipt and ticket to prevent using Nullable Type Indicator , Bang Operator and making unnecessary if else null-checking value
-    //instead just create a conditional if isEmpty OR isNotEmpty
     loggedUser.linkedAccounts.add(
       WaterAccount(
         accountNumber: linkedAccountForm['accountNumber'],
@@ -239,5 +238,12 @@ class LinkAccountService {
         ticket: [],
       ),
     );
+
+    //updates the LinkedAccount of AccountDb
+    for (var account in AccountCollection().accountDb) {
+      if (account.email == loggedUser.email) {
+        account.linkedAccounts = loggedUser.linkedAccounts;
+      }
+    }
   }
 }

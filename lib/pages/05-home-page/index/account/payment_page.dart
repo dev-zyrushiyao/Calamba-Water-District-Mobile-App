@@ -85,13 +85,6 @@ class _MyWidgetState extends State<PaymentPage> {
             _buildPaymentMethod(_loggedUser, theme),
             const SizedBox(height: 60),
 
-            // Stack(
-            //   clipBehavior: Clip.none,
-            //   children: [
-            //     Positioned(bottom: 325, child: _buildTransactioNotice(theme)),
-            //     _buildBigbox(theme),
-            //   ],
-            // ),
             _buildBigbox(theme),
             const SizedBox(height: 25),
             PrimaryButton(

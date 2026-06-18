@@ -69,7 +69,7 @@ class _AccountVerificationPageState extends State<AccountVerificationPage> {
     }
   }
 
-  Future<void> registerUser(Map<String, dynamic> data) async {
+  Future<void> _registerUser(Map<String, dynamic> data) async {
     _accountCollection.accountDb.add(
       UserAccount(
         data['nickname'],
@@ -126,7 +126,8 @@ class _AccountVerificationPageState extends State<AccountVerificationPage> {
 
                 const Headline(
                   headline: 'Enter Verification Code',
-                  subHeadline: 'Enter the 6-digit code sent to your email.',
+                  subHeadline:
+                      'Enter the 6-digit code sent to your email.\nYou can put any digit to bypass the OTP',
                 ),
 
                 const SizedBox(height: 40),
@@ -173,7 +174,7 @@ class _AccountVerificationPageState extends State<AccountVerificationPage> {
                   onPressed: _isOtpComplete
                       ? () async {
                           FocusScope.of(context).unfocus();
-                          await registerUser(data);
+                          await _registerUser(data);
 
                           if (!context.mounted) return;
                           Navigator.pushNamed(context, '/signupresult');
