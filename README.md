@@ -1,5 +1,4 @@
-# Calamba-Water-District-Mobile-App
-Unofficial Calamba Water District Mobile App using Flutter
+# Unofficial Calamba Water District Prototype Mobile Application
 This app is not affiliated with the official Calamba Water District and is intended for demonstration purposes only.
 this is personal project to learn Flutter Framework and to experience following my own design made in Figma.
 
