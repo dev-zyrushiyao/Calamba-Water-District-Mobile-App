@@ -4,6 +4,7 @@ import 'package:myapp/custom-widgets/headline.dart';
 import 'package:myapp/custom-widgets/primary_button.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:myapp/data-class/constants/gender_enum.dart';
+import 'package:myapp/data-class/user_account.dart';
 
 import 'package:myapp/services/validator_service.dart';
 
@@ -172,10 +173,21 @@ class _SignupPageState extends State<SignupPage> {
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         _formKey.currentState!.save();
+
+                        final newUser = UserAccount(
+                          _registeredForm['nickname'],
+                          _registeredForm['phoneNumber'],
+                          _registeredForm['gender'],
+                          _registeredForm['email'],
+                          _registeredForm['password'],
+                          _registeredForm['ewallet'],
+                          [],
+                        );
+
                         Navigator.pushNamed(
                           context,
                           '/accountverification',
-                          arguments: _registeredForm,
+                          arguments: newUser,
                         );
                       }
                     },

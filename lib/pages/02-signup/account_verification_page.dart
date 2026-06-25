@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:myapp/custom-widgets/display_no_data.dart';
 import 'package:myapp/custom-widgets/headline.dart';
 import 'package:myapp/custom-widgets/primary_button.dart';
@@ -6,16 +7,18 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:myapp/data-bank/account_collection.dart';
 import 'package:myapp/data-class/user_account.dart';
+import 'package:myapp/providers/account_provider.dart';
 
-class AccountVerificationPage extends StatefulWidget {
+class AccountVerificationPage extends ConsumerStatefulWidget {
   const AccountVerificationPage({super.key});
 
   @override
-  State<AccountVerificationPage> createState() =>
+  ConsumerState<AccountVerificationPage> createState() =>
       _AccountVerificationPageState();
 }
 
-class _AccountVerificationPageState extends State<AccountVerificationPage> {
+class _AccountVerificationPageState
+    extends ConsumerState<AccountVerificationPage> {
   final List<Widget> _otp = [];
 
   final AccountCollection _accountCollection = AccountCollection();
@@ -69,19 +72,19 @@ class _AccountVerificationPageState extends State<AccountVerificationPage> {
     }
   }
 
-  Future<void> _registerUser(Map<String, dynamic> data) async {
-    _accountCollection.accountDb.add(
-      UserAccount(
-        data['nickname'],
-        data['phoneNumber'],
-        data['gender'],
-        data['email'],
-        data['password'],
-        data['ewallet'],
-        [],
-      ),
-    );
-  }
+  // Future<void> _registerUser(Map<String, dynamic> data) async {
+  //   _accountCollection.accountDb.add(
+  //     UserAccount(
+  //       data['nickname'],
+  //       data['phoneNumber'],
+  //       data['gender'],
+  //       data['email'],
+  //       data['password'],
+  //       data['ewallet'],
+  //       [],
+  //     ),
+  //   );
+  // }
 
   void _addTextField(int textFieldQuantity) {
     for (int i = 0; i < textFieldQuantity; i++) {
@@ -105,8 +108,10 @@ class _AccountVerificationPageState extends State<AccountVerificationPage> {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
 
-    final data =
-        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    //provider
+    final accountDb = ref.watch(accountNotifierProvider);
+
+    final data = ModalRoute.of(context)?.settings.arguments as UserAccount?;
 
     if (data == null) {
       return DisplayNoData();
@@ -174,7 +179,11 @@ class _AccountVerificationPageState extends State<AccountVerificationPage> {
                   onPressed: _isOtpComplete
                       ? () async {
                           FocusScope.of(context).unfocus();
-                          await _registerUser(data);
+                          // await _registerUser(data);
+
+                          ref
+                              .read(accountNotifierProvider.notifier)
+                              .registerUser(data);
 
                           if (!context.mounted) return;
                           Navigator.pushNamed(context, '/signupresult');

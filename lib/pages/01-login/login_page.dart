@@ -1,22 +1,24 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:myapp/custom-widgets/secondary_button.dart';
 import 'package:myapp/data-bank/account_collection.dart';
 import 'package:myapp/data-bank/account_type.dart';
 import 'package:myapp/data-class/user_account.dart';
+import 'package:myapp/providers/account_provider.dart';
 import '../../design-system/design_system.dart'; //home-widget
 
-class LoginPage extends StatefulWidget {
+class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  ConsumerState<LoginPage> createState() => _LoginPageState();
 }
 
 //login page
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends ConsumerState<LoginPage> {
   //controller
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -55,6 +57,13 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
+
+    //provider
+    final accounts = ref.watch(accountNotifierProvider);
+
+    debugPrint(
+      'Account Provider: Type: ${accounts.runtimeType} length: ${accounts.length}',
+    );
 
     final deviceWidth = MediaQuery.of(context).size.width;
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:myapp/pages/00-How-to/get_started_page.dart';
 import 'package:myapp/pages/00-How-to/guide_page.dart';
 
@@ -36,7 +37,7 @@ void main() async {
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   //RunApp calling the myApp Class
-  runApp(const CalambaWaterDistrict());
+  runApp(const ProviderScope(child: CalambaWaterDistrict()));
 }
 
 //myApp - calling widget
