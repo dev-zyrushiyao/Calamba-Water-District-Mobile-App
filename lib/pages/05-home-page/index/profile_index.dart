@@ -1,32 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:myapp/custom-shapes/profile_border.dart';
+import 'package:myapp/custom-widgets/display_no_data.dart';
 import 'package:myapp/custom-widgets/form_editable_textfield.dart';
 import 'package:myapp/custom-widgets/primary_button.dart';
 import 'package:myapp/custom-widgets/profile_content_display_animation.dart';
-import 'package:myapp/data-bank/account_collection.dart';
 
-import 'package:myapp/data-bank/account_type.dart';
 import 'package:myapp/data-class/constants/gender_enum.dart';
 
 import 'package:flutter/services.dart';
 import 'package:myapp/data-class/constants/text_section_enum.dart';
 import 'package:myapp/data-class/user_account.dart';
+import 'package:myapp/providers/account_provider.dart';
+import 'package:myapp/providers/auth_provider.dart';
 import 'package:myapp/services/masking_service.dart';
 import 'package:myapp/services/profile_service.dart';
 import 'package:myapp/services/user_interface_service.dart';
 import 'package:myapp/services/validator_service.dart';
 
-class ProfileIndex extends StatefulWidget {
+class ProfileIndex extends ConsumerStatefulWidget {
   const ProfileIndex({super.key});
 
   @override
-  State<ProfileIndex> createState() => _ProfileIndexState();
+  ConsumerState<ProfileIndex> createState() => _ProfileIndexState();
 }
 
-class _ProfileIndexState extends State<ProfileIndex> {
-  //logged user account
-  final UserAccount _loggedUser = AccountType().owner;
-
+class _ProfileIndexState extends ConsumerState<ProfileIndex> {
   //services
   final _profileService = ProfileService();
   final _userInterfaceService = UserInterfaceService();
@@ -43,7 +42,7 @@ class _ProfileIndexState extends State<ProfileIndex> {
 
   //list to display information from UI
   // final List<dynamic> _loggedUserValues = [];
-  Map<TextSection, dynamic> _loggedUserValues = {};
+  Map<TextSection, dynamic> loggedUserValues = {};
   //list of profile section
   List<TextSection> _textSection = [];
 
@@ -75,23 +74,17 @@ class _ProfileIndexState extends State<ProfileIndex> {
     );
 
     _initializeDropdownItem();
-    _initializeDropdownInitialValue();
     _initializeTextSection();
-    _initializeLoggedUserValues();
-    _initializeTextControllers();
-    _triggerEntranceAnimation();
 
-    debugPrint(
-      'Account Owner Linked Account: ${_loggedUser.linkedAccounts.length}',
-    );
-
-    for (var account in AccountCollection().accountDb) {
-      if (account.email == _loggedUser.email) {
-        debugPrint(
-          'Account DB ${account.email} is found and has linkedAccount of : ${account.linkedAccounts.length}',
-        );
-      }
+    final loggedUser = ref.watch(authNotifierProvider);
+    if (loggedUser != null) {
+      createUserDisplayValue(loggedUser);
+      createTextControllers(loggedUser);
+      createDropdownValue(loggedUser);
     }
+
+    // _initializeTextControllers();
+    _triggerEntranceAnimation();
   }
 
   @override
@@ -121,9 +114,9 @@ class _ProfileIndexState extends State<ProfileIndex> {
     }
   }
 
-  void _initializeDropdownInitialValue() {
+  void createDropdownValue(UserAccount loggedUser) {
     //Initial Value and changed value of dropdown
-    _chosenValue = _loggedUser.gender;
+    _chosenValue = loggedUser.gender;
   }
 
   void _initializeTextSection() {
@@ -131,24 +124,10 @@ class _ProfileIndexState extends State<ProfileIndex> {
     _textSection = TextSection.values;
   }
 
-  void _initializeLoggedUserValues() {
-    _loggedUserValues = {
-      TextSection.nickname: _loggedUser.nickname,
-      TextSection.phoneNumber:
-          _loggedUser.phoneNumber.toString().startsWith('9')
-          ? '0${_loggedUser.phoneNumber}'
-          : _loggedUser.phoneNumber.toString(),
-      TextSection.email: _loggedUser.email,
-      TextSection.password: _loggedUser.password,
-      TextSection.gender: _loggedUser.gender,
-      TextSection.eWallet: _loggedUser.ewallet,
-    };
-  }
-
-  void _initializeTextControllers() {
+  void createTextControllers(UserAccount loggedUser) {
     //initial value of textfield for UI Display
     //add controller to the list
-    for (var item in _loggedUserValues.values) {
+    for (var item in loggedUserValues.values) {
       _textController.add(TextEditingController(text: item.toString()));
     }
   }
@@ -167,6 +146,19 @@ class _ProfileIndexState extends State<ProfileIndex> {
     });
   }
 
+  void createUserDisplayValue(UserAccount loggedUser) {
+    loggedUserValues = {
+      TextSection.nickname: loggedUser.nickname,
+      TextSection.phoneNumber: loggedUser.phoneNumber.toString().startsWith('9')
+          ? '0${loggedUser.phoneNumber}'
+          : loggedUser.phoneNumber.toString(),
+      TextSection.email: loggedUser.email,
+      TextSection.password: loggedUser.password,
+      TextSection.gender: loggedUser.gender,
+      TextSection.eWallet: loggedUser.ewallet,
+    };
+  }
+
   // ==================//
   // Dispose methods   //
   // ==================//
@@ -181,6 +173,13 @@ class _ProfileIndexState extends State<ProfileIndex> {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
+
+    final loggedUser = ref.watch(authNotifierProvider);
+
+    if (loggedUser == null) {
+      return DisplayNoData();
+    }
+
     return Column(
       children: [
         //header animation
@@ -192,7 +191,7 @@ class _ProfileIndexState extends State<ProfileIndex> {
             duration: const Duration(seconds: 1),
             curve: Curves.easeOutBack,
             builder: (context, value, _) {
-              return _buildProfileContainer(value, theme);
+              return _buildProfileContainer(value, theme, loggedUser);
             },
           ),
         ),
@@ -224,9 +223,13 @@ class _ProfileIndexState extends State<ProfileIndex> {
                             itemBuilder: (context, index) {
                               return _textSection[index] == TextSection.gender
                                   //if index is Gender section return a dropdown list
-                                  ? _buildGenderDropDownButton(index, theme)
+                                  ? _buildGenderDropDownButton(
+                                      index,
+                                      theme,
+                                      loggedUser,
+                                    )
                                   //else show TextField
-                                  : _buildFormTextFields(index);
+                                  : _buildFormTextFields(index, loggedUser);
                             },
                           ),
                         ),
@@ -242,7 +245,11 @@ class _ProfileIndexState extends State<ProfileIndex> {
                               const SizedBox(height: 20),
                           itemCount: _textSection.length,
                           itemBuilder: (context, index) {
-                            return _displayUserInformation(index, theme);
+                            return _displayUserInformation(
+                              index,
+                              theme,
+                              loggedUser,
+                            );
                           },
                         ),
                       ),
@@ -286,7 +293,11 @@ class _ProfileIndexState extends State<ProfileIndex> {
   // PRIVATE UI HELPER METHODS //
   // ==========================//
 
-  Widget _buildProfileContainer(double value, ThemeData theme) {
+  Widget _buildProfileContainer(
+    double value,
+    ThemeData theme,
+    UserAccount loggedUser,
+  ) {
     final containerWidth = MediaQuery.of(context).size.width;
     return Container(
       width: containerWidth,
@@ -295,7 +306,7 @@ class _ProfileIndexState extends State<ProfileIndex> {
       child: value < 150
           ? const SizedBox.shrink()
           : ProfileContentDisplayAnimation(
-              loggedUser: _loggedUser,
+              loggedUser: loggedUser,
               containerHeight: _containerHeight,
               photoSize: _photoSize,
               nameSize: _nameSize,
@@ -342,7 +353,11 @@ class _ProfileIndexState extends State<ProfileIndex> {
     );
   }
 
-  Widget _buildGenderDropDownButton(int index, ThemeData theme) {
+  Widget _buildGenderDropDownButton(
+    int index,
+    ThemeData theme,
+    UserAccount loggedUser,
+  ) {
     return Align(
       alignment: Alignment.centerLeft,
       child: Column(
@@ -362,14 +377,17 @@ class _ProfileIndexState extends State<ProfileIndex> {
               //Saves the form values to User Object (loggedUser)
               //saves only from the TextSection enum : _, _, _, _, gender , _
               if (value != null) {
-                _profileService.saveFormInformationFrom(
-                  loggedUser: _loggedUser,
+                _profileService.saveForm(
                   textSection: _textSection[index],
+                  textFieldValue: null,
+                  loggedUser: loggedUser,
                   dropdownValue: value,
                 );
 
+                debugPrint('GENDER DROPDOWN VALUE: $value');
+
                 //re-updates the list for UI display
-                _loggedUserValues[_textSection[index]] = value.name;
+                loggedUserValues[_textSection[index]] = value.name;
               }
             },
             onChanged: (value) {
@@ -406,7 +424,7 @@ class _ProfileIndexState extends State<ProfileIndex> {
     );
   }
 
-  Widget _buildFormTextFields(int index) {
+  Widget _buildFormTextFields(int index, UserAccount loggedUser) {
     return FormEditableTextfield(
       textController: _textController[index],
       textSection: _textSection[index].value,
@@ -422,11 +440,34 @@ class _ProfileIndexState extends State<ProfileIndex> {
           ? _buildIconPasswordButton(_textSection[index])
           : null,
       validator: (value) {
-        return _validatorService.validateInputFrom(
-          value: value,
-          textSection: _textSection[index],
-          loggedUser: _loggedUser,
-        );
+        bool? isAccountExist;
+        if (value != null) {
+          isAccountExist = ref
+              .read(accountNotifierProvider.notifier)
+              .isAccountExist(value);
+        }
+
+        switch (_textSection[index]) {
+          case TextSection.email:
+            if (loggedUser.email != value) {
+              return _validatorService.validateInputFrom(
+                value: value,
+                textSection: _textSection[index],
+                loggedUser: loggedUser,
+                isAccountExist: isAccountExist,
+              );
+            }
+            break;
+          default:
+            return _validatorService.validateInputFrom(
+              value: value,
+              textSection: _textSection[index],
+              loggedUser: loggedUser,
+              isAccountExist: isAccountExist,
+            );
+        }
+
+        return null;
       },
       onSaved: (value) {
         //Saves the form values to User Object (loggedUser) except the Gender secton since it is a dropdown list
@@ -438,13 +479,13 @@ class _ProfileIndexState extends State<ProfileIndex> {
           //_LoggedUserValues now equals to the value saved on form instead of controller text.
           //reset the password obscure -> isHidden variable back to default value : true
           setState(() {
-            _profileService.saveFormInformationFrom(
-              loggedUser: _loggedUser,
+            _profileService.saveForm(
+              loggedUser: loggedUser,
               textSection: _textSection[index],
               textFieldValue: value,
             );
 
-            _loggedUserValues[_textSection[index]] = value;
+            loggedUserValues[_textSection[index]] = value;
             _isHidden = true;
           });
         }
@@ -453,7 +494,11 @@ class _ProfileIndexState extends State<ProfileIndex> {
     );
   }
 
-  Widget _displayUserInformation(int index, ThemeData theme) {
+  Widget _displayUserInformation(
+    int index,
+    ThemeData theme,
+    UserAccount loggedUser,
+  ) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -476,12 +521,31 @@ class _ProfileIndexState extends State<ProfileIndex> {
         Flexible(
           flex: 1,
           child: switch (_textSection[index]) {
+            TextSection.nickname => SizedBox(
+              width: double.infinity,
+              child: Text(
+                // '${_loggedUserValues[_textSection[index]]}',
+                loggedUser.nickname,
+
+                textAlign: TextAlign.left,
+                style: theme.textTheme.bodyLarge,
+              ),
+            ),
+
             TextSection.phoneNumber => SizedBox(
               width: double.infinity,
               child: Text(
-                _maskingService.maskPhoneNumber(
-                  _loggedUserValues[_textSection[index]],
-                ),
+                _maskingService.maskPhoneNumber(loggedUser.phoneNumber),
+                textAlign: TextAlign.left,
+                style: theme.textTheme.bodyLarge,
+              ),
+            ),
+
+            TextSection.email => SizedBox(
+              width: double.infinity,
+              child: Text(
+                // '${_loggedUserValues[_textSection[index]]}',
+                loggedUser.email,
 
                 textAlign: TextAlign.left,
                 style: theme.textTheme.bodyLarge,
@@ -492,24 +556,24 @@ class _ProfileIndexState extends State<ProfileIndex> {
             TextSection.password => SizedBox(
               width: double.infinity,
               child: Text(
-                '•' * _loggedUserValues[_textSection[index]].length,
+                '•' * loggedUser.password.length,
                 style: theme.textTheme.bodyLarge,
               ),
             ),
+
             //gender
             TextSection.gender => SizedBox(
               width: double.infinity,
               child: Text(
-                _chosenValue!.value,
+                loggedUser.gender.value,
                 style: theme.textTheme.bodyLarge,
               ),
             ),
-            //the rest of the text
-            _ => SizedBox(
+
+            TextSection.eWallet => SizedBox(
               width: double.infinity,
               child: Text(
-                '${_loggedUserValues[_textSection[index]]}',
-                textAlign: TextAlign.left,
+                loggedUser.ewallet.toString(),
                 style: theme.textTheme.bodyLarge,
               ),
             ),
@@ -533,6 +597,15 @@ class _ProfileIndexState extends State<ProfileIndex> {
           if (_formKey.currentState!.validate()) {
             //save the form
             _formKey.currentState!.save();
+
+            final updatedUser = ref.read(authNotifierProvider);
+
+            if (updatedUser != null) {
+              ref
+                  .read(authNotifierProvider.notifier)
+                  .updateAccountFromSession(updatedUser);
+            }
+
             //hides again the button after successfully updating the user information
             setState(() {
               //turning off the toggle editing button
@@ -575,6 +648,7 @@ class _ProfileIndexState extends State<ProfileIndex> {
       child: FilledButton.icon(
         icon: _isEditing ? SizedBox.shrink() : Icon(Icons.logout),
         onPressed: () {
+          ref.read(authNotifierProvider.notifier).logout();
           Navigator.pushNamedAndRemoveUntil(
             context,
             '/login',

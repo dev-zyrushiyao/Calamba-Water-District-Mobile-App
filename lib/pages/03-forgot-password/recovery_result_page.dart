@@ -94,6 +94,10 @@ class RecoveryResultPage extends StatelessWidget {
                               text:
                                   'Please follow the instruction to reset your password.',
                             ),
+                            const TextSpan(
+                              text:
+                                  '(This feature is not available in the demo app)',
+                            ),
                           ],
                         ),
                       ),

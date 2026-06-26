@@ -5,7 +5,6 @@ import 'package:myapp/custom-widgets/headline.dart';
 import 'package:myapp/custom-widgets/primary_button.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
-import 'package:myapp/data-bank/account_collection.dart';
 import 'package:myapp/data-class/user_account.dart';
 import 'package:myapp/providers/account_provider.dart';
 
@@ -20,8 +19,6 @@ class AccountVerificationPage extends ConsumerStatefulWidget {
 class _AccountVerificationPageState
     extends ConsumerState<AccountVerificationPage> {
   final List<Widget> _otp = [];
-
-  final AccountCollection _accountCollection = AccountCollection();
 
   //generate node focus
   final List<FocusNode> _focusNodes = List.generate(5, (index) => FocusNode());
@@ -72,20 +69,6 @@ class _AccountVerificationPageState
     }
   }
 
-  // Future<void> _registerUser(Map<String, dynamic> data) async {
-  //   _accountCollection.accountDb.add(
-  //     UserAccount(
-  //       data['nickname'],
-  //       data['phoneNumber'],
-  //       data['gender'],
-  //       data['email'],
-  //       data['password'],
-  //       data['ewallet'],
-  //       [],
-  //     ),
-  //   );
-  // }
-
   void _addTextField(int textFieldQuantity) {
     for (int i = 0; i < textFieldQuantity; i++) {
       _otp.add(
@@ -109,7 +92,7 @@ class _AccountVerificationPageState
     final ThemeData theme = Theme.of(context);
 
     //provider
-    final accountDb = ref.watch(accountNotifierProvider);
+    // final accountDb = ref.watch(accountNotifierProvider);
 
     final data = ModalRoute.of(context)?.settings.arguments as UserAccount?;
 
@@ -179,8 +162,6 @@ class _AccountVerificationPageState
                   onPressed: _isOtpComplete
                       ? () async {
                           FocusScope.of(context).unfocus();
-                          // await _registerUser(data);
-
                           ref
                               .read(accountNotifierProvider.notifier)
                               .registerUser(data);

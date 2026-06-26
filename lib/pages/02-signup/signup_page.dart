@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:myapp/custom-widgets/headline.dart';
 import 'package:myapp/custom-widgets/primary_button.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:myapp/data-class/constants/gender_enum.dart';
 import 'package:myapp/data-class/user_account.dart';
+import 'package:myapp/providers/account_provider.dart';
 
 import 'package:myapp/services/validator_service.dart';
 
-class SignupPage extends StatefulWidget {
+class SignupPage extends ConsumerStatefulWidget {
   const SignupPage({super.key});
 
   @override
-  State<SignupPage> createState() => _SignupPageState();
+  ConsumerState<SignupPage> createState() => _SignupPageState();
 }
 
 //Widget tree structure
@@ -21,7 +23,7 @@ class SignupPage extends StatefulWidget {
 //--Column [sizedBox , container-TextHeader , sizedBox , center-container-Column(Column[Label,TextForm)) ]
 // Mobile no. section container-column (text (row[text-textfield]))
 
-class _SignupPageState extends State<SignupPage> {
+class _SignupPageState extends ConsumerState<SignupPage> {
   //service
   final ValidatorService _validatorService = ValidatorService();
 
@@ -58,6 +60,9 @@ class _SignupPageState extends State<SignupPage> {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
+
+    //providers
+    final accountDb = ref.watch(accountNotifierProvider);
     return Scaffold(
       backgroundColor: theme.colorScheme.surface,
       appBar: AppBar(title: const Text('Sign up')),
@@ -106,7 +111,21 @@ class _SignupPageState extends State<SignupPage> {
                     hintText: 'Enter valid E-mail',
                     maxLength: 30,
                     validator: (value) {
-                      return _validatorService.emailValidator(value);
+                      //search email input from the Provider set and when found retrieve the account
+                      //else return null
+                      final user = ref
+                          .read(accountNotifierProvider.notifier)
+                          .searchEmail(value);
+
+                      //if the user is not null declare declare boolean as true
+                      //else return null
+                      bool? isUserAccountExist = user != null ? true : null;
+
+                      return _validatorService.emailValidator(
+                        value,
+                        null,
+                        isUserAccountExist,
+                      );
                     },
                     onSaved: (value) => _registeredForm['email'] = value,
                     theme: theme,

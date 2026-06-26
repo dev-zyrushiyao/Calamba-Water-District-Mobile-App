@@ -1,3 +1,23 @@
+//--------------Riverpod--------------------//
+DONE - Install Riverpod
+DONE - Create Provider
+DONE - Make the AccountDb list as Set in Provider 
+DONE - Create new account the Set (Signup page)
+DONE - Add an Error result when registering a already exist email
+CANCELLED - Add a way to use the Provider in email validator
+DONE - Use Provider on Forgot Password
+DONE - Login using Provider
+DONE - Update LoggedUser and the Account from the Provider (db) when updating profile
+- Create linkedAccounts using Provider account
+- Pay linkedAccounts using Provider account
+- check Receipt and Bills using Provider account
+- Create a ticket using Provider account
+- rename the DataBanks to models
+
+
+
+
+//--------------Object Oriented--------------------//
 //DONE- Adjust the UI if there is no Linked Accounts 
 //DONE- Refactor the Account Index and LinkAccount Page 
 //DONE- Add Slidable EDIT Button function at AccountIndex 

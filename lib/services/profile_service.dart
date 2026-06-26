@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:myapp/data-bank/account_collection.dart';
 import 'package:myapp/data-class/constants/gender_enum.dart';
 import 'package:myapp/data-class/constants/text_section_enum.dart';
@@ -73,6 +74,9 @@ class ProfileService {
        - TextField -> saveFormInformationFrom (textFieldValue: value , dropdownValue: null)
        - Dropdown -> saveFormInformationFrom (textFieldValue: null , dropdownValue: chosenValue)
        -> UserAccount LoggedUser = TextFieldValue & ChosenValue */
+  @Deprecated(
+    'Used only for OOP version , use saveFormInformation() instead for Provider version',
+  )
   void saveFormInformationFrom({
     required UserAccount loggedUser,
     required Enum textSection,
@@ -89,7 +93,6 @@ class ProfileService {
             case TextSection.nickname:
               loggedUser.nickname = textFieldValue;
               account.nickname = textFieldValue;
-
               break;
             case TextSection.phoneNumber:
               loggedUser.phoneNumber =
@@ -132,6 +135,57 @@ class ProfileService {
       );
       ArgumentError.checkNotNull(dropdownValue, 'dropdownValue');
       ArgumentError.checkNotNull(textFieldValue, 'dropdownValue');
+    }
+  }
+
+  void saveForm({
+    required Enum textSection,
+    required String? textFieldValue,
+    required UserAccount loggedUser,
+    Gender? dropdownValue,
+  }) {
+    if (textFieldValue != null) {
+      switch (textSection) {
+        case TextSection.nickname:
+          loggedUser.nickname = textFieldValue;
+          // account.nickname = textFieldValue;
+          break;
+        case TextSection.phoneNumber:
+          loggedUser.phoneNumber =
+              int.tryParse(textFieldValue) ?? loggedUser.phoneNumber;
+          // account.phoneNumber = int.tryParse(textFieldValue) ?? 0;
+          break;
+        case TextSection.email:
+          loggedUser.email = textFieldValue;
+          // account.email = textFieldValue;
+          break;
+        case TextSection.password:
+          loggedUser.password = textFieldValue;
+          // account.password = textFieldValue;
+          break;
+        case TextSection.eWallet:
+          loggedUser.ewallet = int.tryParse(textFieldValue) ?? 0;
+          // account.ewallet = int.tryParse(textFieldValue) ?? 0;
+          break;
+        default:
+          null;
+      }
+    }
+
+    if (dropdownValue != null) {
+      switch (textSection) {
+        case TextSection.gender:
+          debugPrint(
+            'PROFILE SERVICE: BEFORE LOGGED USER GENDER : ${loggedUser.gender}',
+          );
+          loggedUser.gender = dropdownValue;
+
+          debugPrint(
+            'PROFILE SERVICE: AFTER LOGGED USER GENDER : ${loggedUser.gender}',
+          );
+          // account.gender = dropdownValue;
+          break;
+      }
     }
   }
 

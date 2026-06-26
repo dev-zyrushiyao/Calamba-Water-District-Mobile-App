@@ -1,10 +1,14 @@
 import 'package:collection/collection.dart';
+
 import 'package:myapp/data-bank/account_collection.dart';
 import 'package:myapp/data-class/constants/gender_enum.dart';
 import 'package:myapp/data-class/constants/text_section_enum.dart';
 import 'package:myapp/data-class/user_account.dart';
 
 class ValidatorService {
+  @Deprecated(
+    'This method checks the Singleton class(list of accounts). The AccountProvider already has a method similar to this',
+  )
   bool verifyAccount(String? emailInput) {
     final AccountCollection accountCollection = AccountCollection();
     final listOfAccounts = accountCollection.accountDb;
@@ -16,7 +20,9 @@ class ValidatorService {
     return false;
   }
 
-  //Search User email to reset
+  @Deprecated(
+    'This method checks the Singleton class(list of accounts). The AccountProvider already has a method similar to this',
+  )
   UserAccount? retrieveAccount(String? emailInput) {
     final AccountCollection accountCollection = AccountCollection();
     final listOfAccounts = accountCollection.accountDb;
@@ -26,17 +32,12 @@ class ValidatorService {
   }
 
   //Display reset password validation
-  String? resetEmailValidator(String? value) {
-    final AccountCollection accountCollection = AccountCollection();
-    final listOfAccounts = accountCollection.accountDb;
-
-    for (var userAccount in listOfAccounts) {
-      if (userAccount.email == value) {
-        return null;
-      }
+  String? resetEmailValidator(bool? isUserAccountExist) {
+    if (isUserAccountExist == null) {
+      return 'Account not found';
     }
 
-    return 'Account not found';
+    return null;
   }
 
   String? nicknameValidator(String? value) {
@@ -54,14 +55,17 @@ class ValidatorService {
         : null;
   }
 
-  String? emailValidator(String? value, [UserAccount? loggedUser]) {
+  String? emailValidator(
+    String? value, [
+    UserAccount? userAccount,
+    bool? isUserAccountExist,
+  ]) {
     //r'''^[!@#$%^&*()_\-+~`\[\]|;:{}'" <>?,./\\]''', including <space>
     final RegExp specialCharacter = RegExp(r'[\s!-/:-@\[-`{-~]');
 
     //[underscore , @ and dot] not included
     //r'''[!#$%^&*()\-+~`\[\]|;:{}'" <>?,/\\]''',
     final RegExp specialCharacterWithException = RegExp(r'[\s!-\-/:-?\[-^`|~]');
-    bool? isEmailExist = false;
 
     const emailMinimumLength = 5;
 
@@ -73,19 +77,23 @@ class ValidatorService {
     //then proceed the validation for saving
     //else if loggedUser exist and same value in the textfield email , skip verifyAccount()
     //then just proceed to the rest of validation.
-    if (loggedUser != null) {
-      if (loggedUser.email != value) {
-        //if user update its nickname this will prevent it from doing email check
-        isEmailExist = verifyAccount(value);
-      } else {
-        isEmailExist = false;
-      }
-    }
+    // if (userAccount != null) {
+    //   // if (userAccount.email != value) {
+    //   //   //if user update its nickname this will prevent it from doing email check
+    //   //   isEmailExist = accounts?.any((account) => account.email == value);
+    //   //   print('VALIDATION TRUE');
+    //   // } else {
+    //   //   isEmailExist = false;
+    //   //   print('isEmailExist: $isEmailExist');
+    //   // }
+
+    //   if (userAccount.email == value) {}
+    // }
 
     return (value == null || value.isEmpty)
         ? 'Email is required'
-        : (isEmailExist)
-        ? 'Email is already taken'
+        : (isUserAccountExist == true)
+        ? 'This email is not available'
         : (value.length < emailMinimumLength)
         ? 'Not a valid email length'
         : (value.startsWith(specialCharacter))
@@ -141,12 +149,13 @@ class ValidatorService {
   String? validateInputFrom({
     required String? value,
     required TextSection textSection,
-    required UserAccount loggedUser,
+    UserAccount? loggedUser,
+    bool? isAccountExist,
   }) {
     return switch (textSection) {
       TextSection.nickname => nicknameValidator(value),
       TextSection.phoneNumber => phoneNumberValidator(value),
-      TextSection.email => emailValidator(value, loggedUser),
+      TextSection.email => emailValidator(value, loggedUser, isAccountExist),
       TextSection.password => passwordValidator(value),
       TextSection.eWallet => eWalletValidator(value),
       _ => null,

@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:myapp/custom-widgets/headline.dart';
 import 'package:myapp/custom-widgets/primary_button.dart';
 import 'package:myapp/data-class/user_account.dart';
+import 'package:myapp/providers/account_provider.dart';
 
 import 'package:myapp/services/validator_service.dart';
 
-class ForgotPasswordPage extends StatefulWidget {
+class ForgotPasswordPage extends ConsumerStatefulWidget {
   const ForgotPasswordPage({super.key});
 
   @override
-  State<ForgotPasswordPage> createState() => _ForgotPasswordPageState();
+  ConsumerState<ForgotPasswordPage> createState() => _ForgotPasswordPageState();
 }
 
-class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
+class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final _validatorService = ValidatorService();
 
@@ -65,13 +67,11 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
                     if (!context.mounted) return;
 
-                    final user = searchedUser;
-
-                    if (user != null) {
+                    if (searchedUser != null) {
                       Navigator.pushNamed(
                         context,
                         '/forgotpasswordresult',
-                        arguments: user.email,
+                        arguments: searchedUser?.email,
                       );
                     } else {
                       throw ArgumentError(
@@ -113,7 +113,6 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   }
 
   Widget _buildTextField(ThemeData theme) {
-    final validationService = ValidatorService();
     return TextFormField(
       keyboardType: TextInputType.name,
       decoration: InputDecoration(
@@ -123,13 +122,20 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           color: theme.colorScheme.error,
         ),
       ),
+      validator: (value) {
+        searchedUser = ref
+            .read(accountNotifierProvider.notifier)
+            .searchEmail(value);
+
+        //if the user is not null declare declare boolean as true
+        //else return null
+        bool? isUserAccountExist = searchedUser != null ? true : null;
+        return _validatorService.resetEmailValidator(isUserAccountExist);
+      },
       onSaved: (String? value) {
-        searchedUser = _validatorService.retrieveAccount(value);
+        //no methods here , reset password does not have to save anything
       },
       autovalidateMode: AutovalidateMode.onUserInteractionIfError,
-      validator: (value) {
-        return validationService.resetEmailValidator(value);
-      },
     );
   }
 }

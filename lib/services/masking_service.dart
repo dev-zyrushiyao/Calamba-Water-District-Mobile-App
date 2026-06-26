@@ -28,7 +28,8 @@ class MaskingService {
     return '$maskedUsername@$maskedDomain';
   }
 
-  String maskPhoneNumber(String phoneNumberInString) {
+  String maskPhoneNumber(int phoneNumber) {
+    String phoneNumberInString = phoneNumber.toString();
     //split the String character into a list (for example: "MASK" -> ['M' , 'A' , 'S' , 'K'])
     List<String> letterSplit = phoneNumberInString.split('');
     //constant values

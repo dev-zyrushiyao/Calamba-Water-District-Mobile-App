@@ -8,6 +8,7 @@ import 'package:myapp/data-bank/account_collection.dart';
 import 'package:myapp/data-bank/account_type.dart';
 import 'package:myapp/data-class/user_account.dart';
 import 'package:myapp/providers/account_provider.dart';
+import 'package:myapp/providers/auth_provider.dart';
 import '../../design-system/design_system.dart'; //home-widget
 
 class LoginPage extends ConsumerStatefulWidget {
@@ -31,7 +32,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   final AccountType _accountType = AccountType();
 
   //validation
-  bool? _isCorrectLogin;
+  bool? _loginResult;
 
   //login textbox consistent size
   final double _textFieldWidth = 288.00;
@@ -49,6 +50,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     super.dispose();
   }
 
+  @Deprecated(
+    'This only used in OOP Login version , please use the Auth Provider',
+  )
   Future<void> loggedTheUser(UserAccount account) async {
     //Direct change values
     _accountType.owner = account;
@@ -58,14 +62,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
 
-    //provider
-    final accounts = ref.watch(accountNotifierProvider);
-
-    debugPrint(
-      'Account Provider: Type: ${accounts.runtimeType} length: ${accounts.length}',
-    );
-
-    final deviceWidth = MediaQuery.of(context).size.width;
+    final deviceWidth = MediaQuery.sizeOf(context).width;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -91,14 +88,17 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                       'assets/login-logo.svg',
                     ),
 
-                    if (_isCorrectLogin != null)
-                      if (_isCorrectLogin != true)
-                        Text(
-                          'Login information is incorrect',
-                          style: theme.textTheme.labelSmall?.copyWith(
-                            color: Colors.red,
-                          ),
-                        ),
+                    SizedBox(
+                      height: 20,
+                      child: _loginResult == false
+                          ? Text(
+                              'Login information is incorrect',
+                              style: theme.textTheme.labelSmall?.copyWith(
+                                color: Colors.red,
+                              ),
+                            )
+                          : null,
+                    ),
 
                     _buildEmailField(theme, _emailController),
 
@@ -121,40 +121,27 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                       height: _textFieldHeight,
                       width: _textFieldWidth,
                       onPressed: () async {
-                        if (_accountCollection.accountDb.isEmpty) {
-                          debugPrint('the DB is empty');
-                          //display a incorrect login if there is no registered account
-                          setState(() {
-                            _isCorrectLogin = false;
+                        final email = _emailController.text;
+                        final password = _passwordController.text;
+
+                        _loginResult = ref
+                            .read(authNotifierProvider.notifier)
+                            .login(email, password);
+
+                        if (_loginResult == true) {
+                          await Future.delayed(Duration(milliseconds: 500), () {
+                            if (!context.mounted) return;
+                            FocusScope.of(context).unfocus();
                           });
+
+                          if (!context.mounted) return;
+                          Navigator.popAndPushNamed(context, '/boarding');
                         } else {
-                          for (var account in _accountCollection.accountDb) {
-                            if ((account.email == _emailController.text) &&
-                                (account.password ==
-                                    _passwordController.text)) {
-                              setState(() {
-                                _isCorrectLogin = true;
-                              });
-
-                              await loggedTheUser(account);
-
-                              await Future.delayed(
-                                Duration(milliseconds: 500),
-                                () {
-                                  if (!context.mounted) return;
-                                  FocusScope.of(context).unfocus();
-                                },
-                              );
-
-                              if (!context.mounted) return;
-                              Navigator.popAndPushNamed(context, '/boarding');
-                              break;
-                            } else {
-                              setState(() {
-                                _isCorrectLogin = false;
-                              });
-                            }
-                          }
+                          setState(() {
+                            debugPrint(
+                              'Failed Login, login result : $_loginResult',
+                            );
+                          });
                         }
                       },
                     ),

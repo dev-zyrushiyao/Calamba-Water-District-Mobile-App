@@ -1,24 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:myapp/custom-widgets/dashboard_account.dart';
+import 'package:myapp/custom-widgets/display_no_data.dart';
 import 'package:myapp/custom-widgets/headline.dart';
 import 'package:myapp/custom-widgets/primary_button.dart';
 import 'package:myapp/custom-widgets/silver_dotted_border.dart';
-import 'package:myapp/data-bank/account_type.dart';
+import 'package:myapp/providers/auth_provider.dart';
 
-class HomeIndex extends StatefulWidget {
+class HomeIndex extends ConsumerStatefulWidget {
   const HomeIndex({super.key});
 
   @override
-  State<HomeIndex> createState() => _HomeIndexState();
+  ConsumerState<HomeIndex> createState() => _HomeIndexState();
 }
 
-class _HomeIndexState extends State<HomeIndex> {
-  final _loggedUser = AccountType().owner;
-
+class _HomeIndexState extends ConsumerState<HomeIndex> {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
+
+    final loggedUser = ref.watch(authNotifierProvider);
+
+    if (loggedUser == null) {
+      return DisplayNoData();
+    }
 
     return SafeArea(
       child: Padding(
@@ -38,7 +44,7 @@ class _HomeIndexState extends State<HomeIndex> {
             Align(
               alignment: Alignment.bottomLeft,
               child: Headline(
-                headline: 'Hi, ${_loggedUser.nickname}!',
+                headline: 'Hi, ${loggedUser.nickname}!',
                 subHeadline: 'Ready to settle your dues? We\'ve made it easy.',
                 spacing: 5.0,
               ),
@@ -53,15 +59,15 @@ class _HomeIndexState extends State<HomeIndex> {
 
             const SizedBox(height: 13.0),
 
-            if (_loggedUser.linkedAccounts.isNotEmpty)
+            if (loggedUser.linkedAccounts.isNotEmpty)
               Expanded(
                 child: ListView.separated(
                   separatorBuilder: (context, index) =>
                       const SizedBox(height: 26),
-                  itemCount: _loggedUser.linkedAccounts.length,
+                  itemCount: loggedUser.linkedAccounts.length,
                   itemBuilder: (context, index) {
                     return DashboardDisplay(
-                      waterAccount: _loggedUser.linkedAccounts[index],
+                      waterAccount: loggedUser.linkedAccounts[index],
                       primaryButton: PrimaryButton(
                         label: 'Pay Bill',
                         width: 92,
@@ -71,7 +77,7 @@ class _HomeIndexState extends State<HomeIndex> {
                           final result = await Navigator.pushNamed(
                             context,
                             '/accountinformation',
-                            arguments: _loggedUser.linkedAccounts[index],
+                            arguments: loggedUser.linkedAccounts[index],
                           );
 
                           //When the Account Information Page pressed the delete button it will return
@@ -81,7 +87,7 @@ class _HomeIndexState extends State<HomeIndex> {
                           if (result == 'delete') {
                             setState(() {
                               //removed the target UserLinked LinkedAccount
-                              _loggedUser.linkedAccounts.removeAt(index);
+                              loggedUser.linkedAccounts.removeAt(index);
                             });
                           } else {
                             //refresh the page when the user get back from
