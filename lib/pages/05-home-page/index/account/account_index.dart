@@ -1,31 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:go_router/go_router.dart';
 import 'package:myapp/custom-widgets/colored_container.dart';
+import 'package:myapp/custom-widgets/display_no_data.dart';
 
 import 'package:myapp/custom-widgets/headline.dart';
 import 'package:myapp/custom-widgets/separation_divider.dart';
 import 'package:myapp/custom-widgets/silver_dotted_border.dart';
 import 'package:myapp/custom-widgets/status_indicator.dart';
-import 'package:myapp/data-bank/account_type.dart';
+import 'package:myapp/data-class/constants/custom_action_enum.dart';
 
 import 'package:myapp/data-class/water_account.dart';
+
+import 'package:myapp/providers/auth_provider.dart';
 
 import 'package:myapp/services/link_account_service.dart';
 import 'package:myapp/services/masking_service.dart';
 
-class AccountIndex extends StatefulWidget {
+class AccountIndex extends ConsumerStatefulWidget {
   const AccountIndex({super.key});
 
   @override
-  State<AccountIndex> createState() => _AccountIndexState();
+  ConsumerState<AccountIndex> createState() => _AccountIndexState();
 }
 
-class _AccountIndexState extends State<AccountIndex>
+class _AccountIndexState extends ConsumerState<AccountIndex>
     with TickerProviderStateMixin {
-  //User Account
-
-  final _loggedUser = AccountType().owner;
-
   //form key
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -62,13 +63,22 @@ class _AccountIndexState extends State<AccountIndex>
 
   void _createSlidingController() {
     //add sliding controller of linked accounts
+    //create the controller only when user visit the AccountIndex
 
-    if (_loggedUser.linkedAccounts.isNotEmpty) {
+    final loggedUser = ref.read(authNotifierProvider);
+
+    if (loggedUser == null) {
+      throw ArgumentError.notNull('loggedUser');
+    }
+
+    if (loggedUser.linkedAccounts.isNotEmpty) {
       //if user has linked accounts -> create a controller
       // if target is 5 and current is 2, it will add 3 controllers
-      while (_slidableController.length < _loggedUser.linkedAccounts.length) {
+      while (_slidableController.length < loggedUser.linkedAccounts.length) {
         _slidableController.add(SlidableController(this));
       }
+    } else {
+      debugPrint('Linked accounts is empty');
     }
   }
 
@@ -82,16 +92,14 @@ class _AccountIndexState extends State<AccountIndex>
       for (var i = 0; i < _slidableController.length; i++) {
         _slidableController[i].dispose();
       }
+    } else {
+      debugPrint('Slidable Controller is empty');
     }
   }
 
   // ==================//
   // private methods   //
   // ==================//
-
-  void _closeDialog(BuildContext context) {
-    return Navigator.pop(context);
-  }
 
   Future<dynamic> _buildUnlinkDialogBox(
     BuildContext context,
@@ -103,32 +111,36 @@ class _AccountIndexState extends State<AccountIndex>
       builder: (context) {
         return AlertDialog.adaptive(
           icon: const Icon(Icons.delete),
-          title: const Text('Unlink this account?'),
+          title: Text('Unlink ${linkedAccounts[index].accountName}?'),
           content: const Text(
             'Local transaction history for this account will be removed from this device.',
           ),
           actions: [
             TextButton(
               onPressed: () {
-                _closeDialog(context);
+                context.pop();
               },
               child: const Text('Cancel'),
             ),
             TextButton(
               onPressed: () {
-                var targetContoller = _slidableController.removeAt(index);
-
-                setState(() {
-                  linkedAccounts.removeAt(index);
-                });
-
-                Navigator.pop(context);
-
                 debugPrint('Unlink Triggered');
-                debugPrint(
-                  'Linked Account and its scrollable controller has been removed from the list',
-                );
+                //reference only for debugPrinting
+                final removedAccount = ref
+                    .read(authNotifierProvider)
+                    ?.linkedAccounts[index];
+
+                ref
+                    .watch(authNotifierProvider.notifier)
+                    .removeAccountAtIndex(index);
+
+                final targetContoller = _slidableController.removeAt(index);
+
                 targetContoller.dispose();
+                debugPrint(
+                  'Linked Account (${removedAccount?.accountNumber} / ${removedAccount?.accountNumber} ) and its scrollable controller ($targetContoller) has been removed from the list',
+                );
+                context.pop();
               },
               child: Text('Unlink'),
             ),
@@ -160,24 +172,22 @@ class _AccountIndexState extends State<AccountIndex>
                   spacing: 20,
                   children: [
                     TextFormField(
-                      validator: (value) => _linkAccountService
-                          .validateAccountNameTextField(value),
+                      validator: (value) {
+                        return _linkAccountService.validateAccountNameTextField(
+                          value,
+                        );
+                      },
                       maxLength: 15,
                       controller: _dialogTextfieldController,
                       keyboardType: TextInputType.name,
                       onSaved: (newValue) {
                         if (newValue != null) {
-                          _loggedUser.linkedAccounts[index].accountName =
-                              newValue;
+                          linkedAccounts[index].accountName = newValue;
                         }
                       },
                       onChanged: (value) {
                         setDialogState(() {
-                          if (value.isEmpty) {
-                            _isSaveEnabled = false;
-                          } else {
-                            _isSaveEnabled = true;
-                          }
+                          _isSaveEnabled = value.isNotEmpty;
                         });
                       },
                       decoration: InputDecoration(
@@ -196,7 +206,7 @@ class _AccountIndexState extends State<AccountIndex>
                         TextButton(
                           onPressed: () {
                             //close the dialogbox when the button is pressed
-                            _closeDialog(context);
+                            context.pop();
 
                             Future.delayed(Duration(seconds: 1), () {
                               //clear the textvalue of controller
@@ -214,7 +224,7 @@ class _AccountIndexState extends State<AccountIndex>
                                       //update the LinkedAccount name
                                       _formKey.currentState!.save();
                                       //close the dialogbox after saving
-                                      _closeDialog(context);
+                                      context.pop();
                                       //clear the textvalue of controller
                                       _dialogTextfieldController.clear();
                                       //flip back the boolean to false to make the button disabled again
@@ -242,6 +252,12 @@ class _AccountIndexState extends State<AccountIndex>
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
 
+    final loggedUser = ref.watch(authNotifierProvider);
+
+    if (loggedUser == null) {
+      return DisplayNoData();
+    }
+
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -262,14 +278,18 @@ class _AccountIndexState extends State<AccountIndex>
             const SizedBox(height: 30),
 
             //Outer Container
-            if (_loggedUser.linkedAccounts.isEmpty)
+            if (loggedUser.linkedAccounts.isEmpty)
               SilverDottedBorder(
                 message: Text(
                   'Link your service connection to view bills and check consumption',
                   textAlign: TextAlign.center,
                   style: theme.textTheme.titleMedium,
                 ),
-                button: _buildLinkButton(theme),
+                button: _buildLinkButton(
+                  theme,
+                  context,
+                  loggedUser.linkedAccounts,
+                ),
               )
             else
               //Display linked accounts
@@ -282,7 +302,7 @@ class _AccountIndexState extends State<AccountIndex>
                       children: [
                         Expanded(
                           child: ListView.separated(
-                            itemCount: _loggedUser.linkedAccounts.length,
+                            itemCount: loggedUser.linkedAccounts.length,
                             separatorBuilder: (context, index) => Column(
                               children: [
                                 const Padding(
@@ -306,7 +326,7 @@ class _AccountIndexState extends State<AccountIndex>
                                   borderRadius: BorderRadius.circular(13.0),
                                 ),
                                 child: _buildSlider(
-                                  linkedAccounts: _loggedUser.linkedAccounts,
+                                  linkedAccounts: loggedUser.linkedAccounts,
                                   index: index,
                                   theme: theme,
                                 ),
@@ -314,7 +334,11 @@ class _AccountIndexState extends State<AccountIndex>
                             },
                           ),
                         ),
-                        _buildLinkButton(theme),
+                        _buildLinkButton(
+                          theme,
+                          context,
+                          loggedUser.linkedAccounts,
+                        ),
                       ],
                     ),
                   ),
@@ -342,8 +366,9 @@ class _AccountIndexState extends State<AccountIndex>
         motion: const ScrollMotion(),
         children: [
           SlidableAction(
+            key: ValueKey(linkedAccounts[index].accountNumber),
             onPressed: (context) {
-              _buildUnlinkDialogBox(context, index, _loggedUser.linkedAccounts);
+              _buildUnlinkDialogBox(context, index, linkedAccounts);
             },
             backgroundColor: const Color(0xFFC50014),
             foregroundColor: theme.colorScheme.onSecondary,
@@ -352,15 +377,8 @@ class _AccountIndexState extends State<AccountIndex>
           ),
           SlidableAction(
             onPressed: (context) {
-              setState(() {
-                //build dialog
-                _buildEditDialogBox(
-                  context,
-                  index,
-                  _loggedUser.linkedAccounts,
-                  theme,
-                );
-              });
+              //build dialog
+              _buildEditDialogBox(context, index, linkedAccounts, theme);
             },
             backgroundColor: const Color(0xFF0392CF),
             foregroundColor: theme.colorScheme.onSecondary,
@@ -377,29 +395,32 @@ class _AccountIndexState extends State<AccountIndex>
               child: GestureDetector(
                 onTap: () async {
                   //Push to AccountInformationPage and return a triggerable String stored in result variable
-                  final result = await Navigator.pushNamed(
-                    context,
+                  final result = await context.push(
                     '/accountinformation',
-                    arguments: _loggedUser.linkedAccounts[index],
+                    extra: linkedAccounts[index],
                   );
-
-                  //dispose the current Linked Account controller
-                  final targetController = _slidableController.removeAt(index);
 
                   //When the Account Information Page pressed the delete button it will return
                   //a 'delete string to a variable result'
                   //if the condition is met this will delete the current linked account on the list , the slidable controller on the list
                   //and dispose the controller that has been removed from the SlidableController
-                  if (result == 'delete') {
-                    debugPrint('Delete Triggered');
-                    setState(() {
-                      //removed the target UserLinked LinkedAccount
-                      _loggedUser.linkedAccounts.removeAt(index);
+                  if (result == CustomAction.delete) {
+                    debugPrint(
+                      'Custom Action ${CustomAction.delete.value} is Triggered',
+                    );
 
-                      //after it successfully the item on the list and dipose the controller
-                      //the List of LinkedAccount length and the Slidable Controller will be updated
-                    });
+                    //removed the target UserLinked LinkedAccount
+                    ref
+                        .read(authNotifierProvider.notifier)
+                        .removeAccountAtIndex(index);
 
+                    //dispose the current Linked Account controller
+                    final targetController = _slidableController.removeAt(
+                      index,
+                    );
+
+                    //after it successfully removed the item on the list and dipose the controller
+                    //the List of LinkedAccount length and the Slidable Controller will be updated
                     targetController.dispose();
                   }
                 },
@@ -417,9 +438,8 @@ class _AccountIndexState extends State<AccountIndex>
                         children: [
                           Text(
                             _maskingService.formatAccountNumber(
-                              accountNumber: _loggedUser
-                                  .linkedAccounts[index]
-                                  .accountNumber,
+                              accountNumber:
+                                  linkedAccounts[index].accountNumber,
                             ),
                             style: theme.textTheme.titleLarge,
                           ),
@@ -459,15 +479,20 @@ class _AccountIndexState extends State<AccountIndex>
     );
   }
 
-  Widget _buildLinkButton(ThemeData theme) {
+  Widget _buildLinkButton(
+    ThemeData theme,
+    BuildContext context,
+    List<WaterAccount> linkedAccounts,
+  ) {
     return Align(
-      alignment: _loggedUser.linkedAccounts.isEmpty
+      alignment: linkedAccounts.isEmpty
           ? Alignment.center
           : Alignment.centerRight,
       child: FilledButton.icon(
         onPressed: () async {
           //wait for the user to finish linking account
-          await Navigator.pushNamed(context, '/linkaccount');
+          // await Navigator.pushNamed(context, '/linkaccount');
+          await context.push('/linkaccount');
 
           //when the user press back, rebuild the page and create sliding controller
           setState(() {

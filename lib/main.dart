@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:myapp/data-class/user_account.dart';
+import 'package:myapp/data-class/water_account.dart';
 import 'package:myapp/pages/00-How-to/get_started_page.dart';
 import 'package:myapp/pages/00-How-to/guide_page.dart';
 
@@ -44,14 +47,16 @@ void main() async {
 class CalambaWaterDistrict extends StatelessWidget {
   const CalambaWaterDistrict({super.key});
 
+  //router
+
   @override
   Widget build(BuildContext context) {
     //Figma Design System
-    final DesignSystem designSystem = DesignSystem();
+    final designSystem = DesignSystem();
     final designSystemColor = designSystem.themeColor();
     final designSystemTypography = designSystem.themeTypography();
 
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'Calamba Water District Unofficial Demo App',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -66,43 +71,139 @@ class CalambaWaterDistrict extends StatelessWidget {
         textTheme: designSystemTypography,
         colorScheme: designSystemColor,
       ),
-      initialRoute: '/home',
-      routes: {
-        //how-to
-        '/getstarted': (context) => const GetStartedPage(),
-        '/guide': (context) => const GuidePage(),
-        //login
-        '/login': (context) => const LoginPage(),
-        //Sign up page
-        '/signup': (context) => const SignupPage(),
-        '/accountverification': (context) => const AccountVerificationPage(),
-        '/signupresult': (context) => const RegisterResultPage(),
-        //Forgot password page
-        '/forgotpassword': (context) => const ForgotPasswordPage(),
-        '/forgotpasswordresult': (context) => const RecoveryResultPage(),
-        //Boarding page
-        '/boarding': (context) => const BoardingPageOne(),
-        //Home Index
-        '/home': (context) => const HomePage(),
-        //News Index
-        '/newscontent': (context) => const NewsContentPage(),
-        //Account Index
-        '/linkaccount': (context) => const LinkAccountPage(),
-        '/accountinformation': (context) => const AccountInformationPage(),
-        '/billing': (context) => const BillingPage(),
-        '/billingcontent': (context) => const BillingContentPage(),
-        '/receipt': (context) => const ReceiptPage(),
-        '/receiptcontent': (context) => const ReceiptContentPage(), //pending
-        '/payment': (context) => const PaymentPage(),
-        '/paymentconfirmation': (context) => PaymentConfirmation(),
-        '/paymentresult': (context) => const PaymentResultPage(),
-        '/ticket': (context) => const TicketPage(),
-        '/ticketcontent': (context) => const TicketContent(),
-        //Support Index
-        '/support': (context) => const SupportIndex(),
-        '/supportresult': (context) => const SupportResultPage(),
-        '/supportemailresult': (context) => const SupportEmailResultPage(),
-      },
+      routerConfig: _router,
     );
   }
 }
+
+//Go Router Config
+final _router = GoRouter(
+  debugLogDiagnostics: true,
+  initialLocation: '/home',
+  routes: [
+    // Intro - Child Route
+    GoRoute(
+      path: '/getstarted',
+      builder: (context, state) => const GetStartedPage(),
+      routes: [
+        GoRoute(path: 'guide', builder: (context, state) => const GuidePage()),
+      ],
+    ),
+
+    // Authentication - Child Route
+    GoRoute(
+      path: '/', // Kept as /login to match your redirect logic
+      builder: (context, state) => const LoginPage(),
+      routes: [
+        //Sign up
+        GoRoute(
+          path: 'signup',
+          builder: (context, state) => const SignupPage(),
+          routes: [
+            GoRoute(
+              path: 'accountverification',
+              builder: (context, state) {
+                final data = state.extra as UserAccount?;
+
+                return AccountVerificationPage(newUser: data);
+              },
+              routes: [
+                GoRoute(
+                  path: 'result',
+                  builder: (context, state) => const RegisterResultPage(),
+                ),
+              ],
+            ),
+          ],
+        ),
+        // Forgot Password
+        GoRoute(
+          path: 'forgotpassword',
+          builder: (context, state) => const ForgotPasswordPage(),
+          routes: [
+            GoRoute(
+              path: 'recovery',
+              builder: (context, state) {
+                final data = state.extra as String?;
+
+                return RecoveryResultPage(emailToReset: data);
+              },
+            ),
+          ],
+        ),
+        //boarding
+        GoRoute(
+          path: '/boarding',
+          builder: (context, state) => const BoardingPageOne(),
+        ),
+      ],
+    ),
+
+    // Home (indexes) & Core Content
+    GoRoute(path: '/home', builder: (context, state) => const HomePage()),
+
+    //push linkaccount only because of AccountIndex _buildLinkButton async method
+    GoRoute(
+      path: '/linkaccount',
+      builder: (context, state) => const LinkAccountPage(),
+    ),
+
+    GoRoute(
+      path: '/accountinformation',
+      builder: (context, state) {
+        final data = state.extra as WaterAccount?;
+
+        return AccountInformationPage(linkedAccount: data);
+      },
+    ),
+
+    GoRoute(
+      path: '/newscontent',
+      builder: (context, state) => const NewsContentPage(),
+    ),
+
+    // Billing & Receipts
+    GoRoute(path: '/billing', builder: (context, state) => const BillingPage()),
+    GoRoute(
+      path: '/billingcontent',
+      builder: (context, state) => const BillingContentPage(),
+    ),
+    GoRoute(path: '/receipt', builder: (context, state) => const ReceiptPage()),
+    GoRoute(
+      path: '/receiptcontent',
+      builder: (context, state) => const ReceiptContentPage(),
+    ),
+
+    // Payments
+    GoRoute(path: '/payment', builder: (context, state) => const PaymentPage()),
+    GoRoute(
+      path: '/paymentconfirmation',
+      builder: (context, state) => const PaymentConfirmation(),
+    ),
+    GoRoute(
+      path: '/paymentresult',
+      builder: (context, state) => const PaymentResultPage(),
+    ),
+
+    // Tickets
+    GoRoute(path: '/ticket', builder: (context, state) => const TicketPage()),
+    GoRoute(
+      path: '/ticketcontent',
+      builder: (context, state) => const TicketContent(),
+    ),
+
+    // Support
+    GoRoute(
+      path: '/support',
+      builder: (context, state) => const SupportIndex(),
+    ),
+    GoRoute(
+      path: '/supportresult',
+      builder: (context, state) => const SupportResultPage(),
+    ),
+    GoRoute(
+      path: '/supportemailresult',
+      builder: (context, state) => const SupportEmailResultPage(),
+    ),
+  ],
+);

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:myapp/custom-widgets/headline.dart';
 import 'package:myapp/custom-widgets/primary_button.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -61,8 +62,6 @@ class _SignupPageState extends ConsumerState<SignupPage> {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
 
-    //providers
-    final accountDb = ref.watch(accountNotifierProvider);
     return Scaffold(
       backgroundColor: theme.colorScheme.surface,
       appBar: AppBar(title: const Text('Sign up')),
@@ -203,10 +202,9 @@ class _SignupPageState extends ConsumerState<SignupPage> {
                           [],
                         );
 
-                        Navigator.pushNamed(
-                          context,
-                          '/accountverification',
-                          arguments: newUser,
+                        context.go(
+                          '/signup/accountverification',
+                          extra: newUser,
                         );
                       }
                     },

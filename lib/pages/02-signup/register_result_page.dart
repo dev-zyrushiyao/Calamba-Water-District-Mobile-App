@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:myapp/custom-widgets/primary_button.dart';
 
 class RegisterResultPage extends StatelessWidget {
@@ -40,11 +41,7 @@ class RegisterResultPage extends StatelessWidget {
                   PrimaryButton(
                     label: 'Login to get started',
                     onPressed: () {
-                      Navigator.pushNamedAndRemoveUntil(
-                        context,
-                        '/login',
-                        (route) => false,
-                      );
+                      context.go('/');
                     },
                   ),
                 ],

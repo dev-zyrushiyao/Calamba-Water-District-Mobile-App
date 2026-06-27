@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:myapp/custom-widgets/headline.dart';
 import 'package:myapp/custom-widgets/primary_button.dart';
 import 'package:myapp/data-class/user_account.dart';
@@ -60,18 +61,22 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
               PrimaryButton(
                 label: 'Reset Password',
                 onPressed: () async {
+                  FocusScope.of(context).unfocus();
+
                   if (_formKey.currentState!.validate()) {
                     _formKey.currentState!.save();
 
                     await Future.delayed(Duration(seconds: 1), () {});
 
+                    //guard clause
                     if (!context.mounted) return;
 
-                    if (searchedUser != null) {
-                      Navigator.pushNamed(
-                        context,
-                        '/forgotpasswordresult',
-                        arguments: searchedUser?.email,
+                    final emailToReset = searchedUser?.email;
+
+                    if (emailToReset != null) {
+                      context.go(
+                        '/forgotpassword/recovery',
+                        extra: emailToReset,
                       );
                     } else {
                       throw ArgumentError(

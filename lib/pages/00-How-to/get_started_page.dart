@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:myapp/custom-widgets/primary_button.dart';
 
 class GetStartedPage extends StatelessWidget {
@@ -65,8 +66,7 @@ class GetStartedPage extends StatelessWidget {
               PrimaryButton(
                 label: 'Next',
                 width: double.infinity,
-                onPressed: () =>
-                    Navigator.pushReplacementNamed(context, '/guide'),
+                onPressed: () => context.go('/getstarted/guide'),
               ),
             ],
           ),

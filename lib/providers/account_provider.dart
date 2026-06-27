@@ -41,9 +41,9 @@ class AccountNotifier extends Notifier<Set<UserAccount>> {
       state = {...state, userAccount};
     } else {
       throw ArgumentError.value(
-        'ERR-1000',
-        'Email Registration Error',
-        'The email used is not available',
+        userAccount.email,
+        'UserAccount userAccount',
+        'The email used is not available (ERR-A1000)',
       );
     }
   }

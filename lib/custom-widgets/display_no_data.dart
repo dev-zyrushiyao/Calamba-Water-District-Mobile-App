@@ -4,10 +4,16 @@ class DisplayNoData extends StatefulWidget {
   const DisplayNoData({super.key});
 
   @override
-  State<DisplayNoData> createState() => _MyWidgetState();
+  State<DisplayNoData> createState() => _DisplayNoData();
 }
 
-class _MyWidgetState extends State<DisplayNoData> {
+class _DisplayNoData extends State<DisplayNoData> {
+  @override
+  void initState() {
+    super.initState();
+    throw ArgumentError.notNull('data/loggedUser');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:myapp/custom-widgets/dashboard_account.dart';
 import 'package:myapp/custom-widgets/display_no_data.dart';
 import 'package:myapp/custom-widgets/headline.dart';
 import 'package:myapp/custom-widgets/primary_button.dart';
 import 'package:myapp/custom-widgets/silver_dotted_border.dart';
+import 'package:myapp/data-class/constants/custom_action_enum.dart';
 import 'package:myapp/providers/auth_provider.dart';
 
 class HomeIndex extends ConsumerStatefulWidget {
@@ -16,6 +18,11 @@ class HomeIndex extends ConsumerStatefulWidget {
 }
 
 class _HomeIndexState extends ConsumerState<HomeIndex> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
@@ -62,6 +69,8 @@ class _HomeIndexState extends ConsumerState<HomeIndex> {
             if (loggedUser.linkedAccounts.isNotEmpty)
               Expanded(
                 child: ListView.separated(
+                  physics: const ClampingScrollPhysics(),
+                  padding: EdgeInsets.only(bottom: 50.0),
                   separatorBuilder: (context, index) =>
                       const SizedBox(height: 26),
                   itemCount: loggedUser.linkedAccounts.length,
@@ -74,25 +83,18 @@ class _HomeIndexState extends ConsumerState<HomeIndex> {
                         height: 43,
                         onPressed: () async {
                           //Push to AccountInformationPage and return a triggerable String stored in result variable
-                          final result = await Navigator.pushNamed(
-                            context,
+                          final result = await context.push(
                             '/accountinformation',
-                            arguments: loggedUser.linkedAccounts[index],
+                            extra: loggedUser.linkedAccounts[index],
                           );
 
                           //When the Account Information Page pressed the delete button it will return
-                          //a 'delete string to a variable result'
-                          //if the condition is met this will delete the current linked account on the list , the slidable controller on the list
-                          //and dispose the controller that has been removed from the SlidableController
-                          if (result == 'delete') {
-                            setState(() {
-                              //removed the target UserLinked LinkedAccount
-                              loggedUser.linkedAccounts.removeAt(index);
-                            });
-                          } else {
-                            //refresh the page when the user get back from
-                            //AccountInformationPage to HomeIndex if linked account is not deleted
-                            setState(() {});
+                          //returns enum to a variable result'
+                          //if the condition is met this will delete the current linked account on the list
+                          if (result == CustomAction.delete) {
+                            ref
+                                .read(authNotifierProvider.notifier)
+                                .removeAccountAtIndex(index);
                           }
                         },
                       ),

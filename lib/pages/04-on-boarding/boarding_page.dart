@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:myapp/custom-widgets/boarding_caption.dart';
 import 'package:myapp/custom-widgets/primary_button.dart';
 import 'package:myapp/custom-shapes/scoop_border.dart';
@@ -103,7 +104,7 @@ class _BoardingPageOneState extends State<BoardingPageOne> {
                       });
                     } else {
                       setState(() {
-                        Navigator.popAndPushNamed(context, '/home');
+                        context.go('/home');
                       });
                     }
                   },

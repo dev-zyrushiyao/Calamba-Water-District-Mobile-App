@@ -2,12 +2,11 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:myapp/custom-widgets/secondary_button.dart';
-import 'package:myapp/data-bank/account_collection.dart';
 import 'package:myapp/data-bank/account_type.dart';
 import 'package:myapp/data-class/user_account.dart';
-import 'package:myapp/providers/account_provider.dart';
 import 'package:myapp/providers/auth_provider.dart';
 import '../../design-system/design_system.dart'; //home-widget
 
@@ -26,10 +25,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
   //Password character
   bool _isHidden = true;
-
-  //Account simulation DB
-  final AccountCollection _accountCollection = AccountCollection();
-  final AccountType _accountType = AccountType();
 
   //validation
   bool? _loginResult;
@@ -55,7 +50,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   )
   Future<void> loggedTheUser(UserAccount account) async {
     //Direct change values
-    _accountType.owner = account;
+
+    final AccountType accountType = AccountType();
+    accountType.owner = account;
   }
 
   @override
@@ -109,7 +106,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                       width: _textFieldWidth,
                       child: GestureDetector(
                         onTap: () {
-                          Navigator.pushNamed(context, '/forgotpassword');
+                          setState(() {
+                            _loginResult = null;
+                          });
+                          context.go('/forgotpassword');
                         },
                         child: _buildForgotPasswordText(theme),
                       ),
@@ -135,7 +135,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                           });
 
                           if (!context.mounted) return;
-                          Navigator.popAndPushNamed(context, '/boarding');
+                          context.go('/boarding');
                         } else {
                           setState(() {
                             debugPrint(
@@ -159,7 +159,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
                     const SizedBox(height: 10),
 
-                    _buildSignupTextSpan(theme),
+                    _buildSignupTextSpan(theme, context),
 
                     Column(
                       children: [
@@ -183,7 +183,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     );
   }
 
-  Widget _buildSignupTextSpan(ThemeData theme) {
+  Widget _buildSignupTextSpan(ThemeData theme, BuildContext context) {
     return Text.rich(
       TextSpan(
         style: theme.textTheme.labelSmall,
@@ -200,7 +200,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             ),
             recognizer: TapGestureRecognizer()
               ..onTap = () {
-                Navigator.pushNamed(context, '/signup');
+                setState(() {
+                  _loginResult = null;
+                });
+                context.go('/signup');
               },
             text: 'Sign Up',
           ),

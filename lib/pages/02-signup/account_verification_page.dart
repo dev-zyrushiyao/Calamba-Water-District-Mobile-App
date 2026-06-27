@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:myapp/custom-widgets/display_no_data.dart';
 import 'package:myapp/custom-widgets/headline.dart';
 import 'package:myapp/custom-widgets/primary_button.dart';
@@ -9,7 +10,10 @@ import 'package:myapp/data-class/user_account.dart';
 import 'package:myapp/providers/account_provider.dart';
 
 class AccountVerificationPage extends ConsumerStatefulWidget {
-  const AccountVerificationPage({super.key});
+  const AccountVerificationPage({super.key, this.newUser});
+
+  //object passed through GoRoute
+  final UserAccount? newUser;
 
   @override
   ConsumerState<AccountVerificationPage> createState() =>
@@ -94,7 +98,9 @@ class _AccountVerificationPageState
     //provider
     // final accountDb = ref.watch(accountNotifierProvider);
 
-    final data = ModalRoute.of(context)?.settings.arguments as UserAccount?;
+    final data = widget.newUser;
+
+    debugPrint('${widget.newUser}');
 
     if (data == null) {
       return DisplayNoData();
@@ -167,7 +173,7 @@ class _AccountVerificationPageState
                               .registerUser(data);
 
                           if (!context.mounted) return;
-                          Navigator.pushNamed(context, '/signupresult');
+                          context.go('/signup/accountverification/result');
                         }
                       : null,
                 ),

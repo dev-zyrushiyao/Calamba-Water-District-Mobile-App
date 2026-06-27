@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:myapp/custom-widgets/display_no_data.dart';
 import 'package:myapp/custom-widgets/primary_button.dart';
 import 'package:myapp/services/masking_service.dart';
 
 class RecoveryResultPage extends StatelessWidget {
-  const RecoveryResultPage({super.key});
+  const RecoveryResultPage({super.key, required this.emailToReset});
+
+  final String? emailToReset;
 
   static const List<String> passwordMask = ["*", "*", "*", "*"];
 
@@ -13,7 +16,7 @@ class RecoveryResultPage extends StatelessWidget {
     final ThemeData theme = Theme.of(context);
     final MaskingService maskingService = MaskingService();
 
-    final data = ModalRoute.of(context)?.settings.arguments as String?;
+    final data = emailToReset;
 
     if (data == null) {
       return DisplayNoData();
@@ -109,10 +112,7 @@ class RecoveryResultPage extends StatelessWidget {
                   PrimaryButton(
                     label: 'Go back to Login',
                     onPressed: () {
-                      Navigator.popUntil(
-                        context,
-                        ModalRoute.withName('/login'),
-                      );
+                      context.go('/');
                     },
                   ),
                 ],

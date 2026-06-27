@@ -1,28 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'dart:async';
 import 'package:morphable_shape/morphable_shape.dart';
 import 'package:myapp/custom-shapes/morphing-shapes/morph_shape.dart';
 import 'package:myapp/custom-widgets/colored_container.dart';
+import 'package:myapp/custom-widgets/custom_text_alert.dart';
 
 import 'package:myapp/custom-widgets/headline.dart';
 import 'package:myapp/custom-widgets/primary_button.dart';
-import 'package:myapp/data-bank/account_type.dart';
+import 'package:myapp/providers/auth_provider.dart';
 
 import 'package:myapp/services/link_account_service.dart';
 import 'package:myapp/services/user_interface_service.dart';
 
-class LinkAccountPage extends StatefulWidget {
+class LinkAccountPage extends ConsumerStatefulWidget {
   const LinkAccountPage({super.key});
 
   @override
-  State<LinkAccountPage> createState() => _LinkAccountPageState();
+  ConsumerState<LinkAccountPage> createState() => _LinkAccountPageState();
 }
 
-class _LinkAccountPageState extends State<LinkAccountPage>
+class _LinkAccountPageState extends ConsumerState<LinkAccountPage>
     with SingleTickerProviderStateMixin {
-  //User
-  final _loggedUser = AccountType().owner;
-
   //Service
   final LinkAccountService _linkAccountService = LinkAccountService();
   final UserInterfaceService _userInterfaceService = UserInterfaceService();
@@ -34,8 +34,8 @@ class _LinkAccountPageState extends State<LinkAccountPage>
 
   //Map to store the form to transfer for userObject after the linking process finish
   final Map<String, dynamic> _linkedAccountForm = {
-    'accountNumber': '',
-    'accountName': '',
+    'accountNumber': null,
+    'accountName': null,
   };
 
   //Account Link checker
@@ -117,9 +117,7 @@ class _LinkAccountPageState extends State<LinkAccountPage>
         timer.cancel();
         _dotTimer = null;
       } else {
-        setState(() {
-          _loadingTextAnimation();
-        });
+        _loadingTextAnimation();
       }
     });
   }
@@ -154,32 +152,36 @@ class _LinkAccountPageState extends State<LinkAccountPage>
   }
 
   void _accountDuplicationChecker() {
-    for (var account in _loggedUser.linkedAccounts) {
-      if (account.accountNumber ==
-          int.tryParse(_accountNumberController.text)) {
-        setState(() {
-          _isAccountAlreadyOnList = true;
-        });
-        break;
-      } else {
-        setState(() {
-          _isAccountAlreadyOnList = false;
-        });
-      }
+    final loggedUser = ref.read(authNotifierProvider);
+
+    if (loggedUser == null) {
+      throw ArgumentError.notNull('loggedUser');
     }
+
+    final inputNumber = int.tryParse(_accountNumberController.text);
+
+    bool isExist = loggedUser.linkedAccounts.any((account) {
+      return account.accountNumber == inputNumber ? true : false;
+    });
+
+    setState(() {
+      _isAccountAlreadyOnList = isExist;
+    });
   }
 
   void _accountMaxLimitChecker() {
-    if (_loggedUser.linkedAccounts.length == _maxAccountToLink) {
-      debugPrint('NOTE: ACCOUNT LIKED IS FULL');
-      setState(() {
-        _isAccountLinkedFull = true;
-      });
-    } else {
-      setState(() {
-        _isAccountLinkedFull = false;
-      });
+    final loggedUser = ref.read(authNotifierProvider);
+
+    if (loggedUser == null) {
+      throw ArgumentError.notNull('loggedUser');
     }
+
+    //check if the length of the linked account reach the maximum limit
+    bool isFull = loggedUser.linkedAccounts.length == _maxAccountToLink;
+
+    setState(() {
+      _isAccountLinkedFull = isFull;
+    });
   }
 
   void _clearTextController() {
@@ -190,6 +192,12 @@ class _LinkAccountPageState extends State<LinkAccountPage>
   //link account process simulation function
   Future<void> _startLinkingProcess() async {
     if (!mounted) return;
+
+    final loggedUser = ref.read(authNotifierProvider);
+
+    if (loggedUser == null) {
+      throw ArgumentError.notNull('loggedUser');
+    }
 
     //refresh back to default value when the user try to link another account.
     setState(() {
@@ -215,19 +223,35 @@ class _LinkAccountPageState extends State<LinkAccountPage>
           //if the validation is passed and the linking process is finished save the form values
           //values will be saved temporary on a map
           _formKey.currentState?.save();
-          debugPrint('Linking process is finished!');
 
-          //Save User Input to the User Linked Account
-          _linkAccountService.createLinkAccount(
-            _loggedUser,
-            _linkedAccountForm,
+          bool hasNullValue = _linkedAccountForm.entries.any(
+            (item) => item.value == null,
           );
+
+          if (!hasNullValue) {
+            //create a new WaterAccount
+            final newLinkedAccount = _linkAccountService.createLinkAccount(
+              _linkedAccountForm,
+            );
+
+            ref
+                .read(authNotifierProvider.notifier)
+                .addLinkedAccount(newLinkedAccount);
+
+            debugPrint('Linking process is finished!');
+          } else {
+            throw ArgumentError.value(
+              '$hasNullValue',
+              'bool fromHasValue',
+              'Error LinkedAccountForm has a null value (ERR-A1001)',
+            );
+          }
 
           //clears the value of the textfield after saving the information
           _clearTextController();
 
           //remove the modal after the process is finished
-          Navigator.pop(context);
+          context.pop();
 
           //shows snackbar to inform the user about status of the action
           _userInterfaceService.showCustomSnackbar(
@@ -269,6 +293,9 @@ class _LinkAccountPageState extends State<LinkAccountPage>
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
+
+    final _ = ref.watch(authNotifierProvider);
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -307,6 +334,7 @@ class _LinkAccountPageState extends State<LinkAccountPage>
                         child: Column(
                           children: [
                             _buildAccountNumberTextField(theme),
+                            SizedBox(height: 20),
                             _buildAccountNameTextField(theme),
 
                             _buildLinkAlert(),
@@ -358,28 +386,18 @@ class _LinkAccountPageState extends State<LinkAccountPage>
   // PRIVATE UI HELPER METHODS //
   // ==========================//
 
-  Widget _buildTextAlert({required String message}) {
-    return Container(
-      alignment: Alignment.centerLeft,
-      child: Text(
-        message,
-        style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
-      ),
-    );
-  }
-
   Widget _buildLinkAlert() {
     return SizedBox(
       child: _isAccountAlreadyOnList && _isAccountLinkedFull
-          ? _buildTextAlert(
+          ? CustomTextAlert(
               message:
                   '• The account exist in your list. \n'
                   '• You have reached the maximum number of linked service connections.',
             )
           : _isAccountAlreadyOnList
-          ? _buildTextAlert(message: '• The account exist in your list')
+          ? CustomTextAlert(message: '• The account exist in your list')
           : _isAccountLinkedFull
-          ? _buildTextAlert(
+          ? CustomTextAlert(
               message:
                   '• You have reached the maximum number of linked service connections.',
             )

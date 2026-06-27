@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:myapp/pages/05-home-page/index/account/account_index.dart';
 import 'package:myapp/pages/05-home-page/index/home_index.dart';
 import 'package:myapp/pages/05-home-page/index/news_index.dart';
 import 'package:myapp/pages/05-home-page/index/profile_index.dart';
 import 'package:myapp/pages/05-home-page/index/support/support_index.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  ConsumerState<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends ConsumerState<HomePage> {
   int _currentPageIndex = 0;
 
   @override
@@ -25,11 +27,11 @@ class _HomePageState extends State<HomePage> {
     final themeData = Theme.of(context);
 
     final List<Widget> pages = [
-      HomeIndex(),
-      NewsIndex(),
-      AccountIndex(),
-      SupportIndex(),
-      ProfileIndex(),
+      const HomeIndex(),
+      const NewsIndex(),
+      const AccountIndex(),
+      const SupportIndex(),
+      const ProfileIndex(),
     ];
 
     return Scaffold(
@@ -38,8 +40,7 @@ class _HomePageState extends State<HomePage> {
           ? null
           : FloatingActionButton(
               onPressed: () async {
-                await Navigator.pushNamed(context, '/linkaccount');
-                setState(() {});
+                await context.push('/linkaccount');
               },
               backgroundColor: themeData.colorScheme.secondaryContainer,
               shape: const CircleBorder(),

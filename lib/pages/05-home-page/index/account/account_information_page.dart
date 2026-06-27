@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:myapp/custom-widgets/display_no_data.dart';
 import 'package:myapp/custom-widgets/headline.dart';
 import 'package:myapp/custom-widgets/primary_button.dart';
 import 'package:myapp/custom-widgets/secondary_button.dart';
 import 'package:myapp/custom-widgets/secondary_button_outlined.dart';
 import 'package:myapp/custom-widgets/status_indicator.dart';
+import 'package:myapp/data-class/constants/custom_action_enum.dart';
+
 import 'package:myapp/data-class/water_account.dart';
 
 class AccountInformationPage extends StatelessWidget {
-  const AccountInformationPage({super.key});
+  const AccountInformationPage({super.key, required this.linkedAccount});
+
+  final WaterAccount? linkedAccount;
 
   void _buildDialog(BuildContext context) {
     showDialog(
@@ -23,7 +28,7 @@ class AccountInformationPage extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.pop(dialogBoxContext);
+                context.pop();
               },
               child: const Text('Cancel'),
             ),
@@ -32,10 +37,12 @@ class AccountInformationPage extends StatelessWidget {
                 //When the user tap the Delete icon
                 //Destroy the Dialogbox
                 //Destroy the current page (account information)
-                //return a 'delete' string that will be triggered from
+                //return a CustomAction enum that will be triggered from
                 //AccountIndex _buildSlider() Guesture Detector onTap () async to delete the WaterAccount data
-                Navigator.pop(dialogBoxContext);
-                Navigator.pop(context, 'delete');
+
+                context.pop();
+                Future.delayed(Duration(seconds: 1), () {});
+                context.pop(CustomAction.delete);
               },
               child: const Text('Unlink'),
             ),
@@ -51,7 +58,7 @@ class AccountInformationPage extends StatelessWidget {
     //Philippine Peso sign
     final String currencySign = '\u20B1';
     //Data passed through Account Index to Account InformationPage
-    final data = ModalRoute.of(context)?.settings.arguments as WaterAccount?;
+    final data = linkedAccount;
 
     if (data == null) {
       return DisplayNoData();

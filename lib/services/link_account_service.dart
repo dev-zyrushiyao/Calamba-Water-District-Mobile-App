@@ -1,10 +1,8 @@
 import 'dart:math';
 
-import 'package:myapp/data-bank/account_collection.dart';
 import 'package:myapp/data-class/bill.dart';
 import 'package:myapp/data-class/constants/month_enum.dart';
 import 'package:myapp/data-class/constants/water_account_status_enum.dart';
-import 'package:myapp/data-class/user_account.dart' show UserAccount;
 import 'package:myapp/data-class/water_account.dart' show WaterAccount;
 
 class LinkAccountService {
@@ -127,7 +125,6 @@ class LinkAccountService {
 
   //generateBill for a year (12 items)
   List<Bill>? generateBill(
-    UserAccount loggedUser,
     Map<String, dynamic> linkedAccountForm,
     int generatedDueDay,
   ) {
@@ -208,8 +205,8 @@ class LinkAccountService {
     return billList;
   }
 
-  void createLinkAccount(
-    UserAccount loggedUser,
+  WaterAccount createLinkAccount(
+    // UserAccount loggedUser,
     Map<String, dynamic> linkedAccountForm,
   ) {
     int generatedDueDay = generateNumber<int>(minValue: 1, maxValue: 30);
@@ -221,29 +218,27 @@ class LinkAccountService {
 
     //store the map values to the UserObject water account to simulate database saving (one to many relationship)
     //add to the linkedaccount list of UserObject (Owner/Currently Logged in User)
-    loggedUser.linkedAccounts.add(
-      WaterAccount(
-        accountNumber: linkedAccountForm['accountNumber'],
-        accountName: linkedAccountForm['accountName'],
-        isActive: WaterAccountStatus.active, //default value
-        previousBill: generateNumber<double>(minValue: 150, maxValue: 700),
-        lastReading: generatedPreviousReading,
-        dueDay: generatedDueDay,
-        remainingDayDue: totalDaysOfMonth - generatedDueDay,
-        balance: generateNumber<double>(minValue: 150, maxValue: 900),
-        bill:
-            generateBill(loggedUser, linkedAccountForm, generatedDueDay) ??
-            [], // if the generateBill method fails to fire it will produce an empty instance of a list and not a null value for the bill property
-        receipt: [],
-        ticket: [],
-      ),
+    return WaterAccount(
+      accountNumber: linkedAccountForm['accountNumber'],
+      accountName: linkedAccountForm['accountName'],
+      isActive: WaterAccountStatus.active, //default value
+      previousBill: generateNumber<double>(minValue: 150, maxValue: 700),
+      lastReading: generatedPreviousReading,
+      dueDay: generatedDueDay,
+      remainingDayDue: totalDaysOfMonth - generatedDueDay,
+      balance: generateNumber<double>(minValue: 150, maxValue: 900),
+      bill:
+          generateBill(linkedAccountForm, generatedDueDay) ??
+          [], // if the generateBill method fails to fire it will produce an empty instance of a list and not a null value for the bill property
+      receipt: [],
+      ticket: [],
     );
 
     //updates the LinkedAccount of AccountDb
-    for (var account in AccountCollection().accountDb) {
-      if (account.email == loggedUser.email) {
-        account.linkedAccounts = loggedUser.linkedAccounts;
-      }
-    }
+    // for (var account in AccountCollection().accountDb) {
+    //   if (account.email == loggedUser.email) {
+    //     account.linkedAccounts = loggedUser.linkedAccounts;
+    //   }
+    // }
   }
 }

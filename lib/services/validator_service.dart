@@ -69,27 +69,6 @@ class ValidatorService {
 
     const emailMinimumLength = 5;
 
-    //added UserAccount? because this method is also used in SignUp Page
-    //where the UserAccount does not exist yet
-    //Parameter UserAccount is optional
-    //if loggedUser exist and email of user is different from the textfield
-    //proceed to verify the account
-    //then proceed the validation for saving
-    //else if loggedUser exist and same value in the textfield email , skip verifyAccount()
-    //then just proceed to the rest of validation.
-    // if (userAccount != null) {
-    //   // if (userAccount.email != value) {
-    //   //   //if user update its nickname this will prevent it from doing email check
-    //   //   isEmailExist = accounts?.any((account) => account.email == value);
-    //   //   print('VALIDATION TRUE');
-    //   // } else {
-    //   //   isEmailExist = false;
-    //   //   print('isEmailExist: $isEmailExist');
-    //   // }
-
-    //   if (userAccount.email == value) {}
-    // }
-
     return (value == null || value.isEmpty)
         ? 'Email is required'
         : (isUserAccountExist == true)

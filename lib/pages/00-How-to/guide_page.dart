@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:myapp/custom-widgets/primary_button.dart';
 
 class GuidePage extends StatefulWidget {
@@ -70,8 +71,7 @@ class _MyWidgetState extends State<GuidePage> {
               PrimaryButton(
                 label: 'Proceed to App',
                 width: double.infinity,
-                onPressed: () =>
-                    Navigator.pushReplacementNamed(context, '/login'),
+                onPressed: () => context.go('/'),
               ),
             ],
           ),

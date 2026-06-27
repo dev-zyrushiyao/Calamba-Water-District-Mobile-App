@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:myapp/data-class/constants/gender_enum.dart';
 import 'package:myapp/data-class/user_account.dart';
+import 'package:myapp/data-class/water_account.dart';
 import 'package:myapp/providers/account_provider.dart';
 
 class AuthNotifier extends Notifier<UserAccount?> {
@@ -15,6 +16,7 @@ class AuthNotifier extends Notifier<UserAccount?> {
       639151234567,
       [],
     );
+    // return null;
   }
 
   bool login(String email, String password) {
@@ -35,9 +37,36 @@ class AuthNotifier extends Notifier<UserAccount?> {
     state = null;
   }
 
+  void removeAccountAtIndex(int index) {
+    final currentUser = state;
+
+    if (currentUser == null) return;
+
+    //guard clause - aborts the method if the index reached -1 or above the length of the list
+    if (index < 0 || index >= currentUser.linkedAccounts.length) return;
+
+    final updatedList = List<WaterAccount>.from(currentUser.linkedAccounts);
+    updatedList.removeAt(index);
+
+    final updatedUser = currentUser.copyWith(linkedAccounts: updatedList);
+
+    updateAccountFromSession(updatedUser);
+  }
+
+  void addLinkedAccount(WaterAccount waterAccount) {
+    final currentUser = state;
+
+    if (currentUser == null) return;
+
+    final updatedList = List<WaterAccount>.from(currentUser.linkedAccounts)
+      ..add(waterAccount);
+    final updatedUser = currentUser.copyWith(linkedAccounts: updatedList);
+
+    updateAccountFromSession(updatedUser);
+  }
+
   void updateAccountFromSession(UserAccount updatedUser) {
     if (state == null) return;
-
     state = updatedUser;
 
     ref
