@@ -233,12 +233,5 @@ class LinkAccountService {
       receipt: [],
       ticket: [],
     );
-
-    //updates the LinkedAccount of AccountDb
-    // for (var account in AccountCollection().accountDb) {
-    //   if (account.email == loggedUser.email) {
-    //     account.linkedAccounts = loggedUser.linkedAccounts;
-    //   }
-    // }
   }
 }

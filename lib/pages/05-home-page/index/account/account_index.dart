@@ -101,6 +101,35 @@ class _AccountIndexState extends ConsumerState<AccountIndex>
   // private methods   //
   // ==================//
 
+  void _unlinkAccount({required int targetIndex, required bool hasDialogBox}) {
+    debugPrint('Unlink Triggered');
+    //reference only for debugPrinting
+    final removedAccount = ref
+        .read(authNotifierProvider)
+        ?.linkedAccounts[targetIndex];
+
+    //after it successfully removed the item from the list and dipose the controller
+    //the List of LinkedAccount length and the Slidable Controller will be adjusted
+    final targetContoller = _slidableController.removeAt(targetIndex);
+    targetContoller.dispose();
+
+    //Remove the dialogbox
+    if (hasDialogBox) {
+      context.pop();
+    }
+
+    //execute the methond to remove the linked account after the page finish rebuilding
+    //(pop page-rebuild-recalculate layout-repaint-execute addPostFrameCallback)
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      debugPrint(
+        'Linked Account (${removedAccount?.accountName} / ${removedAccount?.accountNumber} ) and its scrollable controller ($targetContoller) has been removed from the list',
+      );
+
+      //remove the linked account and update the authenticated logged account and the simulated database
+      ref.read(authNotifierProvider.notifier).removeAccountAtIndex(targetIndex);
+    });
+  }
+
   Future<dynamic> _buildUnlinkDialogBox(
     BuildContext context,
     int index,
@@ -124,23 +153,7 @@ class _AccountIndexState extends ConsumerState<AccountIndex>
             ),
             TextButton(
               onPressed: () {
-                debugPrint('Unlink Triggered');
-                //reference only for debugPrinting
-                final removedAccount = ref
-                    .read(authNotifierProvider)
-                    ?.linkedAccounts[index];
-
-                ref
-                    .watch(authNotifierProvider.notifier)
-                    .removeAccountAtIndex(index);
-
-                final targetContoller = _slidableController.removeAt(index);
-
-                targetContoller.dispose();
-                debugPrint(
-                  'Linked Account (${removedAccount?.accountNumber} / ${removedAccount?.accountNumber} ) and its scrollable controller ($targetContoller) has been removed from the list',
-                );
-                context.pop();
+                _unlinkAccount(targetIndex: index, hasDialogBox: true);
               },
               child: Text('Unlink'),
             ),
@@ -180,10 +193,12 @@ class _AccountIndexState extends ConsumerState<AccountIndex>
                       maxLength: 15,
                       controller: _dialogTextfieldController,
                       keyboardType: TextInputType.name,
-                      onSaved: (newValue) {
-                        if (newValue != null) {
-                          linkedAccounts[index].accountName = newValue;
-                        }
+                      onSaved: (value) {
+                        if (value == null || value.trim().isEmpty) return;
+
+                        ref
+                            .read(authNotifierProvider.notifier)
+                            .updateLinkedAccountAtIndex(index, value);
                       },
                       onChanged: (value) {
                         setDialogState(() {
@@ -401,27 +416,14 @@ class _AccountIndexState extends ConsumerState<AccountIndex>
                   );
 
                   //When the Account Information Page pressed the delete button it will return
-                  //a 'delete string to a variable result'
+                  //a enum delete to variable result
                   //if the condition is met this will delete the current linked account on the list , the slidable controller on the list
                   //and dispose the controller that has been removed from the SlidableController
                   if (result == CustomAction.delete) {
                     debugPrint(
                       'Custom Action ${CustomAction.delete.value} is Triggered',
                     );
-
-                    //removed the target UserLinked LinkedAccount
-                    ref
-                        .read(authNotifierProvider.notifier)
-                        .removeAccountAtIndex(index);
-
-                    //dispose the current Linked Account controller
-                    final targetController = _slidableController.removeAt(
-                      index,
-                    );
-
-                    //after it successfully removed the item on the list and dipose the controller
-                    //the List of LinkedAccount length and the Slidable Controller will be updated
-                    targetController.dispose();
+                    _unlinkAccount(targetIndex: index, hasDialogBox: false);
                   }
                 },
                 child: Container(

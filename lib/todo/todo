@@ -12,24 +12,28 @@ DONE - Create linkedAccounts using Provider account
 - add CWD logo on AccountIndex and Support Index
 - adjust UI padding on Dotted Line (AccountIndex)
 - Adjust UI padding UI (SupportIndex)
+DONE - Check Edit button on AccountIndex
 DONE - make update list linked accounts on AuthProvider
 DONE - refactor the HomeIndex DashBoardDisplay onPressed() and use CustomAction to delete
 DONE - test the setState of (Home Index Build() Listview onPressed) if necessary else remove
 DONE - add route to the FAB (HomeIndex)
-- Simplify the LinkAccountPage _loadingTextAnimation
+DONE - Simplify the LinkAccountPage _loadingTextAnimation
 DONE- Update the result == delete from the _buildSlider use the context.pop(true) pass a boolean for deletion instead of string
 - Pay linkedAccounts using Provider account
+- Fixed a bug about Page Transition from Payment to AccountInformation
 - check Receipt and Bills using Provider account
 - Create a ticket using Provider account
 - rename the DataBanks to models
 - Check Go Router Stateful nested navigation / ShellRoute for HomePage (Bottom Navigation)
 - Finish the Nested Route of GoRouter
--add the code from the unlink and gesture detector (account index)
-WidgetsBinding.instance.addPostFrameCallback((_) {
-    ref
-        .read(authNotifierProvider.notifier)
-        .removeAccountAtIndex(index);
-  });
+DONE - add WidgetState the code from the unlink and gesture detector (account index)
+- Refactor the Logout button from OOP to Provider and use GoRoute
+- Create a provider and refactor news 
+- refactor receipt
+- refactor ticket
+- refactor Support
+- refactor payment
+
 
 
 

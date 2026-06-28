@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:myapp/data-bank/receipt.dart';
+import 'package:myapp/data-class/bill.dart';
+import 'package:myapp/data-class/news_information.dart';
 import 'package:myapp/data-class/user_account.dart';
 import 'package:myapp/data-class/water_account.dart';
 import 'package:myapp/pages/00-How-to/get_started_page.dart';
@@ -27,7 +30,7 @@ import 'package:myapp/pages/05-home-page/index/account/receipt_content_page.dart
 import 'package:myapp/pages/05-home-page/index/account/receipt_page.dart';
 import 'package:myapp/pages/05-home-page/index/account/ticket_content.dart';
 import 'package:myapp/pages/05-home-page/index/account/ticket_page.dart';
-import 'package:myapp/pages/05-home-page/index/news_content_page.dart';
+import 'package:myapp/pages/05-home-page/index/news/news_content_page.dart';
 import 'package:myapp/pages/05-home-page/index/support/support_email_result_page.dart';
 import 'package:myapp/pages/05-home-page/index/support/support_index.dart';
 import 'package:myapp/pages/05-home-page/index/support/support_result_page.dart';
@@ -152,22 +155,37 @@ final _router = GoRouter(
       path: '/accountinformation',
       builder: (context, state) {
         final data = state.extra as WaterAccount?;
-
         return AccountInformationPage(linkedAccount: data);
       },
     ),
 
     GoRoute(
-      path: '/newscontent',
-      builder: (context, state) => const NewsContentPage(),
+      path: '/billing',
+      builder: (context, state) {
+        final data = state.extra as WaterAccount?;
+
+        return BillingPage(waterAccount: data);
+      },
     ),
 
-    // Billing & Receipts
-    GoRoute(path: '/billing', builder: (context, state) => const BillingPage()),
     GoRoute(
-      path: '/billingcontent',
-      builder: (context, state) => const BillingContentPage(),
+      path: '/billcontent',
+      builder: (context, state) {
+        final data = state.extra as Bill?;
+
+        return BillingContentPage(bill: data);
+      },
     ),
+
+    GoRoute(
+      path: '/newscontent',
+      builder: (context, state) {
+        final data = state.extra as NewsInformation?;
+
+        return NewsContentPage(newsInformation: data);
+      },
+    ),
+
     GoRoute(path: '/receipt', builder: (context, state) => const ReceiptPage()),
     GoRoute(
       path: '/receiptcontent',
@@ -175,14 +193,28 @@ final _router = GoRouter(
     ),
 
     // Payments
-    GoRoute(path: '/payment', builder: (context, state) => const PaymentPage()),
+    GoRoute(
+      path: '/payment',
+      builder: (context, state) {
+        final data = state.extra as WaterAccount?;
+        return PaymentPage(waterAccount: data);
+      },
+    ),
+
     GoRoute(
       path: '/paymentconfirmation',
-      builder: (context, state) => const PaymentConfirmation(),
+      builder: (context, state) {
+        final data = state.extra as Map<String, dynamic>?;
+        return PaymentConfirmation(paymentData: data);
+      },
     ),
+
     GoRoute(
       path: '/paymentresult',
-      builder: (context, state) => const PaymentResultPage(),
+      builder: (context, state) {
+        final data = state.extra as Map<String, dynamic>?;
+        return PaymentResultPage(receiptData: data);
+      },
     ),
 
     // Tickets

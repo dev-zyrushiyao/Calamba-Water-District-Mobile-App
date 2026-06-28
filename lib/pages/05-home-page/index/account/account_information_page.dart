@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:myapp/custom-widgets/display_no_data.dart';
 import 'package:myapp/custom-widgets/headline.dart';
@@ -9,8 +10,10 @@ import 'package:myapp/custom-widgets/status_indicator.dart';
 import 'package:myapp/data-class/constants/custom_action_enum.dart';
 
 import 'package:myapp/data-class/water_account.dart';
+import 'package:myapp/providers/auth_provider.dart';
+import 'package:myapp/services/masking_service.dart';
 
-class AccountInformationPage extends StatelessWidget {
+class AccountInformationPage extends ConsumerWidget {
   const AccountInformationPage({super.key, required this.linkedAccount});
 
   final WaterAccount? linkedAccount;
@@ -39,7 +42,6 @@ class AccountInformationPage extends StatelessWidget {
                 //Destroy the current page (account information)
                 //return a CustomAction enum that will be triggered from
                 //AccountIndex _buildSlider() Guesture Detector onTap () async to delete the WaterAccount data
-
                 context.pop();
                 Future.delayed(Duration(seconds: 1), () {});
                 context.pop(CustomAction.delete);
@@ -53,7 +55,12 @@ class AccountInformationPage extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    //provider
+    final _ = ref.watch(authNotifierProvider);
+
+    final MaskingService maskingService = MaskingService();
+
     final ThemeData theme = Theme.of(context);
     //Philippine Peso sign
     final String currencySign = '\u20B1';
@@ -105,9 +112,11 @@ class AccountInformationPage extends StatelessWidget {
                 Row(
                   spacing: 10,
                   children: [
-                    Text('Account Number', style: theme.textTheme.bodyLarge),
+                    Text('Account Number:', style: theme.textTheme.bodyLarge),
                     Text(
-                      '${data.accountNumber}',
+                      maskingService.formatAccountNumber(
+                        accountNumber: data.accountNumber,
+                      ),
                       style: theme.textTheme.bodyLarge!.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
@@ -152,7 +161,7 @@ class AccountInformationPage extends StatelessWidget {
                   label: 'Pay',
                   width: 200,
                   onPressed: () {
-                    Navigator.pushNamed(context, '/payment', arguments: data);
+                    context.push('/payment', extra: data);
                   },
                 ),
               ],
@@ -182,15 +191,7 @@ class AccountInformationPage extends StatelessWidget {
                       child: SecondaryButtonOutlined(
                         label: 'Billing',
                         onPressed: () {
-                          Navigator.pushNamed(
-                            context,
-                            '/billing',
-                            //passes data to display accountNumber and a reversed list
-                            arguments: {
-                              'reversedListData': data.bill.reversed.toList(),
-                              'userData': data,
-                            },
-                          );
+                          context.push('/billing', extra: data);
                         },
                       ),
                     ),

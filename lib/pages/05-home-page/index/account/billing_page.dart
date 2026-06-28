@@ -1,18 +1,24 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:myapp/custom-widgets/colored_container.dart';
 import 'package:myapp/custom-widgets/display_no_data.dart';
 import 'package:myapp/custom-widgets/headline.dart';
-import 'package:myapp/data-class/bill.dart';
 import 'package:myapp/data-class/water_account.dart';
+import 'package:myapp/providers/auth_provider.dart';
 import 'package:myapp/services/masking_service.dart';
 
-class BillingPage extends StatelessWidget {
-  const BillingPage({super.key});
+class BillingPage extends ConsumerWidget {
+  const BillingPage({super.key, required this.waterAccount});
+
+  final WaterAccount? waterAccount;
 
   @override
-  Widget build(BuildContext context) {
-    final data = ModalRoute.of(context)?.settings.arguments as Map?;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final data = waterAccount;
+
+    final _ = ref.watch(authNotifierProvider);
 
     final MaskingService maskingService = MaskingService();
     final ThemeData theme = Theme.of(context);
@@ -21,8 +27,7 @@ class BillingPage extends StatelessWidget {
       return DisplayNoData();
     }
 
-    final billList = data['reversedListData'] as List<Bill>;
-    final userData = data['userData'] as WaterAccount;
+    final reversedBillList = data.bill.reversed.toList();
 
     return Scaffold(
       appBar: AppBar(title: const Text('Billing')),
@@ -45,23 +50,24 @@ class BillingPage extends StatelessWidget {
                   ),
                   child: Headline(
                     headline:
-                        '${maskingService.formatAccountNumber(accountNumber: userData.accountNumber)} Bills',
+                        '${maskingService.formatAccountNumber(accountNumber: data.accountNumber)} Bills',
                   ),
                 ),
-                if (billList.isNotEmpty)
+                if (reversedBillList.isNotEmpty)
                   Expanded(
                     child: ListView.separated(
                       shrinkWrap: true,
                       separatorBuilder: (context, index) =>
                           const SizedBox(height: 50),
-                      itemCount: billList.length,
+                      itemCount: reversedBillList.length,
                       itemBuilder: (context, index) {
                         return GestureDetector(
-                          onTap: () => Navigator.pushNamed(
-                            context,
-                            '/billingcontent',
-                            arguments: billList[index],
-                          ),
+                          onTap: () {
+                            context.push(
+                              '/billcontent',
+                              extra: reversedBillList[index],
+                            );
+                          },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -70,7 +76,7 @@ class BillingPage extends StatelessWidget {
                                 style: theme.textTheme.bodyLarge,
                               ),
                               Text(
-                                '${billList[index].monthName} 2026',
+                                '${reversedBillList[index].monthName} 2026',
                                 style: theme.textTheme.bodyLarge,
                               ),
                             ],

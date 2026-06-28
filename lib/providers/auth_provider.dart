@@ -37,9 +37,46 @@ class AuthNotifier extends Notifier<UserAccount?> {
     state = null;
   }
 
+  void updateLinkedAccount(WaterAccount waterAccount) {
+    final currentUser = state;
+
+    if (currentUser == null) {
+      ArgumentError.notNull('$currentUser');
+      return;
+    }
+
+    //find the target item in the list
+    final updatedList = List<WaterAccount>.from(currentUser.linkedAccounts);
+    final targetIndex = updatedList.indexWhere(
+      (account) => account.accountNumber == waterAccount.accountNumber,
+    );
+
+    if (targetIndex == -1) return;
+
+    //create a new object with a new value
+    updatedList[targetIndex] = waterAccount;
+
+    //update the new value to the auth account
+    final updatedUser = currentUser.copyWith(linkedAccounts: updatedList);
+    updateAccountFromSession(updatedUser);
+  }
+
+  void updateLinkedAccountAtIndex(int index, String value) {
+    final currentUser = state;
+
+    if (currentUser == null) return;
+
+    final updatedList = List<WaterAccount>.from(currentUser.linkedAccounts);
+    updatedList[index] = updatedList[index].copyWith(accountName: value);
+
+    final updatedUser = currentUser.copyWith(linkedAccounts: updatedList);
+    updateAccountFromSession(updatedUser);
+  }
+
   void removeAccountAtIndex(int index) {
     final currentUser = state;
 
+    //guard clause
     if (currentUser == null) return;
 
     //guard clause - aborts the method if the index reached -1 or above the length of the list
@@ -49,7 +86,6 @@ class AuthNotifier extends Notifier<UserAccount?> {
     updatedList.removeAt(index);
 
     final updatedUser = currentUser.copyWith(linkedAccounts: updatedList);
-
     updateAccountFromSession(updatedUser);
   }
 
@@ -60,8 +96,8 @@ class AuthNotifier extends Notifier<UserAccount?> {
 
     final updatedList = List<WaterAccount>.from(currentUser.linkedAccounts)
       ..add(waterAccount);
-    final updatedUser = currentUser.copyWith(linkedAccounts: updatedList);
 
+    final updatedUser = currentUser.copyWith(linkedAccounts: updatedList);
     updateAccountFromSession(updatedUser);
   }
 

@@ -124,29 +124,19 @@ class _LinkAccountPageState extends ConsumerState<LinkAccountPage>
 
   //Function for the loading text animation
   void _loadingTextAnimation() {
-    if (_isAscending) {
-      if (_substringEndIndex < _loadingDotted.length) {
-        setState(() {
-          _substringEndIndex++;
-
-          debugPrint(
-            'Substring ASCENDING value of: [$_loadingDotted] , Start: $_substringStartIndex , End: $_substringEndIndex',
-          );
-        });
-      }
-
+    if (_isAscending == true) {
       if (_substringEndIndex == _loadingDotted.length) {
-        _isAscending = false;
+        _isAscending = !_isAscending;
+      } else {
+        _substringEndIndex++;
       }
-    } else {
-      if (1 < _loadingDotted.length) {
-        _substringEndIndex--;
-        debugPrint(
-          'Substring DECENDING value of: [$_loadingDotted] , Start: $_substringStartIndex , End: $_substringEndIndex',
-        );
-      }
+    }
+
+    if (!_isAscending) {
       if (_substringEndIndex == 0) {
-        _isAscending = true;
+        _isAscending = !_isAscending;
+      } else {
+        _substringEndIndex--;
       }
     }
   }
@@ -353,12 +343,12 @@ class _LinkAccountPageState extends ConsumerState<LinkAccountPage>
                   _accountDuplicationChecker();
                   _accountMaxLimitChecker();
 
-                  //if a user is trying to link account already liked OR if the account liked reached its maximum limit -> Reload the page
+                  //if a user is trying to link account already linked OR if the account liked reached its maximum limit -> Reload the page
                   //else continue build the modal , linking process and timer animation
                   if (_isAccountAlreadyOnList == true ||
                       _isAccountLinkedFull == true) {
                     setState(() {
-                      debugPrint('AccountLinked or Already List detected');
+                      debugPrint('AccountLinked or List full detected');
                     });
                   } else if (_formKey.currentState!.validate()) {
                     //if validation passed, the modalBottomSheet appears and will trigger the linking process and the loading text animation

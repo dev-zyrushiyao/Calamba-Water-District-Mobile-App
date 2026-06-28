@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:myapp/custom-widgets/secondary_button.dart';
 import 'package:myapp/data-bank/account_type.dart';
 import 'package:myapp/data-class/user_account.dart';
+import 'package:myapp/providers/account_provider.dart';
 import 'package:myapp/providers/auth_provider.dart';
 import '../../design-system/design_system.dart'; //home-widget
 
@@ -60,6 +61,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     final ThemeData theme = Theme.of(context);
 
     final deviceWidth = MediaQuery.sizeOf(context).width;
+
+    final _ = ref.watch(accountNotifierProvider);
 
     return Scaffold(
       resizeToAvoidBottomInset: false,

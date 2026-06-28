@@ -9,12 +9,6 @@ class DisplayNoData extends StatefulWidget {
 
 class _DisplayNoData extends State<DisplayNoData> {
   @override
-  void initState() {
-    super.initState();
-    throw ArgumentError.notNull('data/loggedUser');
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),

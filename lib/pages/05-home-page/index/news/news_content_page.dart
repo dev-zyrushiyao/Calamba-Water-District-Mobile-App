@@ -7,7 +7,9 @@ import 'package:myapp/custom-widgets/news_header.dart';
 import 'package:myapp/services/news_content_page_service.dart';
 
 class NewsContentPage extends StatefulWidget {
-  const NewsContentPage({super.key});
+  const NewsContentPage({super.key, this.newsInformation});
+
+  final NewsInformation? newsInformation;
 
   @override
   State<NewsContentPage> createState() => _NewsContentPageState();
@@ -20,8 +22,7 @@ class _NewsContentPageState extends State<NewsContentPage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final data = ModalRoute.of(context)?.settings.arguments as NewsInformation?;
-
+    final data = widget.newsInformation;
     if (data == null) {
       return DisplayNoData();
     }

@@ -25,7 +25,7 @@ class PaymentService {
     return transactionNumberAsList.join();
   }
 
-  Future<void> saveAndCreateReceipt({
+  Future<WaterAccount> saveAndCreateReceipt({
     required WaterAccount waterAccount,
     required String transactionNumber,
     required Biller billerName,
@@ -35,18 +35,29 @@ class PaymentService {
     final UserInterfaceService userInterfaceService = UserInterfaceService();
     final manilaTime = userInterfaceService.getManilaTimezone();
     //add receipt object
-    waterAccount.receipt.add(
-      Receipt(
-        transactionNumber: transactionNumber,
-        billerName: billerName.value,
-        amount: inputAmount,
-        paymentMethod: paymentMethod.value,
-        date: manilaTime,
-      ),
+
+    final newReceipt = Receipt(
+      transactionNumber: transactionNumber,
+      billerName: billerName.value,
+      amount: inputAmount,
+      paymentMethod: paymentMethod.value,
+      date: manilaTime,
     );
 
-    //deduct balance
-    waterAccount.balance = waterAccount.balance - inputAmount;
+    final receiptList = List<Receipt>.from(waterAccount.receipt);
+    receiptList.add(newReceipt);
+
+    final computedBalance = waterAccount.balance - inputAmount;
+    final double? formatBalance = double.tryParse(
+      computedBalance.toStringAsFixed(2),
+    );
+
+    final updatedWaterAccount = waterAccount.copyWith(
+      balance: formatBalance,
+      receipt: receiptList,
+    );
+
+    return updatedWaterAccount;
   }
 
   Future<Receipt?> searchReceiptToDisplay({

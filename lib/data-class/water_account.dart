@@ -7,16 +7,14 @@ import 'package:myapp/data-class/constants/water_account_status_enum.dart';
 import 'package:myapp/data-class/ticket.dart';
 
 class WaterAccount {
-  //Widget of Accounts
-
-  String accountName; //removed the final to be editable
+  final String accountName; //removed the final to be editable
   final int accountNumber;
   final WaterAccountStatus isActive;
   final double previousBill;
   final double lastReading;
   final int dueDay;
   final int remainingDayDue;
-  double balance; //removed the final to be editable
+  final double balance; //removed the final to be editable
   final List<Bill> bill;
   final List<Receipt> receipt;
   final List<Ticket> ticket;
@@ -34,6 +32,34 @@ class WaterAccount {
     required this.receipt,
     required this.ticket,
   });
+
+  WaterAccount copyWith({
+    String? accountName,
+    int? accountNumber,
+    WaterAccountStatus? isActive,
+    double? previousBill,
+    double? lastReading,
+    int? dueDay,
+    int? remainingDayDue,
+    double? balance,
+    List<Bill>? bill,
+    List<Receipt>? receipt,
+    List<Ticket>? ticket,
+  }) {
+    return WaterAccount(
+      accountName: accountName ?? this.accountName,
+      accountNumber: accountNumber ?? this.accountNumber,
+      isActive: isActive ?? this.isActive,
+      previousBill: previousBill ?? this.previousBill,
+      lastReading: lastReading ?? this.lastReading,
+      dueDay: dueDay ?? this.dueDay,
+      remainingDayDue: remainingDayDue ?? this.remainingDayDue,
+      balance: balance ?? this.balance,
+      bill: bill ?? this.bill,
+      receipt: receipt ?? this.receipt,
+      ticket: ticket ?? this.ticket,
+    );
+  }
 
   Color get statusColor {
     if (isActive == WaterAccountStatus.active) {

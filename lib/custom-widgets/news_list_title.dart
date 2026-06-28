@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:myapp/data-class/news_information.dart';
 
 class NewsListTitle extends StatefulWidget {
@@ -37,11 +38,12 @@ class _MyWidgetState extends State<NewsListTitle> {
         Expanded(
           child: GestureDetector(
             onTap: () async {
+              if (!mounted) return;
+
               //Wait for the user to go back From NewsContent -> NewsIndex
-              await Navigator.pushNamed(
-                context,
+              await context.push(
                 '/newscontent',
-                arguments: widget.newsInformationList,
+                extra: widget.newsInformationList,
               );
 
               //When a user press the back button of the appbar it will invoke the NewsIndex._updateTheNews()

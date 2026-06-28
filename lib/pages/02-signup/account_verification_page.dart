@@ -95,9 +95,6 @@ class _AccountVerificationPageState
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
 
-    //provider
-    // final accountDb = ref.watch(accountNotifierProvider);
-
     final data = widget.newUser;
 
     debugPrint('${widget.newUser}');

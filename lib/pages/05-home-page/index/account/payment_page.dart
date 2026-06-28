@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:myapp/custom-widgets/display_no_data.dart';
 import 'package:myapp/custom-widgets/primary_button.dart';
-import 'package:myapp/data-bank/account_type.dart';
 import 'package:myapp/data-class/constants/payment_method_enum.dart';
 import 'package:myapp/data-class/user_account.dart';
 import 'package:myapp/data-class/water_account.dart';
+import 'package:myapp/providers/auth_provider.dart';
 
-class PaymentPage extends StatefulWidget {
-  const PaymentPage({super.key});
+class PaymentPage extends ConsumerStatefulWidget {
+  const PaymentPage({super.key, required this.waterAccount});
+
+  final WaterAccount? waterAccount;
 
   @override
-  State<PaymentPage> createState() => _MyWidgetState();
+  ConsumerState<PaymentPage> createState() => _MyWidgetState();
 }
 
-class _MyWidgetState extends State<PaymentPage> {
-  //user
-  final UserAccount _loggedUser = AccountType().owner;
-
+class _MyWidgetState extends ConsumerState<PaymentPage> {
   //used for textfield hint
   final String _defaultAmount = '0';
   TextEditingController? _amountController;
@@ -63,15 +64,18 @@ class _MyWidgetState extends State<PaymentPage> {
 
   @override
   Widget build(BuildContext context) {
+    final loggedUser = ref.watch(authNotifierProvider);
+
+    //Data passed through Account Index to Account InformationPage
+    final data = widget.waterAccount;
+
+    if (loggedUser == null || data == null) {
+      return DisplayNoData();
+    }
+
     final ThemeData theme = Theme.of(context);
     //Philippine Peso sign
     final String currencySign = '\u20B1';
-    //Data passed through Account Index to Account InformationPage
-    final data = ModalRoute.of(context)?.settings.arguments as WaterAccount?;
-
-    if (data == null) {
-      return DisplayNoData();
-    }
 
     return Scaffold(
       appBar: AppBar(title: const Text('Payment')),
@@ -82,7 +86,7 @@ class _MyWidgetState extends State<PaymentPage> {
             const SizedBox(height: 20),
             _buildTextField(data, currencySign, theme),
             const SizedBox(height: 50),
-            _buildPaymentMethod(_loggedUser, theme),
+            _buildPaymentMethod(loggedUser, theme),
             const SizedBox(height: 60),
 
             _buildBigbox(theme),
@@ -96,14 +100,17 @@ class _MyWidgetState extends State<PaymentPage> {
                         //pass the value of onSave to inputAmount (String)
                         _formKey.currentState?.save();
 
+                        final input = inputAmount;
+
+                        if (input == null) return;
+
                         // passes 2 arguments
                         // TextInput
                         // WaterAccount
-                        await Navigator.pushNamed(
-                          context,
+                        await context.push(
                           '/paymentconfirmation',
-                          arguments: {
-                            'inputAmount': double.tryParse(inputAmount!),
+                          extra: {
+                            'inputAmount': double.tryParse(input),
                             'waterAccount': data,
                           },
                         );

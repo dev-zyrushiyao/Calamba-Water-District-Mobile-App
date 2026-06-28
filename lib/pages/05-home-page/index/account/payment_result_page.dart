@@ -1,27 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:myapp/custom-widgets/circular_copy_button.dart';
 import 'package:myapp/custom-widgets/display_no_data.dart';
 import 'package:myapp/custom-widgets/headline.dart';
 import 'package:myapp/custom-widgets/primary_button.dart';
 import 'package:myapp/custom-widgets/receipt_container.dart';
-import 'package:myapp/data-bank/receipt.dart';
+import 'package:myapp/providers/auth_provider.dart';
 
 import 'package:myapp/services/user_interface_service.dart';
 
-class PaymentResultPage extends StatelessWidget {
-  const PaymentResultPage({super.key});
+class PaymentResultPage extends ConsumerWidget {
+  const PaymentResultPage({super.key, required this.receiptData});
+
+  final Map<String, dynamic>? receiptData;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     ThemeData theme = Theme.of(context);
 
-    final data = ModalRoute.of(context)?.settings.arguments as Receipt?;
-
-    final UserInterfaceService userInterfaceService = UserInterfaceService();
+    final data = receiptData;
 
     if (data == null) {
       return DisplayNoData();
     }
+
+    final receipt = data['receipt'];
+    final waterAccount = data['waterAccount'];
+
+    final _ = ref.watch(authNotifierProvider);
+
+    final UserInterfaceService userInterfaceService = UserInterfaceService();
 
     return Scaffold(
       body: SafeArea(
@@ -53,18 +62,18 @@ class PaymentResultPage extends StatelessWidget {
 
             ReceiptContainer(
               copyButton: CircularCopyButton(
-                targetTextToCopy: data.transactionNumber,
+                targetTextToCopy: receipt.transactionNumber,
               ),
               actions: [
-                {'Transaction No.': data.transactionNumber},
-                {'Biller:': data.billerName},
-                {'Amount:': data.amount.toStringAsFixed(2)},
+                {'Transaction No.': receipt.transactionNumber},
+                {'Biller:': receipt.billerName},
+                {'Amount:': receipt.amount.toStringAsFixed(2)},
                 {
                   'Date:': userInterfaceService.convertReceiptDateFormat(
-                    date: data.date,
+                    date: receipt.date,
                   ),
                 },
-                {'Payment Method:': data.paymentMethod},
+                {'Payment Method:': receipt.paymentMethod},
               ],
             ),
 
@@ -74,10 +83,7 @@ class PaymentResultPage extends StatelessWidget {
               label: 'Return to Account Page',
               width: double.infinity,
               onPressed: () {
-                Navigator.popUntil(
-                  context,
-                  ModalRoute.withName('/accountinformation'),
-                );
+                context.push('/accountinformation', extra: waterAccount);
               },
             ),
           ],

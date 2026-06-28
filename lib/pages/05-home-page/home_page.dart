@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:myapp/pages/05-home-page/index/account/account_index.dart';
 import 'package:myapp/pages/05-home-page/index/home_index.dart';
-import 'package:myapp/pages/05-home-page/index/news_index.dart';
+import 'package:myapp/pages/05-home-page/index/news/news_index.dart';
 import 'package:myapp/pages/05-home-page/index/profile_index.dart';
 import 'package:myapp/pages/05-home-page/index/support/support_index.dart';
 

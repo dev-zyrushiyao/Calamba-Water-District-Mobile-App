@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:myapp/custom-shapes/profile_border.dart';
 import 'package:myapp/custom-widgets/display_no_data.dart';
 import 'package:myapp/custom-widgets/form_editable_textfield.dart';
@@ -649,11 +650,12 @@ class _ProfileIndexState extends ConsumerState<ProfileIndex> {
         icon: _isEditing ? SizedBox.shrink() : Icon(Icons.logout),
         onPressed: () {
           ref.read(authNotifierProvider.notifier).logout();
-          Navigator.pushNamedAndRemoveUntil(
-            context,
-            '/login',
-            (route) => false,
-          );
+
+          final currentUser = ref.read(authNotifierProvider);
+
+          if (currentUser == null) {
+            context.go('/');
+          }
         },
         label: _isEditing ? SizedBox.shrink() : Text('Logout'),
         style: FilledButton.styleFrom(

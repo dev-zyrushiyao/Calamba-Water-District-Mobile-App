@@ -1,21 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:myapp/custom-widgets/appbar_custom_header.dart';
 import 'package:myapp/custom-widgets/display_no_data.dart';
 import 'package:myapp/data-class/bill.dart';
+import 'package:myapp/providers/auth_provider.dart';
 
-class BillingContentPage extends StatefulWidget {
-  const BillingContentPage({super.key});
+class BillingContentPage extends ConsumerStatefulWidget {
+  const BillingContentPage({super.key, required this.bill});
+
+  final Bill? bill;
 
   @override
-  State<BillingContentPage> createState() => BillingContenttState();
+  ConsumerState<BillingContentPage> createState() => BillingContenttState();
 }
 
-class BillingContenttState extends State<BillingContentPage> {
+class BillingContenttState extends ConsumerState<BillingContentPage> {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
 
-    final data = ModalRoute.of(context)?.settings.arguments as Bill?;
+    final data = widget.bill;
+
+    final _ = ref.watch(authNotifierProvider);
 
     if (data == null) {
       return DisplayNoData();

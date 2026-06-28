@@ -1,21 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:myapp/custom-widgets/display_no_data.dart';
 import 'package:myapp/custom-widgets/primary_button.dart';
-import 'package:myapp/data-bank/account_type.dart';
+
 import 'package:myapp/data-bank/receipt.dart';
 import 'package:myapp/data-class/constants/biller_enum.dart';
 import 'package:myapp/data-class/constants/payment_method_enum.dart';
-import 'package:myapp/data-class/user_account.dart';
+
 import 'package:myapp/data-class/water_account.dart';
+import 'package:myapp/providers/auth_provider.dart';
 import 'package:myapp/services/payment_service.dart';
 
-class PaymentConfirmation extends StatelessWidget {
-  const PaymentConfirmation({super.key});
+class PaymentConfirmation extends ConsumerWidget {
+  const PaymentConfirmation({super.key, required this.paymentData});
+
+  final Map<String, dynamic>? paymentData;
 
   @override
-  Widget build(BuildContext context) {
-    //logged user account
-    final UserAccount loggedUser = AccountType().owner;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final loggedUser = ref.watch(authNotifierProvider);
+
+    if (loggedUser == null) {
+      return DisplayNoData();
+    }
 
     //service
     final PaymentService paymentService = PaymentService();
@@ -23,14 +31,14 @@ class PaymentConfirmation extends StatelessWidget {
     //theme
     final ThemeData theme = Theme.of(context);
 
-    final data = ModalRoute.of(context)?.settings.arguments as Map?;
+    final data = paymentData;
 
     if (data == null) {
       return const DisplayNoData();
     }
 
-    final double inputAmount = data['inputAmount'];
-    final WaterAccount waterAccount = data['waterAccount'];
+    final inputAmount = data['inputAmount'] as double;
+    final waterAccount = data['waterAccount'] as WaterAccount;
 
     return Scaffold(
       appBar: AppBar(title: const Text('Payment Confirmation')),
@@ -94,7 +102,7 @@ class PaymentConfirmation extends StatelessWidget {
                         actions: [
                           TextButton(
                             onPressed: () {
-                              Navigator.pop(context);
+                              context.pop();
                             },
                             child: const Text('No, cancel'),
                           ),
@@ -106,13 +114,18 @@ class PaymentConfirmation extends StatelessWidget {
 
                               //use the generated transaction number and create the receipt
                               //deduct the balance
-                              await paymentService.saveAndCreateReceipt(
-                                waterAccount: waterAccount,
-                                transactionNumber: generatedTransactionNumber,
-                                billerName: Biller.calambaWaterDistrict,
-                                inputAmount: inputAmount,
-                                paymentMethod: PaymentMethod.gCash,
-                              );
+                              final updatedWaterAccount = await paymentService
+                                  .saveAndCreateReceipt(
+                                    waterAccount: waterAccount,
+                                    transactionNumber:
+                                        generatedTransactionNumber,
+                                    billerName: Biller.calambaWaterDistrict,
+                                    inputAmount: inputAmount,
+                                    paymentMethod: PaymentMethod.gCash,
+                                  );
+                              ref
+                                  .read(authNotifierProvider.notifier)
+                                  .updateLinkedAccount(updatedWaterAccount);
 
                               //after creating the receipt , search the linkedAccount generated transaction number
                               //returns a Receipt object of that specific transaction (current one created)
@@ -120,7 +133,8 @@ class PaymentConfirmation extends StatelessWidget {
                                   .searchReceiptToDisplay(
                                     searchTransactionNumber:
                                         generatedTransactionNumber,
-                                    waterAccountReceipt: waterAccount.receipt,
+                                    waterAccountReceipt:
+                                        updatedWaterAccount.receipt,
                                   );
 
                               //guard clause
@@ -129,10 +143,12 @@ class PaymentConfirmation extends StatelessWidget {
                               //The Receipt object is pass as argument to be displayed on the next page
                               //shows the receipt of user's current transaction
                               if (retrievedReceipt != null) {
-                                Navigator.pushNamed(
-                                  context,
+                                context.push(
                                   '/paymentresult',
-                                  arguments: retrievedReceipt,
+                                  extra: {
+                                    'receipt': retrievedReceipt,
+                                    'waterAccount': updatedWaterAccount,
+                                  },
                                 );
                               } else {
                                 debugPrint(
