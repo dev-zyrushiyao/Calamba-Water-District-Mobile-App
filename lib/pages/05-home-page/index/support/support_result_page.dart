@@ -8,7 +8,9 @@ import 'package:myapp/custom-widgets/display_no_data.dart';
 import 'package:myapp/data-class/ticket.dart';
 
 class SupportResultPage extends StatefulWidget {
-  const SupportResultPage({super.key});
+  const SupportResultPage({super.key, this.supportTicket});
+
+  final Ticket? supportTicket;
 
   @override
   State<SupportResultPage> createState() => _MyWidgetState();
@@ -64,7 +66,7 @@ class _MyWidgetState extends State<SupportResultPage>
 
   @override
   Widget build(BuildContext context) {
-    final data = ModalRoute.of(context)?.settings.arguments as Ticket?;
+    final data = widget.supportTicket;
 
     if (data == null) {
       return DisplayNoData();

@@ -1,23 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:myapp/custom-widgets/display_no_data.dart';
 import 'package:myapp/custom-widgets/separation_divider.dart';
-import 'package:myapp/data-bank/account_type.dart';
 import 'package:myapp/data-class/chat_support.dart';
 import 'package:myapp/data-class/constants/chat_role_enum.dart';
 import 'package:myapp/data-class/ticket.dart';
 import 'package:myapp/data-class/user_account.dart';
+import 'package:myapp/providers/auth_provider.dart';
 import 'package:myapp/services/user_interface_service.dart';
 
-class TicketContent extends StatefulWidget {
-  const TicketContent({super.key});
+class TicketContent extends ConsumerStatefulWidget {
+  const TicketContent({super.key, this.ticketData});
+
+  final Map<String, dynamic>? ticketData;
 
   @override
-  State<TicketContent> createState() => _TicketContentState();
+  ConsumerState<TicketContent> createState() => _TicketContentState();
 }
 
-class _TicketContentState extends State<TicketContent> {
-  final UserAccount _loggedUser = AccountType().owner;
+class _TicketContentState extends ConsumerState<TicketContent> {
+  // final UserAccount _loggedUser = AccountType().owner;
   //service
   final UserInterfaceService _userInterfaceService = UserInterfaceService();
 
@@ -56,26 +59,31 @@ class _TicketContentState extends State<TicketContent> {
 
   @override
   Widget build(BuildContext context) {
-    final data = ModalRoute.of(context)?.settings.arguments as Ticket?;
+    //provider
+    final loggedUser = ref.watch(authNotifierProvider);
+
+    final data = widget.ticketData;
 
     //theme
     final ThemeData theme = Theme.of(context);
 
-    if (data == null) {
+    if (loggedUser == null || data == null) {
       return DisplayNoData();
     }
 
+    final ticket = data['ticket'];
+
     dateTicketCreated = _userInterfaceService.convertToCalendarDateFormat(
-      data.report.dateTicketCreated,
+      ticket.report.dateTicketCreated,
     );
     dateOccurence = _userInterfaceService.convertToCalendarDateFormat(
-      data.report.dateOccurence,
+      ticket.report.dateOccurence,
     );
 
-    chatSupport = data.report.chatHistory;
+    chatSupport = ticket.report.chatHistory;
 
     return Scaffold(
-      appBar: AppBar(title: Text('Ticket No. ${data.ticketNumber}')),
+      appBar: AppBar(title: Text('Ticket No. ${ticket.ticketNumber}')),
       body: SizedBox(
         child: Column(
           children: [
@@ -87,7 +95,7 @@ class _TicketContentState extends State<TicketContent> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Category: ${data.report.supportCategory.description}',
+                      'Category: ${ticket.report.supportCategory.description}',
                       style: theme.textTheme.headlineSmall,
                     ),
                     Text(
@@ -131,8 +139,8 @@ class _TicketContentState extends State<TicketContent> {
             ),
 
             _buildTextField(
-              ticketData: data,
-              loggedUser: _loggedUser,
+              ticketData: ticket,
+              loggedUser: loggedUser,
               currentDate: currentDateTime,
               theme: theme,
             ),

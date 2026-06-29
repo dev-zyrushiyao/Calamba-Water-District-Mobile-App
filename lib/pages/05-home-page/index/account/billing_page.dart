@@ -10,24 +10,30 @@ import 'package:myapp/providers/auth_provider.dart';
 import 'package:myapp/services/masking_service.dart';
 
 class BillingPage extends ConsumerWidget {
-  const BillingPage({super.key, required this.waterAccount});
+  const BillingPage({super.key, required this.linkedAccountData});
 
-  final WaterAccount? waterAccount;
+  final Map<String, dynamic>? linkedAccountData;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final data = waterAccount;
-
     final _ = ref.watch(authNotifierProvider);
-
     final MaskingService maskingService = MaskingService();
     final ThemeData theme = Theme.of(context);
+
+    final data = linkedAccountData;
 
     if (data == null) {
       return DisplayNoData();
     }
+    //data variables
+    final waterAccount = data['waterAccount'] as WaterAccount?;
 
-    final reversedBillList = data.bill.reversed.toList();
+    if (waterAccount == null) {
+      return DisplayNoData();
+    }
+
+    //data variables
+    final reversedBillList = waterAccount.bill.reversed.toList();
 
     return Scaffold(
       appBar: AppBar(title: const Text('Billing')),
@@ -50,7 +56,7 @@ class BillingPage extends ConsumerWidget {
                   ),
                   child: Headline(
                     headline:
-                        '${maskingService.formatAccountNumber(accountNumber: data.accountNumber)} Bills',
+                        '${maskingService.formatAccountNumber(accountNumber: waterAccount.accountNumber)} Bills',
                   ),
                 ),
                 if (reversedBillList.isNotEmpty)
@@ -64,8 +70,8 @@ class BillingPage extends ConsumerWidget {
                         return GestureDetector(
                           onTap: () {
                             context.push(
-                              '/billcontent',
-                              extra: reversedBillList[index],
+                              '/billing/billcontent',
+                              extra: {'bill': reversedBillList[index]},
                             );
                           },
                           child: Row(

@@ -1,28 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:myapp/custom-widgets/display_no_data.dart';
 import 'package:myapp/custom-widgets/headline.dart';
 import 'package:myapp/custom-widgets/primary_button.dart';
-import 'package:myapp/data-bank/account_type.dart';
-import 'package:myapp/data-class/chat_support.dart';
-import 'package:myapp/data-class/constants/chat_role_enum.dart';
-import 'package:myapp/data-class/constants/report_status_enum.dart';
 import 'package:myapp/data-class/constants/support_category_enum.dart';
-import 'package:myapp/data-class/report.dart';
-import 'package:myapp/data-class/ticket.dart';
-import 'package:myapp/data-class/user_account.dart';
+import 'package:myapp/data-class/water_account.dart';
+import 'package:myapp/providers/auth_provider.dart';
 import 'package:myapp/services/masking_service.dart';
 import 'package:myapp/services/support_service.dart';
 import 'package:myapp/services/user_interface_service.dart';
 
-class SupportIndex extends StatefulWidget {
+class SupportIndex extends ConsumerStatefulWidget {
   const SupportIndex({super.key});
 
   @override
-  State<SupportIndex> createState() => _SupportIndexState();
+  ConsumerState<SupportIndex> createState() => _SupportIndexState();
 }
 
-class _SupportIndexState extends State<SupportIndex> {
+class _SupportIndexState extends ConsumerState<SupportIndex> {
   //user
-  final UserAccount _loggedUser = AccountType().owner;
+  // final UserAccount _loggedUser = AccountType().owner;
 
   //service
   final SupportService _supportService = SupportService();
@@ -61,14 +59,17 @@ class _SupportIndexState extends State<SupportIndex> {
   }
 
   void _addDropdownItems() {
+    final loggedUser = ref.read(authNotifierProvider);
+    if (loggedUser == null) return;
+
     for (var category in SupportCategory.values) {
       _categoryDropDownItem.add(
         DropdownMenuEntry(value: category, label: category.value),
       );
     }
 
-    if (_loggedUser.linkedAccounts.isNotEmpty) {
-      for (var account in _loggedUser.linkedAccounts) {
+    if (loggedUser.linkedAccounts.isNotEmpty) {
+      for (var account in loggedUser.linkedAccounts) {
         _accountDropDownItem.add(
           DropdownMenuEntry(
             value: account.accountNumber,
@@ -88,78 +89,6 @@ class _SupportIndexState extends State<SupportIndex> {
     );
   }
 
-  ChatSupport createChatMessage(
-    String senderName,
-    String? reportContext,
-    DateTime dateTime,
-    ChatRole role,
-  ) {
-    switch (role) {
-      case ChatRole.client:
-        return ChatSupport(
-          senderName: senderName,
-          message: reportContext ?? 'Report Context Not Found',
-          date: dateTime,
-          role: role,
-        );
-      case ChatRole.staff:
-        //default
-        return ChatSupport(
-          senderName: 'Stell - Support',
-          message:
-              'We apologize for the inconvenience regarding your balance; \n'
-              'please allow 24 to 48 hours for your mobile payment to sync with our system. \n'
-              'If the issue persists after this period, kindly send a screenshot of your receipt \n'
-              'so we can manually verify and update your account.',
-          date: dateTime,
-          role: role,
-        );
-    }
-  }
-
-  Future<void> createTicketSupport(int generatedTicketNumber) async {
-    //Search the affected account under the LoggedUser
-    for (var linkedAccount in _loggedUser.linkedAccounts) {
-      //when the user is found create a receipt
-      if (linkedAccount.accountNumber ==
-          _supportInput['affectedAccountNumber']) {
-        DateTime manilaTime = _userInterfaceService.getManilaTimezone();
-
-        linkedAccount.ticket.add(
-          Ticket(
-            ticketNumber: generatedTicketNumber,
-            report: Report(
-              supportCategory: _supportInput['supportCategory'],
-              affectedAccountNumber: _supportInput['affectedAccountNumber'],
-              dateOccurence: _selectedDate,
-              dateTicketCreated: manilaTime,
-              reportedBy: _loggedUser.nickname,
-              reportContext:
-                  _supportInput['reportContext'] ?? 'Report Context Not Found',
-              chatHistory: [
-                createChatMessage(
-                  _loggedUser.nickname,
-                  _supportInput['reportContext'],
-                  manilaTime,
-                  ChatRole.client,
-                ),
-                createChatMessage(
-                  'Stell',
-                  _supportInput['reportContext'],
-                  manilaTime,
-                  ChatRole.staff,
-                ),
-              ],
-            ),
-            reportStatus: ReportStatus.inProgress,
-          ),
-        );
-        debugPrint('NOTE: Ticket has been Created');
-        break;
-      }
-    }
-  }
-
   void _refreshValues() {
     setState(() {
       _formKey.currentState?.reset(); // Clears form validation & FormFields
@@ -174,6 +103,12 @@ class _SupportIndexState extends State<SupportIndex> {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
+
+    final loggedUser = ref.watch(authNotifierProvider);
+
+    if (loggedUser == null) {
+      return DisplayNoData();
+    }
 
     //format date every page refresh
     _initializeFormatDateValue();
@@ -262,7 +197,7 @@ class _SupportIndexState extends State<SupportIndex> {
                           actions: [
                             TextButton(
                               onPressed: () {
-                                Navigator.pop(context);
+                                context.pop();
                               },
                               child: Text('Cancel'),
                             ),
@@ -272,61 +207,84 @@ class _SupportIndexState extends State<SupportIndex> {
                                 int generatedTicketNumber = _supportService
                                     .generateTicketNumber();
 
-                                //close the dialogbox
-                                Navigator.pop(context);
+                                //manilaTime
+                                DateTime manilaTime = _userInterfaceService
+                                    .getManilaTimezone();
+
+                                // close the dialogbox
+                                // it wont appear again after going ticket submission to SupportIndex
+                                context.pop();
 
                                 switch (_supportInput['supportCategory']) {
                                   case SupportCategory.issueLeak ||
                                       SupportCategory.issueBill:
 
                                     //create ticket
-                                    await createTicketSupport(
-                                      generatedTicketNumber,
-                                    );
-
-                                    Ticket? searchedReceipt =
-                                        await _supportService.retrieveTicket(
-                                          generatedTicketNumber,
-                                          _loggedUser,
+                                    final ticket = await _supportService
+                                        .createTicketSupport(
+                                          generatedTicketNumber:
+                                              generatedTicketNumber,
+                                          loggedUser: loggedUser,
+                                          manilaTime: manilaTime,
+                                          selectedDate: _selectedDate,
+                                          supportInput: _supportInput,
                                         );
 
-                                    //guard clause
+                                    //copy of list
+                                    final copyOfList = List<WaterAccount>.from(
+                                      loggedUser.linkedAccounts,
+                                    );
+                                    //find target index
+                                    final targetIndex = copyOfList.indexWhere(
+                                      (account) =>
+                                          account.accountNumber ==
+                                          _supportInput['affectedAccountNumber'],
+                                    );
+
+                                    if (targetIndex == -1) return;
+
+                                    //fetch the water account and inject a new ticket from its ticket list
+                                    final targetAccount =
+                                        copyOfList[targetIndex];
+                                    targetAccount.ticket.add(ticket);
+
+                                    //save the changes to the provider
+                                    ref
+                                        .read(authNotifierProvider.notifier)
+                                        .updateLinkedAccount(targetAccount);
+
+                                    // //guard clause
                                     if (!context.mounted) return;
 
-                                    if (searchedReceipt != null) {
-                                      await Navigator.pushNamed(
-                                        context,
-                                        '/supportresult',
-                                        arguments: searchedReceipt,
-                                      );
-                                      //refresh the value when the user go back at SupportIndex after creating ticket
-                                      _refreshValues();
-                                    } else {
-                                      debugPrint(
-                                        'searched ticket value : $searchedReceipt , no ticket found',
-                                      );
-                                    }
+                                    await context.push(
+                                      '/supportresult',
+                                      extra: ticket,
+                                    );
+
                                     break;
                                   case SupportCategory.issueApp ||
                                       SupportCategory.issueAccount:
-                                    //Not saved in Receipt object because its an account issue
-                                    //Receipt only issued in LinkedAccount
-                                    //For account level and app issue proceed to email support instead
-                                    //arguments just return an integer generated number
+                                    //Not saved in Ticket object because its an account issue
+                                    //Ticket only issued in LinkedAccount
+                                    //For account level and app issue proceed to email support instead (simulation)
+                                    //arguments just return an integer generated number(generatedTicketNumber)
                                     //Display a separate page that display just a generated number imitating ticket is saved
-                                    await Navigator.pushNamed(
-                                      context,
+                                    //guard clause
+                                    if (!context.mounted) return;
+                                    await context.push(
                                       '/supportemailresult',
-                                      arguments: generatedTicketNumber,
+                                      extra: generatedTicketNumber,
                                     );
-                                    //refresh the value when the user go back at SupportIndex after creating ticket
-                                    _refreshValues();
+
                                     break;
                                   default:
                                     debugPrint(
                                       'switch case value (SupportCategory) is not found.',
                                     );
                                 }
+
+                                //refresh the value when the user go back at SupportIndex after creating ticket
+                                _refreshValues();
                               },
                               child: Text('Submit'),
                             ),

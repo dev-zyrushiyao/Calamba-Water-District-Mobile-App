@@ -202,7 +202,7 @@ class _SignupPageState extends ConsumerState<SignupPage> {
                           [],
                         );
 
-                        context.go(
+                        context.push(
                           '/signup/accountverification',
                           extra: newUser,
                         );

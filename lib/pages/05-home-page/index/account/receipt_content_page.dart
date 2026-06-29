@@ -1,36 +1,51 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:myapp/custom-widgets/appbar_custom_header.dart';
 import 'package:myapp/custom-widgets/circular_copy_button.dart';
 import 'package:myapp/custom-widgets/display_no_data.dart';
 import 'package:myapp/custom-widgets/receipt_container.dart';
 import 'package:myapp/data-bank/receipt.dart';
+
+import 'package:myapp/providers/auth_provider.dart';
 import 'package:myapp/services/user_interface_service.dart';
 
-class ReceiptContentPage extends StatefulWidget {
-  const ReceiptContentPage({super.key});
+class ReceiptContentPage extends ConsumerStatefulWidget {
+  const ReceiptContentPage({super.key, this.receiptData});
+
+  final Map<String, dynamic>? receiptData;
 
   @override
-  State<ReceiptContentPage> createState() => _MyWidgetState();
+  ConsumerState<ReceiptContentPage> createState() => _MyWidgetState();
 }
 
-class _MyWidgetState extends State<ReceiptContentPage> {
+class _MyWidgetState extends ConsumerState<ReceiptContentPage> {
   final UserInterfaceService _userInterfaceService = UserInterfaceService();
 
   @override
   Widget build(BuildContext context) {
-    final data = ModalRoute.of(context)?.settings.arguments as Receipt?;
     final ThemeData theme = Theme.of(context);
 
+    final _ = ref.watch(authNotifierProvider);
+    final data = widget.receiptData;
+
     if (data == null) {
+      ArgumentError.notNull('data');
+      return DisplayNoData();
+    }
+
+    final receipt = data['receipt'] as Receipt?;
+
+    if (receipt == null) {
+      ArgumentError.notNull('waterAccount');
       return DisplayNoData();
     }
 
     return Scaffold(
       appBar: AppBar(
         title: AppbarCustomHeader(
-          title: 'Transaction #${data.transactionNumber}',
+          title: 'Transaction #${receipt.transactionNumber}',
           subtitle: _userInterfaceService.convertReceiptDateFormat(
-            date: data.date,
+            date: receipt.date,
             receiptListFormat: true,
           ),
         ),
@@ -54,18 +69,18 @@ class _MyWidgetState extends State<ReceiptContentPage> {
           const SizedBox(height: 35),
           ReceiptContainer(
             copyButton: CircularCopyButton(
-              targetTextToCopy: data.transactionNumber,
+              targetTextToCopy: receipt.transactionNumber,
             ),
             actions: [
-              {'Transaction No.': data.transactionNumber},
-              {'Biller:': data.billerName},
-              {'Amount:': data.amount.toStringAsFixed(2)},
+              {'Transaction No.': receipt.transactionNumber},
+              {'Biller:': receipt.billerName},
+              {'Amount:': receipt.amount.toStringAsFixed(2)},
               {
                 'Date:': _userInterfaceService.convertReceiptDateFormat(
-                  date: data.date,
+                  date: receipt.date,
                 ),
               },
-              {'Payment Method:': data.paymentMethod},
+              {'Payment Method:': receipt.paymentMethod},
             ],
           ),
         ],

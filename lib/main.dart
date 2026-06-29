@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:myapp/data-bank/receipt.dart';
-import 'package:myapp/data-class/bill.dart';
 import 'package:myapp/data-class/news_information.dart';
+import 'package:myapp/data-class/ticket.dart';
 import 'package:myapp/data-class/user_account.dart';
-import 'package:myapp/data-class/water_account.dart';
 import 'package:myapp/pages/00-How-to/get_started_page.dart';
 import 'package:myapp/pages/00-How-to/guide_page.dart';
 
@@ -32,7 +30,6 @@ import 'package:myapp/pages/05-home-page/index/account/ticket_content.dart';
 import 'package:myapp/pages/05-home-page/index/account/ticket_page.dart';
 import 'package:myapp/pages/05-home-page/index/news/news_content_page.dart';
 import 'package:myapp/pages/05-home-page/index/support/support_email_result_page.dart';
-import 'package:myapp/pages/05-home-page/index/support/support_index.dart';
 import 'package:myapp/pages/05-home-page/index/support/support_result_page.dart';
 
 void main() async {
@@ -80,9 +77,10 @@ class CalambaWaterDistrict extends StatelessWidget {
 }
 
 //Go Router Config
+//Indexes doesnt have GoRoute as its handled by BottomNavigationBar of HomePage() /home
 final _router = GoRouter(
   debugLogDiagnostics: true,
-  initialLocation: '/home',
+  initialLocation: '/',
   routes: [
     // Intro - Child Route
     GoRoute(
@@ -143,40 +141,27 @@ final _router = GoRouter(
     ),
 
     // Home (indexes) & Core Content
-    GoRoute(path: '/home', builder: (context, state) => const HomePage()),
+    GoRoute(
+      path: '/home',
+      builder: (context, state) => const HomePage(),
+      routes: [
+        GoRoute(
+          path: 'accountinformation',
+          builder: (context, state) {
+            final data = state.extra as Map<String, dynamic>?;
+            return AccountInformationPage(linkedAccountData: data);
+          },
+        ),
+      ],
+    ),
 
-    //push linkaccount only because of AccountIndex _buildLinkButton async method
+    //Link account section
     GoRoute(
       path: '/linkaccount',
       builder: (context, state) => const LinkAccountPage(),
     ),
 
-    GoRoute(
-      path: '/accountinformation',
-      builder: (context, state) {
-        final data = state.extra as WaterAccount?;
-        return AccountInformationPage(linkedAccount: data);
-      },
-    ),
-
-    GoRoute(
-      path: '/billing',
-      builder: (context, state) {
-        final data = state.extra as WaterAccount?;
-
-        return BillingPage(waterAccount: data);
-      },
-    ),
-
-    GoRoute(
-      path: '/billcontent',
-      builder: (context, state) {
-        final data = state.extra as Bill?;
-
-        return BillingContentPage(bill: data);
-      },
-    ),
-
+    //News section
     GoRoute(
       path: '/newscontent',
       builder: (context, state) {
@@ -186,56 +171,104 @@ final _router = GoRouter(
       },
     ),
 
-    GoRoute(path: '/receipt', builder: (context, state) => const ReceiptPage()),
-    GoRoute(
-      path: '/receiptcontent',
-      builder: (context, state) => const ReceiptContentPage(),
-    ),
-
-    // Payments
+    //Payment section
     GoRoute(
       path: '/payment',
       builder: (context, state) {
-        final data = state.extra as WaterAccount?;
-        return PaymentPage(waterAccount: data);
+        final data = state.extra as Map<String, dynamic>?;
+        return PaymentPage(linkedAccountData: data);
       },
+      routes: [
+        GoRoute(
+          path: 'paymentconfirmation',
+          builder: (context, state) {
+            final data = state.extra as Map<String, dynamic>?;
+            return PaymentConfirmation(paymentData: data);
+          },
+          routes: [
+            GoRoute(
+              path: 'paymentresult',
+              builder: (context, state) {
+                final data = state.extra as Map<String, dynamic>?;
+                return PaymentResultPage(receiptData: data);
+              },
+            ),
+          ],
+        ),
+      ],
     ),
 
+    //Bill section
     GoRoute(
-      path: '/paymentconfirmation',
+      path: '/billing',
       builder: (context, state) {
         final data = state.extra as Map<String, dynamic>?;
-        return PaymentConfirmation(paymentData: data);
+
+        return BillingPage(linkedAccountData: data);
       },
+      routes: [
+        GoRoute(
+          path: 'billcontent',
+          builder: (context, state) {
+            final data = state.extra as Map<String, dynamic>?;
+
+            return BillingContentPage(billData: data);
+          },
+        ),
+      ],
     ),
 
+    //Receipt section
     GoRoute(
-      path: '/paymentresult',
+      path: '/receipt',
       builder: (context, state) {
-        final data = state.extra as Map<String, dynamic>?;
-        return PaymentResultPage(receiptData: data);
+        final data = state.extra as Map<String, dynamic>;
+        return ReceiptPage(linkedAccountData: data);
       },
+      routes: [
+        GoRoute(
+          path: 'receiptcontent',
+          builder: (context, state) {
+            final data = state.extra as Map<String, dynamic>;
+            return ReceiptContentPage(receiptData: data);
+          },
+        ),
+      ],
     ),
 
     // Tickets
-    GoRoute(path: '/ticket', builder: (context, state) => const TicketPage()),
     GoRoute(
-      path: '/ticketcontent',
-      builder: (context, state) => const TicketContent(),
+      path: '/ticket',
+      builder: (context, state) {
+        final data = state.extra as Map<String, dynamic>?;
+        return TicketPage(ticketData: data);
+      },
+      routes: [
+        GoRoute(
+          path: 'ticketcontent',
+          builder: (context, state) {
+            final data = state.extra as Map<String, dynamic>;
+            return TicketContent(ticketData: data);
+          },
+        ),
+      ],
     ),
 
-    // Support
-    GoRoute(
-      path: '/support',
-      builder: (context, state) => const SupportIndex(),
-    ),
     GoRoute(
       path: '/supportresult',
-      builder: (context, state) => const SupportResultPage(),
+      builder: (context, state) {
+        final data = state.extra as Ticket?;
+        return SupportResultPage(supportTicket: data);
+      },
     ),
+
     GoRoute(
       path: '/supportemailresult',
-      builder: (context, state) => const SupportEmailResultPage(),
+      builder: (context, state) {
+        final data = state.extra as int?;
+
+        return SupportEmailResultPage(supportTicket: data);
+      },
     ),
   ],
 );

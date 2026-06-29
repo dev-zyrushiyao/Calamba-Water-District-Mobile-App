@@ -7,7 +7,9 @@ import 'package:myapp/custom-shapes/support-page-shapes/support_shape5.dart';
 import 'package:myapp/custom-widgets/display_no_data.dart';
 
 class SupportEmailResultPage extends StatefulWidget {
-  const SupportEmailResultPage({super.key});
+  const SupportEmailResultPage({super.key, this.supportTicket});
+
+  final int? supportTicket;
 
   @override
   State<SupportEmailResultPage> createState() => _MyWidgetState();
@@ -63,7 +65,7 @@ class _MyWidgetState extends State<SupportEmailResultPage>
 
   @override
   Widget build(BuildContext context) {
-    final data = ModalRoute.of(context)?.settings.arguments as int?;
+    final data = widget.supportTicket;
 
     if (data == null) {
       return DisplayNoData();

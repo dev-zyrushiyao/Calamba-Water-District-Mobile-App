@@ -97,7 +97,7 @@ class _AccountVerificationPageState
 
     final data = widget.newUser;
 
-    debugPrint('${widget.newUser}');
+    debugPrint('THE NEW USER IS : ${widget.newUser}');
 
     if (data == null) {
       return DisplayNoData();
@@ -164,13 +164,15 @@ class _AccountVerificationPageState
                   label: 'Submit',
                   onPressed: _isOtpComplete
                       ? () async {
+                          //unfocus keyboard
                           FocusScope.of(context).unfocus();
-                          ref
+                          //save the account
+                          await ref
                               .read(accountNotifierProvider.notifier)
                               .registerUser(data);
 
                           if (!context.mounted) return;
-                          context.go('/signup/accountverification/result');
+                          context.push('/signup/accountverification/result');
                         }
                       : null,
                 ),

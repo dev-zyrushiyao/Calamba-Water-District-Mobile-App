@@ -18,22 +18,25 @@ DONE - refactor the HomeIndex DashBoardDisplay onPressed() and use CustomAction 
 DONE - test the setState of (Home Index Build() Listview onPressed) if necessary else remove
 DONE - add route to the FAB (HomeIndex)
 DONE - Simplify the LinkAccountPage _loadingTextAnimation
-DONE- Update the result == delete from the _buildSlider use the context.pop(true) pass a boolean for deletion instead of string
-- Pay linkedAccounts using Provider account
-- Fixed a bug about Page Transition from Payment to AccountInformation
-- check Receipt and Bills using Provider account
-- Create a ticket using Provider account
+DONE - Update the result == delete from the _buildSlider use the context.pop(true) pass a boolean for deletion instead of string
+DONE - Pay linkedAccounts using Provider account
+DONE - Fixed a bug about Page Transition from Payment to AccountInformation
+DONE - fix bug on Gesture Detector of Slider routing to AccounIndex to AccountInformationPage
+Done - check Receipt and Bills using Provider account
+DONE - Create a ticket using Provider account
 - rename the DataBanks to models
 - Check Go Router Stateful nested navigation / ShellRoute for HomePage (Bottom Navigation)
-- Finish the Nested Route of GoRouter
+DONE - Finish the Nested Route of GoRouter
 DONE - add WidgetState the code from the unlink and gesture detector (account index)
-- Refactor the Logout button from OOP to Provider and use GoRoute
-- Create a provider and refactor news 
-- refactor receipt
-- refactor ticket
-- refactor Support
-- refactor payment
-
+DONE - Refactor the Logout button from OOP to Provider and use GoRoute
+DONE - Create a provider and refactor news 
+DONE - refactor receipt
+DONE - refactor ticket
+DONE - refactor Support
+DONE - refactor payment
+DONE - refactor bill on AccountIndex
+DONE - refactor ticketviewing on accountinformation
+DONE - fix the newUser Null in SIgnup Verification
 
 
 

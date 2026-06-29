@@ -10,9 +10,9 @@ import 'package:myapp/data-class/water_account.dart';
 import 'package:myapp/providers/auth_provider.dart';
 
 class PaymentPage extends ConsumerStatefulWidget {
-  const PaymentPage({super.key, required this.waterAccount});
+  const PaymentPage({super.key, required this.linkedAccountData});
 
-  final WaterAccount? waterAccount;
+  final Map<String, dynamic>? linkedAccountData;
 
   @override
   ConsumerState<PaymentPage> createState() => _MyWidgetState();
@@ -67,9 +67,15 @@ class _MyWidgetState extends ConsumerState<PaymentPage> {
     final loggedUser = ref.watch(authNotifierProvider);
 
     //Data passed through Account Index to Account InformationPage
-    final data = widget.waterAccount;
+    final data = widget.linkedAccountData;
 
     if (loggedUser == null || data == null) {
+      return DisplayNoData();
+    }
+
+    final waterAccount = data['waterAccount'] as WaterAccount?;
+
+    if (waterAccount == null) {
       return DisplayNoData();
     }
 
@@ -84,7 +90,7 @@ class _MyWidgetState extends ConsumerState<PaymentPage> {
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           children: [
             const SizedBox(height: 20),
-            _buildTextField(data, currencySign, theme),
+            _buildTextField(waterAccount, currencySign, theme),
             const SizedBox(height: 50),
             _buildPaymentMethod(loggedUser, theme),
             const SizedBox(height: 60),
@@ -95,7 +101,7 @@ class _MyWidgetState extends ConsumerState<PaymentPage> {
               label: 'Proceed',
               width: double.infinity,
               onPressed: isEnabled
-                  ? () async {
+                  ? () {
                       if (_formKey.currentState!.validate()) {
                         //pass the value of onSave to inputAmount (String)
                         _formKey.currentState?.save();
@@ -107,16 +113,18 @@ class _MyWidgetState extends ConsumerState<PaymentPage> {
                         // passes 2 arguments
                         // TextInput
                         // WaterAccount
-                        await context.push(
-                          '/paymentconfirmation',
+                        context.push(
+                          '/payment/paymentconfirmation',
                           extra: {
                             'inputAmount': double.tryParse(input),
-                            'waterAccount': data,
+                            'waterAccount': waterAccount,
                           },
                         );
 
-                        //clear the value of controller
-                        _amountController?.clear();
+                        Future.delayed(Duration(seconds: 1), () {
+                          //clear the value of controller
+                          _amountController?.clear();
+                        });
                       }
                     }
                   : null,
@@ -218,7 +226,7 @@ class _MyWidgetState extends ConsumerState<PaymentPage> {
   }
 
   Widget _buildTextField(
-    WaterAccount data,
+    WaterAccount waterAccount,
     String currencySign,
     ThemeData theme,
   ) {
@@ -261,7 +269,7 @@ class _MyWidgetState extends ConsumerState<PaymentPage> {
                         ),
                         TextSpan(
                           text:
-                              '$currencySign ${data.balance.toStringAsFixed(2)}',
+                              '$currencySign ${waterAccount.balance.toStringAsFixed(2)}',
                           style: theme.textTheme.labelSmall?.copyWith(
                             color: const Color(0xFF664D03),
                             fontWeight: FontWeight.bold,

@@ -198,7 +198,7 @@ class _AccountIndexState extends ConsumerState<AccountIndex>
 
                         ref
                             .read(authNotifierProvider.notifier)
-                            .updateLinkedAccountAtIndex(index, value);
+                            .updateLinkedAccountNameAtIndex(index, value);
                       },
                       onChanged: (value) {
                         setDialogState(() {
@@ -411,8 +411,8 @@ class _AccountIndexState extends ConsumerState<AccountIndex>
                 onTap: () async {
                   //Push to AccountInformationPage and return a triggerable String stored in result variable
                   final result = await context.push(
-                    '/accountinformation',
-                    extra: linkedAccounts[index],
+                    '/home/accountinformation',
+                    extra: {'waterAccount': linkedAccounts[index]},
                   );
 
                   //When the Account Information Page pressed the delete button it will return

@@ -6,9 +6,9 @@ import 'package:myapp/data-class/bill.dart';
 import 'package:myapp/providers/auth_provider.dart';
 
 class BillingContentPage extends ConsumerStatefulWidget {
-  const BillingContentPage({super.key, required this.bill});
+  const BillingContentPage({super.key, required this.billData});
 
-  final Bill? bill;
+  final Map<String, dynamic>? billData;
 
   @override
   ConsumerState<BillingContentPage> createState() => BillingContenttState();
@@ -19,7 +19,7 @@ class BillingContenttState extends ConsumerState<BillingContentPage> {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
 
-    final data = widget.bill;
+    final data = widget.billData;
 
     final _ = ref.watch(authNotifierProvider);
 
@@ -27,11 +27,17 @@ class BillingContenttState extends ConsumerState<BillingContentPage> {
       return DisplayNoData();
     }
 
+    final bill = data['bill'] as Bill?;
+
+    if (bill == null) {
+      return DisplayNoData();
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: AppbarCustomHeader(
-          title: 'Receipt Number: ${data.receiptNumber}',
-          subtitle: '${data.monthName} 2026 Bill',
+          title: 'Receipt Number: ${bill.receiptNumber}',
+          subtitle: '${bill.monthName} 2026 Bill',
         ),
       ),
       body: Padding(
@@ -58,8 +64,8 @@ class BillingContenttState extends ConsumerState<BillingContentPage> {
                   ),
                   child: _buildHeadSection(
                     accountNickname: 'Customer',
-                    accountNumber: '${data.accountNumber}',
-                    month: data.monthName,
+                    accountNumber: '${bill.accountNumber}',
+                    month: bill.monthName,
                     theme: theme,
                   ),
                 ),
@@ -78,7 +84,7 @@ class BillingContenttState extends ConsumerState<BillingContentPage> {
                       Expanded(
                         child: _buildBoxSection(
                           category: 'READING RATE',
-                          content: data.readingRate,
+                          content: bill.readingRate,
                           theme: theme,
                         ),
                       ),
@@ -86,7 +92,7 @@ class BillingContenttState extends ConsumerState<BillingContentPage> {
                       Expanded(
                         child: _buildBoxSection(
                           category: 'DUE DATE',
-                          content: data.dueDate,
+                          content: bill.dueDate,
                           theme: theme,
                         ),
                       ),
@@ -94,7 +100,7 @@ class BillingContenttState extends ConsumerState<BillingContentPage> {
                       Expanded(
                         child: _buildBoxSection(
                           category: 'METER NO.',
-                          content: '${data.meterNumber}',
+                          content: '${bill.meterNumber}',
                           theme: theme,
                         ),
                       ),
@@ -121,7 +127,7 @@ class BillingContenttState extends ConsumerState<BillingContentPage> {
                         ),
                       ),
                       Text(
-                        '${data.period['start']} - ${data.period['end']}',
+                        '${bill.period['start']} - ${bill.period['end']}',
                         style: theme.textTheme.bodyLarge,
                       ),
                     ],
@@ -153,7 +159,7 @@ class BillingContenttState extends ConsumerState<BillingContentPage> {
                                           Expanded(
                                             child: _buildBoxSection(
                                               category: 'PRESENT',
-                                              content: '${data.presentReading}',
+                                              content: '${bill.presentReading}',
                                               theme: theme,
                                             ),
                                           ),
@@ -161,7 +167,7 @@ class BillingContenttState extends ConsumerState<BillingContentPage> {
                                             child: _buildBoxSection(
                                               category: 'PREVIOUS',
                                               content:
-                                                  '${data.previousReading}',
+                                                  '${bill.previousReading}',
                                               theme: theme,
                                             ),
                                           ),
@@ -180,7 +186,7 @@ class BillingContenttState extends ConsumerState<BillingContentPage> {
                                             child: _buildBoxSection(
                                               category: 'USED',
                                               content:
-                                                  '${data.usedCubicMeters}',
+                                                  '${bill.usedCubicMeters}',
                                               theme: theme,
                                             ),
                                           ),
@@ -259,12 +265,12 @@ class BillingContenttState extends ConsumerState<BillingContentPage> {
                             child: _buildAmountSection(
                               category: 'AMOUNT',
                               content: [
-                                '${data.amount}',
-                                '${data.franchiseTax}',
-                                '${data.septageManagementFee}',
-                                '${data.arrears}',
-                                '${data.totalAmount}',
-                                '${data.dueAfter}',
+                                '${bill.amount}',
+                                '${bill.franchiseTax}',
+                                '${bill.septageManagementFee}',
+                                '${bill.arrears}',
+                                '${bill.totalAmount}',
+                                '${bill.dueAfter}',
                               ],
                               theme: theme,
                             ),

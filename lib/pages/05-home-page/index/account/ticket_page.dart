@@ -1,20 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:myapp/custom-widgets/display_no_data.dart';
 import 'package:myapp/custom-widgets/headline.dart';
-import 'package:myapp/data-class/ticket.dart';
+import 'package:myapp/providers/auth_provider.dart';
 
-class TicketPage extends StatelessWidget {
-  const TicketPage({super.key});
+class TicketPage extends ConsumerWidget {
+  const TicketPage({super.key, this.ticketData});
+
+  final Map<String, dynamic>? ticketData;
 
   @override
-  Widget build(BuildContext context) {
-    final data = ModalRoute.of(context)?.settings.arguments as List<Ticket>?;
+  Widget build(BuildContext context, WidgetRef ref) {
+    //provider
+    final _ = ref.watch(authNotifierProvider);
+    final data = ticketData;
 
     final ThemeData theme = Theme.of(context);
 
     if (data == null) {
       return const DisplayNoData();
     }
+
+    final waterAccount = data['waterAccount'];
+
+    final reversedTicketList = waterAccount.ticket.reversed.toList();
 
     return Scaffold(
       appBar: AppBar(title: const Text('Ticket')),
@@ -39,14 +49,13 @@ class TicketPage extends StatelessWidget {
               child: ListView.separated(
                 separatorBuilder: (context, index) =>
                     const SizedBox(height: 10),
-                itemCount: data.length,
+                itemCount: reversedTicketList.length,
                 itemBuilder: (context, index) {
                   return TextButton(
                     onPressed: () {
-                      Navigator.pushNamed(
-                        context,
-                        '/ticketcontent',
-                        arguments: data[index],
+                      context.push(
+                        '/ticket/ticketcontent',
+                        extra: {'ticket': reversedTicketList[index]},
                       );
                     },
                     child: Row(
@@ -56,7 +65,7 @@ class TicketPage extends StatelessWidget {
                         Container(
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
-                            color: data[index].statusColor,
+                            color: reversedTicketList[index].statusColor,
                             border: Border.all(
                               width: 0.7,
                               color: theme.colorScheme.onPrimaryFixedVariant,
@@ -64,10 +73,12 @@ class TicketPage extends StatelessWidget {
                             borderRadius: BorderRadius.circular(13),
                           ),
 
-                          child: Text(data[index].reportStatus.value),
+                          child: Text(
+                            reversedTicketList[index].reportStatus.value,
+                          ),
                         ),
                         Text(
-                          'Ticket No. ${data[index].ticketNumber}',
+                          'Ticket No. ${reversedTicketList[index].ticketNumber}',
                           style: theme.textTheme.bodyLarge,
                         ),
                       ],

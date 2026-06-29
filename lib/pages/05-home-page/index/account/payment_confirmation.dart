@@ -13,7 +13,7 @@ import 'package:myapp/providers/auth_provider.dart';
 import 'package:myapp/services/payment_service.dart';
 
 class PaymentConfirmation extends ConsumerWidget {
-  const PaymentConfirmation({super.key, required this.paymentData});
+  const PaymentConfirmation({super.key, this.paymentData});
 
   final Map<String, dynamic>? paymentData;
 
@@ -37,8 +37,14 @@ class PaymentConfirmation extends ConsumerWidget {
       return const DisplayNoData();
     }
 
-    final inputAmount = data['inputAmount'] as double;
-    final waterAccount = data['waterAccount'] as WaterAccount;
+    final inputAmount = data['inputAmount'] as double?;
+    final waterAccount = data['waterAccount'] as WaterAccount?;
+
+    if (inputAmount == null || waterAccount == null) {
+      ArgumentError.notNull(inputAmount.toString());
+      ArgumentError(waterAccount.toString());
+      return DisplayNoData();
+    }
 
     return Scaffold(
       appBar: AppBar(title: const Text('Payment Confirmation')),
@@ -115,7 +121,7 @@ class PaymentConfirmation extends ConsumerWidget {
                               //use the generated transaction number and create the receipt
                               //deduct the balance
                               final updatedWaterAccount = await paymentService
-                                  .saveAndCreateReceipt(
+                                  .payAndCreateReceipt(
                                     waterAccount: waterAccount,
                                     transactionNumber:
                                         generatedTransactionNumber,
@@ -144,13 +150,14 @@ class PaymentConfirmation extends ConsumerWidget {
                               //shows the receipt of user's current transaction
                               if (retrievedReceipt != null) {
                                 context.push(
-                                  '/paymentresult',
+                                  '/payment/paymentconfirmation/paymentresult',
                                   extra: {
                                     'receipt': retrievedReceipt,
                                     'waterAccount': updatedWaterAccount,
                                   },
                                 );
                               } else {
+                                ArgumentError.notNull('retrievedReceipt');
                                 debugPrint(
                                   'NOTE: the value of receipt object is $retrievedReceipt',
                                 );

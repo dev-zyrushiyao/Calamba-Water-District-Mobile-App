@@ -25,7 +25,7 @@ class PaymentService {
     return transactionNumberAsList.join();
   }
 
-  Future<WaterAccount> saveAndCreateReceipt({
+  Future<WaterAccount> payAndCreateReceipt({
     required WaterAccount waterAccount,
     required String transactionNumber,
     required Biller billerName,

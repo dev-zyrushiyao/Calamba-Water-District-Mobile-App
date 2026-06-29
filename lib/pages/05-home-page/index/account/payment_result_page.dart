@@ -6,12 +6,14 @@ import 'package:myapp/custom-widgets/display_no_data.dart';
 import 'package:myapp/custom-widgets/headline.dart';
 import 'package:myapp/custom-widgets/primary_button.dart';
 import 'package:myapp/custom-widgets/receipt_container.dart';
+import 'package:myapp/data-bank/receipt.dart';
+import 'package:myapp/data-class/water_account.dart';
 import 'package:myapp/providers/auth_provider.dart';
 
 import 'package:myapp/services/user_interface_service.dart';
 
 class PaymentResultPage extends ConsumerWidget {
-  const PaymentResultPage({super.key, required this.receiptData});
+  const PaymentResultPage({super.key, this.receiptData});
 
   final Map<String, dynamic>? receiptData;
 
@@ -19,16 +21,19 @@ class PaymentResultPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     ThemeData theme = Theme.of(context);
 
+    final _ = ref.watch(authNotifierProvider);
     final data = receiptData;
 
     if (data == null) {
       return DisplayNoData();
     }
 
-    final receipt = data['receipt'];
-    final waterAccount = data['waterAccount'];
+    final receipt = data['receipt'] as Receipt?;
+    final waterAccount = data['waterAccount'] as WaterAccount?;
 
-    final _ = ref.watch(authNotifierProvider);
+    if (receipt == null || waterAccount == null) {
+      return DisplayNoData();
+    }
 
     final UserInterfaceService userInterfaceService = UserInterfaceService();
 
@@ -83,7 +88,23 @@ class PaymentResultPage extends ConsumerWidget {
               label: 'Return to Account Page',
               width: double.infinity,
               onPressed: () {
-                context.push('/accountinformation', extra: waterAccount);
+                final loggedAccount = ref.read(authNotifierProvider);
+                if (loggedAccount == null) return;
+
+                //looks for WaterAccount from the state
+                //Making sure the state gets updated value
+                //instead of passing the modified waterAccount to /accountInformation
+                //stateWaterAccount and waterAccount should have the same value
+                final stateWaterAccount = loggedAccount.linkedAccounts
+                    .firstWhere(
+                      (account) =>
+                          account.accountNumber == waterAccount.accountNumber,
+                    );
+
+                context.go(
+                  '/home/accountinformation',
+                  extra: {'waterAccount': stateWaterAccount},
+                );
               },
             ),
           ],

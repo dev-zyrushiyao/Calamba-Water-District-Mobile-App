@@ -84,8 +84,10 @@ class _HomeIndexState extends ConsumerState<HomeIndex> {
                         onPressed: () async {
                           //Push to AccountInformationPage and return a triggerable String stored in result variable
                           final result = await context.push(
-                            '/accountinformation',
-                            extra: loggedUser.linkedAccounts[index],
+                            '/home/accountinformation',
+                            extra: {
+                              'waterAccount': loggedUser.linkedAccounts[index],
+                            },
                           );
 
                           //When the Account Information Page pressed the delete button it will return

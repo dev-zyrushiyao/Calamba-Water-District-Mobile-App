@@ -8,15 +8,15 @@ import 'package:myapp/custom-widgets/secondary_button.dart';
 import 'package:myapp/custom-widgets/secondary_button_outlined.dart';
 import 'package:myapp/custom-widgets/status_indicator.dart';
 import 'package:myapp/data-class/constants/custom_action_enum.dart';
-
 import 'package:myapp/data-class/water_account.dart';
+
 import 'package:myapp/providers/auth_provider.dart';
 import 'package:myapp/services/masking_service.dart';
 
 class AccountInformationPage extends ConsumerWidget {
-  const AccountInformationPage({super.key, required this.linkedAccount});
+  const AccountInformationPage({super.key, this.linkedAccountData});
 
-  final WaterAccount? linkedAccount;
+  final Map<String, dynamic>? linkedAccountData;
 
   void _buildDialog(BuildContext context) {
     showDialog(
@@ -65,15 +65,17 @@ class AccountInformationPage extends ConsumerWidget {
     //Philippine Peso sign
     final String currencySign = '\u20B1';
     //Data passed through Account Index to Account InformationPage
-    final data = linkedAccount;
+    final data = linkedAccountData;
 
     if (data == null) {
       return DisplayNoData();
     }
 
+    final waterAccount = data['waterAccount'] as WaterAccount;
+
     //Receipt button
-    bool hasReceipt = data.receipt.isNotEmpty;
-    bool hasTicket = data.ticket.isNotEmpty;
+    bool hasReceipt = waterAccount.receipt.isNotEmpty;
+    bool hasTicket = waterAccount.ticket.isNotEmpty;
 
     return Scaffold(
       appBar: AppBar(
@@ -115,13 +117,13 @@ class AccountInformationPage extends ConsumerWidget {
                     Text('Account Number:', style: theme.textTheme.bodyLarge),
                     Text(
                       maskingService.formatAccountNumber(
-                        accountNumber: data.accountNumber,
+                        accountNumber: waterAccount.accountNumber,
                       ),
                       style: theme.textTheme.bodyLarge!.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    StatusIndicator(waterAccount: data),
+                    StatusIndicator(waterAccount: waterAccount),
                   ],
                 ),
 
@@ -130,7 +132,7 @@ class AccountInformationPage extends ConsumerWidget {
                   children: [
                     Text('Nickname :', style: theme.textTheme.bodyLarge),
                     Text(
-                      data.accountName,
+                      waterAccount.accountName,
                       style: theme.textTheme.bodyLarge!.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
@@ -148,11 +150,11 @@ class AccountInformationPage extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Due date: ${data.dueDay} of the month',
+                  'Due date: ${waterAccount.dueDay} of the month',
                   style: theme.textTheme.titleLarge,
                 ),
                 Text(
-                  'Balance: $currencySign ${data.balance.toStringAsFixed(2)}',
+                  'Balance: $currencySign ${waterAccount.balance.toStringAsFixed(2)}',
                   style: theme.textTheme.headlineMedium,
                 ),
 
@@ -161,7 +163,10 @@ class AccountInformationPage extends ConsumerWidget {
                   label: 'Pay',
                   width: 200,
                   onPressed: () {
-                    context.push('/payment', extra: data);
+                    context.push(
+                      '/payment',
+                      extra: {'waterAccount': waterAccount},
+                    );
                   },
                 ),
               ],
@@ -191,7 +196,10 @@ class AccountInformationPage extends ConsumerWidget {
                       child: SecondaryButtonOutlined(
                         label: 'Billing',
                         onPressed: () {
-                          context.push('/billing', extra: data);
+                          context.push(
+                            '/billing',
+                            extra: {'waterAccount': waterAccount},
+                          );
                         },
                       ),
                     ),
@@ -201,10 +209,9 @@ class AccountInformationPage extends ConsumerWidget {
                         label: 'Receipt',
                         onPressed: hasReceipt
                             ? () {
-                                Navigator.pushNamed(
-                                  context,
+                                context.push(
                                   '/receipt',
-                                  arguments: data.receipt.reversed.toList(),
+                                  extra: {'waterAccount': waterAccount},
                                 );
                               }
                             : null,
@@ -223,10 +230,9 @@ class AccountInformationPage extends ConsumerWidget {
                   width: 200,
                   onPressed: hasTicket
                       ? () {
-                          Navigator.pushNamed(
-                            context,
+                          context.push(
                             '/ticket',
-                            arguments: data.ticket.reversed.toList(),
+                            extra: {'waterAccount': waterAccount},
                           );
                         }
                       : null,

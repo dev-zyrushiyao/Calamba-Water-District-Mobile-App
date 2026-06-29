@@ -53,15 +53,17 @@ class AuthNotifier extends Notifier<UserAccount?> {
 
     if (targetIndex == -1) return;
 
-    //create a new object with a new value
+    //replace the value with a new object
     updatedList[targetIndex] = waterAccount;
 
-    //update the new value to the auth account
+    //modify the current user object with updatedlist
     final updatedUser = currentUser.copyWith(linkedAccounts: updatedList);
+    //update the Auth and the simulation Database with the new object user
+    //this will trigger rebuild account since its a new object inserted to the state.
     updateAccountFromSession(updatedUser);
   }
 
-  void updateLinkedAccountAtIndex(int index, String value) {
+  void updateLinkedAccountNameAtIndex(int index, String value) {
     final currentUser = state;
 
     if (currentUser == null) return;

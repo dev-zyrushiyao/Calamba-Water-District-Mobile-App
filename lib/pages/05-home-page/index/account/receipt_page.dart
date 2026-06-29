@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:myapp/custom-widgets/display_no_data.dart';
 import 'package:myapp/custom-widgets/headline.dart';
-import 'package:myapp/data-bank/receipt.dart';
+import 'package:myapp/data-class/water_account.dart';
+import 'package:myapp/providers/auth_provider.dart';
 import 'package:myapp/services/user_interface_service.dart';
 
-class ReceiptPage extends StatelessWidget {
-  const ReceiptPage({super.key});
+class ReceiptPage extends ConsumerWidget {
+  const ReceiptPage({super.key, this.linkedAccountData});
+
+  final Map<String, dynamic>? linkedAccountData;
 
   @override
-  Widget build(BuildContext context) {
-    final data = ModalRoute.of(context)?.settings.arguments as List<Receipt>?;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final _ = ref.watch(authNotifierProvider);
 
     //service
     final UserInterfaceService userInterfaceService = UserInterfaceService();
@@ -17,9 +22,20 @@ class ReceiptPage extends StatelessWidget {
     //theme
     final ThemeData theme = Theme.of(context);
 
+    final data = linkedAccountData;
     if (data == null || data.isEmpty) {
+      ArgumentError('data');
       return DisplayNoData();
     }
+
+    final waterAccount = data['waterAccount'] as WaterAccount?;
+
+    if (waterAccount == null) {
+      ArgumentError('waterAccount');
+      return DisplayNoData();
+    }
+
+    final reversedReceiptList = waterAccount.receipt.reversed.toList();
 
     return Scaffold(
       appBar: AppBar(title: const Text('Receipt')),
@@ -44,14 +60,13 @@ class ReceiptPage extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 20),
                 separatorBuilder: (context, index) =>
                     const SizedBox(height: 30),
-                itemCount: data.length,
+                itemCount: reversedReceiptList.length,
                 itemBuilder: (context, index) {
                   return GestureDetector(
                     onTap: () {
-                      Navigator.pushNamed(
-                        context,
-                        '/receiptcontent',
-                        arguments: data[index],
+                      context.push(
+                        '/receipt/receiptcontent',
+                        extra: {'receipt': reversedReceiptList[index]},
                       );
                     },
                     child: SizedBox(
@@ -64,7 +79,8 @@ class ReceiptPage extends StatelessWidget {
                             ),
 
                             TextSpan(
-                              text: data[index].transactionNumber,
+                              text:
+                                  reversedReceiptList[index].transactionNumber,
                               style: theme.textTheme.bodyLarge?.copyWith(
                                 fontWeight: FontWeight.bold,
                               ),
@@ -78,7 +94,7 @@ class ReceiptPage extends StatelessWidget {
                             TextSpan(
                               text: userInterfaceService
                                   .convertReceiptDateFormat(
-                                    date: data[index].date,
+                                    date: reversedReceiptList[index].date,
                                     receiptListFormat: true,
                                   ),
                               style: theme.textTheme.bodyLarge,
