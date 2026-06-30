@@ -5,7 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:myapp/custom-widgets/secondary_button.dart';
-import 'package:myapp/data-bank/account_type.dart';
+import 'package:myapp/data-bank/deprecated-class/account_type.dart';
 import 'package:myapp/data-class/user_account.dart';
 import 'package:myapp/providers/account_provider.dart';
 import 'package:myapp/providers/auth_provider.dart';

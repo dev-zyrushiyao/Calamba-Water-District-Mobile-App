@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:myapp/custom-widgets/display_no_data.dart';
 import 'package:myapp/custom-widgets/headline.dart';
+import 'package:myapp/custom-widgets/page_logo.dart';
 import 'package:myapp/custom-widgets/primary_button.dart';
 import 'package:myapp/data-class/constants/support_category_enum.dart';
 import 'package:myapp/data-class/water_account.dart';
@@ -119,9 +120,11 @@ class _SupportIndexState extends ConsumerState<SupportIndex> {
         child: Form(
           key: _formKey,
           child: ListView(
-            padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
+            padding: EdgeInsets.symmetric(vertical: 10),
             children: [
-              const SizedBox(height: 85.0),
+              PageLogo(),
+
+              const SizedBox(height: 38),
 
               Headline(
                 headline: 'File a Report',

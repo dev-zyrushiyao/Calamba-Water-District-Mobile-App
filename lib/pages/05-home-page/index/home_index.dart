@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:myapp/custom-widgets/dashboard_account.dart';
 import 'package:myapp/custom-widgets/display_no_data.dart';
 import 'package:myapp/custom-widgets/headline.dart';
+import 'package:myapp/custom-widgets/page_logo.dart';
 import 'package:myapp/custom-widgets/primary_button.dart';
 import 'package:myapp/custom-widgets/silver_dotted_border.dart';
 import 'package:myapp/data-class/constants/custom_action_enum.dart';
@@ -38,13 +38,7 @@ class _HomeIndexState extends ConsumerState<HomeIndex> {
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Column(
           children: [
-            Align(
-              alignment: AlignmentGeometry.centerStart,
-              child: SvgPicture.asset(
-                'assets/home-logo.svg',
-                fit: BoxFit.cover,
-              ),
-            ),
+            PageLogo(),
 
             const SizedBox(height: 28.0),
 

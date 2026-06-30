@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'package:collection/collection.dart';
 
-import 'package:myapp/data-bank/receipt.dart';
+import 'package:myapp/data-class/receipt.dart';
 import 'package:myapp/data-class/constants/biller_enum.dart';
 import 'package:myapp/data-class/constants/payment_method_enum.dart';
 import 'package:myapp/data-class/water_account.dart';

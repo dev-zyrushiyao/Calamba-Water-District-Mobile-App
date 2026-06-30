@@ -1,6 +1,6 @@
 import 'package:collection/collection.dart';
 
-import 'package:myapp/data-bank/account_collection.dart';
+import 'package:myapp/data-bank/deprecated-class/account_collection.dart';
 import 'package:myapp/data-class/constants/gender_enum.dart';
 import 'package:myapp/data-class/constants/text_section_enum.dart';
 import 'package:myapp/data-class/user_account.dart';

@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:myapp/custom-widgets/display_no_data.dart';
 import 'package:myapp/custom-widgets/primary_button.dart';
 
-import 'package:myapp/data-bank/receipt.dart';
+import 'package:myapp/data-class/receipt.dart';
 import 'package:myapp/data-class/constants/biller_enum.dart';
 import 'package:myapp/data-class/constants/payment_method_enum.dart';
 

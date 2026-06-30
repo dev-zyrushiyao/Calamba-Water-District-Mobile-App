@@ -4,7 +4,7 @@ import 'package:myapp/custom-widgets/appbar_custom_header.dart';
 import 'package:myapp/custom-widgets/circular_copy_button.dart';
 import 'package:myapp/custom-widgets/display_no_data.dart';
 import 'package:myapp/custom-widgets/receipt_container.dart';
-import 'package:myapp/data-bank/receipt.dart';
+import 'package:myapp/data-class/receipt.dart';
 
 import 'package:myapp/providers/auth_provider.dart';
 import 'package:myapp/services/user_interface_service.dart';

@@ -6,6 +6,7 @@ import 'package:myapp/custom-widgets/colored_container.dart';
 import 'package:myapp/custom-widgets/display_no_data.dart';
 
 import 'package:myapp/custom-widgets/headline.dart';
+import 'package:myapp/custom-widgets/page_logo.dart';
 import 'package:myapp/custom-widgets/separation_divider.dart';
 import 'package:myapp/custom-widgets/silver_dotted_border.dart';
 import 'package:myapp/custom-widgets/status_indicator.dart';
@@ -279,7 +280,9 @@ class _AccountIndexState extends ConsumerState<AccountIndex>
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const SizedBox(height: 85.0),
+            PageLogo(),
+
+            const SizedBox(height: 38),
 
             const Align(
               alignment: Alignment.bottomLeft,

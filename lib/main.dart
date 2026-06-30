@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:myapp/data-class/news_information.dart';
+import 'package:myapp/data-class/deprecated-class/news_information.dart';
 import 'package:myapp/data-class/ticket.dart';
 import 'package:myapp/data-class/user_account.dart';
 import 'package:myapp/pages/00-How-to/get_started_page.dart';
@@ -80,7 +80,7 @@ class CalambaWaterDistrict extends StatelessWidget {
 //Indexes doesnt have GoRoute as its handled by BottomNavigationBar of HomePage() /home
 final _router = GoRouter(
   debugLogDiagnostics: true,
-  initialLocation: '/',
+  initialLocation: '/home',
   routes: [
     // Intro - Child Route
     GoRoute(

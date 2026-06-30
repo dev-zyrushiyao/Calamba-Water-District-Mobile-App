@@ -1,7 +1,7 @@
 //WaterAccount -> LinkedAccountList -> HomeIndex -> DashBoardAccount
 
 import 'package:flutter/material.dart';
-import 'package:myapp/data-bank/receipt.dart';
+import 'package:myapp/data-class/receipt.dart';
 import 'package:myapp/data-class/bill.dart';
 import 'package:myapp/data-class/constants/water_account_status_enum.dart';
 import 'package:myapp/data-class/ticket.dart';

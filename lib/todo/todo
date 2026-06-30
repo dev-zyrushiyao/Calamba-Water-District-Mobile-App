@@ -9,9 +9,9 @@ DONE - Use Provider on Forgot Password
 DONE - Login using Provider
 DONE - Update LoggedUser and the Account from the Provider (db) when updating profile
 DONE - Create linkedAccounts using Provider account
-- add CWD logo on AccountIndex and Support Index
-- adjust UI padding on Dotted Line (AccountIndex)
-- Adjust UI padding UI (SupportIndex)
+DONE - add CWD logo on AccountIndex and Support Index
+CANCELLED - adjust UI padding on Dotted Line (AccountIndex)
+DONE - Adjust UI padding UI (SupportIndex)
 DONE - Check Edit button on AccountIndex
 DONE - make update list linked accounts on AuthProvider
 DONE - refactor the HomeIndex DashBoardDisplay onPressed() and use CustomAction to delete
@@ -37,7 +37,10 @@ DONE - refactor payment
 DONE - refactor bill on AccountIndex
 DONE - refactor ticketviewing on accountinformation
 DONE - fix the newUser Null in SIgnup Verification
-
+DONE - create provider for News
+DONE - move the deprecated class to a separate folder
+DONE - Fix UI NewsIndex using providers
+- Add a gesture GoRoute Link to NewsIndex to NewsContent
 
 
 continue reading : https://pub.dev/documentation/go_router/latest/topics/Configuration-topic.html

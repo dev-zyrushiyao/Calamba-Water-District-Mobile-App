@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:myapp/custom-widgets/display_no_data.dart';
 import 'package:myapp/custom-widgets/news_bullet.dart';
 import 'package:myapp/custom-widgets/news_headline.dart';
-import 'package:myapp/data-class/news_information.dart';
+import 'package:myapp/data-class/deprecated-class/news_information.dart';
 import 'package:myapp/custom-widgets/news_header.dart';
 import 'package:myapp/services/news_content_page_service.dart';
 
