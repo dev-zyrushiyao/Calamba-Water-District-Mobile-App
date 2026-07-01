@@ -24,8 +24,6 @@ DONE - Fixed a bug about Page Transition from Payment to AccountInformation
 DONE - fix bug on Gesture Detector of Slider routing to AccounIndex to AccountInformationPage
 Done - check Receipt and Bills using Provider account
 DONE - Create a ticket using Provider account
-- rename the DataBanks to models
-- Check Go Router Stateful nested navigation / ShellRoute for HomePage (Bottom Navigation)
 DONE - Finish the Nested Route of GoRouter
 DONE - add WidgetState the code from the unlink and gesture detector (account index)
 DONE - Refactor the Logout button from OOP to Provider and use GoRoute
@@ -40,7 +38,15 @@ DONE - fix the newUser Null in SIgnup Verification
 DONE - create provider for News
 DONE - move the deprecated class to a separate folder
 DONE - Fix UI NewsIndex using providers
-- Add a gesture GoRoute Link to NewsIndex to NewsContent
+DONE- Add a gesture GoRoute Link to NewsIndex to NewsContent
+DONE - add ChatRole in UserAccount datamodel
+DONE - Fix UI overflow on Paymentmethod at AccountInformation -> PaymentPage
+DONE - fix support chat display bug
+DONE - fix profile Display BUG
+DONE - fix the profile update using riverpod
+- rename the DataBanks to models
+- Check Go Router Stateful nested navigation / ShellRoute for HomePage (Bottom Navigation)
+- add riverpod generated to the providers
 
 
 continue reading : https://pub.dev/documentation/go_router/latest/topics/Configuration-topic.html

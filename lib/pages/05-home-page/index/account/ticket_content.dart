@@ -7,6 +7,7 @@ import 'package:myapp/data-class/chat_support.dart';
 import 'package:myapp/data-class/constants/chat_role_enum.dart';
 import 'package:myapp/data-class/ticket.dart';
 import 'package:myapp/data-class/user_account.dart';
+import 'package:myapp/data-class/water_account.dart';
 import 'package:myapp/providers/auth_provider.dart';
 import 'package:myapp/services/user_interface_service.dart';
 
@@ -20,17 +21,11 @@ class TicketContent extends ConsumerStatefulWidget {
 }
 
 class _TicketContentState extends ConsumerState<TicketContent> {
-  // final UserAccount _loggedUser = AccountType().owner;
   //service
   final UserInterfaceService _userInterfaceService = UserInterfaceService();
 
   String? dateTicketCreated;
   String? dateOccurence;
-
-  List<ChatSupport>? chatSupport;
-
-  //use in datetime for chatsupport
-  late DateTime currentDateTime = _userInterfaceService.getManilaTimezone();
 
   //controller
   final TextEditingController _textController = TextEditingController();
@@ -59,19 +54,29 @@ class _TicketContentState extends ConsumerState<TicketContent> {
 
   @override
   Widget build(BuildContext context) {
-    //provider
-    final loggedUser = ref.watch(authNotifierProvider);
-
-    final data = widget.ticketData;
-
     //theme
     final ThemeData theme = Theme.of(context);
+
+    //provider
+    final loggedUser = ref.watch(authNotifierProvider);
+    final data = widget.ticketData;
 
     if (loggedUser == null || data == null) {
       return DisplayNoData();
     }
 
-    final ticket = data['ticket'];
+    final ticketNumber = data['ticketNumber'] as int?;
+    final waterAccount = data['waterAccount'] as WaterAccount?;
+
+    if (ticketNumber == null || waterAccount == null) {
+      return DisplayNoData();
+    }
+
+    final ticket = waterAccount.ticket.firstWhere(
+      (ticket) => ticket.ticketNumber == ticketNumber,
+    );
+
+    final chatSupport = ticket.report.chatHistory;
 
     dateTicketCreated = _userInterfaceService.convertToCalendarDateFormat(
       ticket.report.dateTicketCreated,
@@ -79,8 +84,6 @@ class _TicketContentState extends ConsumerState<TicketContent> {
     dateOccurence = _userInterfaceService.convertToCalendarDateFormat(
       ticket.report.dateOccurence,
     );
-
-    chatSupport = ticket.report.chatHistory;
 
     return Scaffold(
       appBar: AppBar(title: Text('Ticket No. ${ticket.ticketNumber}')),
@@ -123,13 +126,13 @@ class _TicketContentState extends ConsumerState<TicketContent> {
                 ),
                 separatorBuilder: (context, index) =>
                     const SizedBox(height: 30),
-                itemCount: chatSupport!.length,
+                itemCount: chatSupport.length,
                 itemBuilder: (context, index) {
                   return _buildChatBubble(
-                    chatSupportIndex: chatSupport![index],
+                    chatSupportIndex: chatSupport[index],
                     datePosted: _userInterfaceService
                         .convertToCalendarDateFormat(
-                          chatSupport![index].date,
+                          chatSupport[index].date,
                           true,
                         ),
                     theme: theme,
@@ -139,9 +142,9 @@ class _TicketContentState extends ConsumerState<TicketContent> {
             ),
 
             _buildTextField(
-              ticketData: ticket,
+              ticket: ticket,
               loggedUser: loggedUser,
-              currentDate: currentDateTime,
+              waterAccount: waterAccount,
               theme: theme,
             ),
           ],
@@ -151,9 +154,10 @@ class _TicketContentState extends ConsumerState<TicketContent> {
   }
 
   Widget _buildTextField({
-    required Ticket ticketData,
+    required Ticket ticket,
     required UserAccount loggedUser,
-    required DateTime currentDate,
+    required WaterAccount waterAccount,
+
     required ThemeData theme,
   }) {
     return Container(
@@ -205,21 +209,47 @@ class _TicketContentState extends ConsumerState<TicketContent> {
           ),
           GestureDetector(
             onTap: () {
-              setState(() {
-                ticketData.report.chatHistory.add(
-                  ChatSupport(
-                    senderName: loggedUser.nickname,
-                    message: _textController.text,
-                    date: currentDate,
-                    role: ChatRole.client,
-                  ),
-                );
-              });
+              if (_textController.text.isEmpty) {
+                return;
+              }
+
+              //use in datetime for chatsupport
+              DateTime currentDateTime = _userInterfaceService
+                  .getManilaTimezone();
+
+              ticket.report.chatHistory.add(
+                ChatSupport(
+                  senderName: loggedUser.nickname,
+                  message: _textController.text,
+                  date: currentDateTime,
+                  role: loggedUser.chatRole,
+                ),
+              );
+
+              //find the index of the ticket in the list
+              final targetIndex = waterAccount.ticket.indexWhere(
+                (ticketData) => ticketData.ticketNumber == ticket.ticketNumber,
+              );
+
+              if (targetIndex == -1) return;
+
+              //copy WaterAccount ticket list
+              final updatedTicketList = List<Ticket>.from(waterAccount.ticket);
+
+              //replace the ticket in the list with the updated ticket
+              updatedTicketList[targetIndex] = ticket;
+
+              // //create a new WaterAccount with the updated ticket list
+              final updatedWaterAccount = waterAccount.copyWith(
+                ticket: updatedTicketList,
+              );
+
+              ref
+                  .read(authNotifierProvider.notifier)
+                  .updateLinkedAccount(updatedWaterAccount);
 
               FocusScope.of(context).unfocus();
-
               _textController.clear();
-
               _scrollToBottom();
             },
             child: Container(

@@ -7,12 +7,19 @@ class NewsBullet extends StatelessWidget {
     this.bulletFormat = false,
   });
 
-  final List<String> bulletList;
+  final List<String>? bulletList;
   final bool bulletFormat;
 
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
+
+    final bulletList = this.bulletList;
+
+    if (bulletList == null || bulletList.isEmpty) {
+      return SizedBox.shrink();
+    }
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 17.0),
       child: Text(

@@ -16,7 +16,7 @@ class NewsNotifier extends Notifier<List<News>> {
         year: Year.y2026,
         title: 'Notice of Scheduled Interconnection: Brgy. Mayapa Area',
         status: NewsStatus.ongoing,
-        paragraph1: [
+        paragraph: [
           'The Calamba Water District (CWD) has issued an urgent advisory following a major pipe burst reported early this morning at the Main Entrance of Lakeview Subdivision.',
           'The rupture was identified in a primary 8-inch distribution line, causing significant water loss and localized flooding near the subdivision gates.',
           'CWD emergency response crews were dispatched at 8:30 AM and are currently on-site performing excavation and pipe replacement.',
@@ -25,7 +25,7 @@ class NewsNotifier extends Notifier<List<News>> {
         headline1: 'Service Impact',
         subline1:
             'Residents in the following areas may experience low pressure to zero water supply during the repair period:',
-        primaryList: [
+        firstList: [
           'Lakeview Subdivision (All Phases)',
           'Portions of Brgy. Halang',
           'Immediate neighboring residential compounds',
@@ -35,7 +35,7 @@ class NewsNotifier extends Notifier<List<News>> {
             "CWD engineers estimate that repairs will be completed and water pressure will begin to normalize by 6:00 PM today, March 12, 2026.",
         headline3: "Advice for Residents",
         subline3: null,
-        secondaryList: [
+        thirdList: [
           'Storage: Residents are encouraged to use stored water wisely until service is restored.',
           'Water Quality: Upon restoration, "turbidity" (brownish water) may occur briefly. Please let your faucets run for 1–2 minutes until the water clears.',
           'Traffic: Motorists are advised to take alternate routes as one lane near the Lakeview Main Entrance is partially obstructed by service vehicles and equipment.',
@@ -48,7 +48,7 @@ class NewsNotifier extends Notifier<List<News>> {
         year: Year.y2026,
         title: 'Water Conservation Workshop for Calamba City Public Schools',
         status: NewsStatus.resolved,
-        paragraph1: ['Placeholder paragraph'],
+        paragraph: ['Placeholder paragraph'],
       ),
 
       News(
@@ -58,7 +58,7 @@ class NewsNotifier extends Notifier<List<News>> {
         year: Year.y2026,
         title: 'Emergency Pipe Repair: Lakeview Subd. Main Entrance',
         status: NewsStatus.resolved,
-        paragraph1: ['Placeholder paragraph'],
+        paragraph: ['Placeholder paragraph'],
       ),
 
       News(
@@ -68,7 +68,7 @@ class NewsNotifier extends Notifier<List<News>> {
         year: Year.y2025,
         title: '"Walk In Her Shoes" Activity Honors Women in the Water Sector',
         status: NewsStatus.resolved,
-        paragraph1: ['Placeholder paragraph'],
+        paragraph: ['Placeholder paragraph'],
       ),
     ];
   }

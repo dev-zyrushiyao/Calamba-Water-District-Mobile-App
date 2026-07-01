@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:myapp/custom-widgets/headline.dart';
 import 'package:myapp/custom-widgets/primary_button.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:myapp/data-class/constants/chat_role_enum.dart';
 import 'package:myapp/data-class/constants/gender_enum.dart';
 import 'package:myapp/data-class/user_account.dart';
 import 'package:myapp/providers/account_provider.dart';
@@ -193,13 +194,14 @@ class _SignupPageState extends ConsumerState<SignupPage> {
                         _formKey.currentState!.save();
 
                         final newUser = UserAccount(
-                          _registeredForm['nickname'],
-                          _registeredForm['phoneNumber'],
-                          _registeredForm['gender'],
-                          _registeredForm['email'],
-                          _registeredForm['password'],
-                          _registeredForm['ewallet'],
-                          [],
+                          nickname: _registeredForm['nickname'],
+                          phoneNumber: _registeredForm['phoneNumber'],
+                          gender: _registeredForm['gender'],
+                          email: _registeredForm['email'],
+                          password: _registeredForm['password'],
+                          ewallet: _registeredForm['ewallet'],
+                          chatRole: ChatRole.client,
+                          linkedAccounts: [],
                         );
 
                         context.push(

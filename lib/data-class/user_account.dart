@@ -1,3 +1,4 @@
+import 'package:myapp/data-class/constants/chat_role_enum.dart';
 import 'package:myapp/data-class/water_account.dart';
 import 'package:myapp/data-class/constants/gender_enum.dart';
 
@@ -8,17 +9,19 @@ class UserAccount {
   String email;
   String password;
   int ewallet;
+  ChatRole chatRole; //enum
   List<WaterAccount> linkedAccounts;
 
-  UserAccount(
-    this.nickname,
-    this.phoneNumber,
-    this.gender,
-    this.email,
-    this.password,
-    this.ewallet,
-    this.linkedAccounts,
-  );
+  UserAccount({
+    required this.nickname,
+    required this.phoneNumber,
+    required this.gender,
+    required this.email,
+    required this.password,
+    required this.ewallet,
+    this.chatRole = ChatRole.client,
+    required this.linkedAccounts,
+  });
 
   UserAccount copyWith({
     String? nickname,
@@ -27,16 +30,18 @@ class UserAccount {
     String? email,
     String? password,
     int? ewallet,
+    ChatRole? chatRole,
     List<WaterAccount>? linkedAccounts,
   }) {
     return UserAccount(
-      nickname ?? this.nickname,
-      phoneNumber ?? this.phoneNumber,
-      gender ?? this.gender,
-      email ?? this.email,
-      password ?? this.password,
-      ewallet ?? this.ewallet,
-      linkedAccounts ?? this.linkedAccounts,
+      nickname: nickname ?? this.nickname,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
+      gender: gender ?? this.gender,
+      email: email ?? this.email,
+      password: password ?? this.password,
+      ewallet: ewallet ?? this.ewallet,
+      chatRole: chatRole ?? this.chatRole,
+      linkedAccounts: linkedAccounts ?? this.linkedAccounts,
     );
   }
 

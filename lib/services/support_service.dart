@@ -53,7 +53,7 @@ class SupportService {
             loggedUser.nickname,
             supportInput['reportContext'],
             manilaTime,
-            ChatRole.client,
+            loggedUser.chatRole,
           ),
           createChatMessage(
             'Stell',

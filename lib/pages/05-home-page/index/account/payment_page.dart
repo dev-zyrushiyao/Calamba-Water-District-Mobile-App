@@ -194,7 +194,7 @@ class _MyWidgetState extends ConsumerState<PaymentPage> {
         Text('Payment Method', style: theme.textTheme.titleLarge),
         SizedBox(
           child: Row(
-            spacing: 10,
+            spacing: 30,
             children: [
               SizedBox(
                 child: Row(
@@ -212,11 +212,26 @@ class _MyWidgetState extends ConsumerState<PaymentPage> {
                   ],
                 ),
               ),
-              Text(
-                '${loggedUser.ewallet} (${loggedUser.nickname})',
-                style: theme.textTheme.bodyLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    child: Text(
+                      '${loggedUser.ewallet}',
+                      style: theme.textTheme.bodyLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    child: Text(
+                      loggedUser.nickname,
+                      style: theme.textTheme.labelSmall?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

@@ -61,6 +61,9 @@ class _ProfileIndexState extends ConsumerState<ProfileIndex> {
   //form validator
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+  //blank User
+  UserAccount? _blankUser;
+
   @override
   void initState() {
     super.initState();
@@ -148,6 +151,7 @@ class _ProfileIndexState extends ConsumerState<ProfileIndex> {
   }
 
   void createUserDisplayValue(UserAccount loggedUser) {
+    //linked Accounts and Chat Role are not included in the display since it is not editable by the user
     loggedUserValues = {
       TextSection.nickname: loggedUser.nickname,
       TextSection.phoneNumber: loggedUser.phoneNumber.toString().startsWith('9')
@@ -375,19 +379,7 @@ class _ProfileIndexState extends ConsumerState<ProfileIndex> {
             items: _dropDownItems,
             isExpanded: true,
             onSaved: (value) {
-              //Saves the form values to User Object (loggedUser)
-              //saves only from the TextSection enum : _, _, _, _, gender , _
               if (value != null) {
-                _profileService.saveForm(
-                  textSection: _textSection[index],
-                  textFieldValue: null,
-                  loggedUser: loggedUser,
-                  dropdownValue: value,
-                );
-
-                debugPrint('GENDER DROPDOWN VALUE: $value');
-
-                //re-updates the list for UI display
                 loggedUserValues[_textSection[index]] = value.name;
               }
             },
@@ -471,24 +463,9 @@ class _ProfileIndexState extends ConsumerState<ProfileIndex> {
         return null;
       },
       onSaved: (value) {
-        //Saves the form values to User Object (loggedUser) except the Gender secton since it is a dropdown list
-        //saves only from the TextSection enum : nickname, phoneNumber, email, password, _ , eWallet
-        //onSaved() automatically loops all the values of the form to save
         if (value != null) {
-          //re-updates the display
-          //onSaved() automatically loops all the values of the form to save
-          //_LoggedUserValues now equals to the value saved on form instead of controller text.
-          //reset the password obscure -> isHidden variable back to default value : true
-          setState(() {
-            _profileService.saveForm(
-              loggedUser: loggedUser,
-              textSection: _textSection[index],
-              textFieldValue: value,
-            );
-
-            loggedUserValues[_textSection[index]] = value;
-            _isHidden = true;
-          });
+          loggedUserValues[_textSection[index]] = value;
+          _isHidden = true;
         }
       },
       onChanged: (_) {},
@@ -599,8 +576,21 @@ class _ProfileIndexState extends ConsumerState<ProfileIndex> {
             //save the form
             _formKey.currentState!.save();
 
-            final updatedUser = ref.read(authNotifierProvider);
+            //create a copy of the current user with the new values from the form
+            final updatedUser = ref
+                .read(authNotifierProvider)
+                ?.copyWith(
+                  nickname: loggedUserValues[TextSection.nickname],
+                  phoneNumber: int.parse(
+                    loggedUserValues[TextSection.phoneNumber],
+                  ),
+                  email: loggedUserValues[TextSection.email],
+                  password: loggedUserValues[TextSection.password],
+                  gender: loggedUserValues[TextSection.gender],
+                  ewallet: int.parse(loggedUserValues[TextSection.eWallet]),
+                );
 
+            //if the updatedUser is not null, update the Auth and the simulation Database with the new object user
             if (updatedUser != null) {
               ref
                   .read(authNotifierProvider.notifier)

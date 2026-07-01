@@ -19,4 +19,25 @@ class Report {
     required this.reportContext,
     required this.chatHistory,
   });
+
+  Report copyWith({
+    SupportCategory? supportCategory,
+    int? affectedAccountNumber,
+    DateTime? dateOccurence,
+    DateTime? dateTicketCreated,
+    String? reportedBy,
+    String? reportContext,
+    List<ChatSupport>? chatHistory,
+  }) {
+    return Report(
+      supportCategory: supportCategory ?? this.supportCategory,
+      affectedAccountNumber:
+          affectedAccountNumber ?? this.affectedAccountNumber,
+      dateOccurence: dateOccurence ?? this.dateOccurence,
+      dateTicketCreated: dateTicketCreated ?? this.dateTicketCreated,
+      reportedBy: reportedBy ?? this.reportedBy,
+      reportContext: reportContext ?? this.reportContext,
+      chatHistory: chatHistory ?? this.chatHistory,
+    );
+  }
 }

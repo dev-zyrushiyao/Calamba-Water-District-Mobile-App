@@ -14,5 +14,17 @@ class Ticket {
     required this.reportStatus,
   });
 
+  Ticket copyWith({
+    int? ticketNumber,
+    Report? report,
+    ReportStatus? reportStatus,
+  }) {
+    return Ticket(
+      ticketNumber: ticketNumber ?? this.ticketNumber,
+      report: report ?? this.report,
+      reportStatus: reportStatus ?? this.reportStatus,
+    );
+  }
+
   Color get statusColor => reportStatus.getReportStatusColor();
 }

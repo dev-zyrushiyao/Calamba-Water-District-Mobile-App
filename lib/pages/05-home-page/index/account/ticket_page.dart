@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:myapp/custom-widgets/display_no_data.dart';
 import 'package:myapp/custom-widgets/headline.dart';
+import 'package:myapp/data-class/water_account.dart';
 import 'package:myapp/providers/auth_provider.dart';
 
 class TicketPage extends ConsumerWidget {
@@ -22,7 +23,11 @@ class TicketPage extends ConsumerWidget {
       return const DisplayNoData();
     }
 
-    final waterAccount = data['waterAccount'];
+    final waterAccount = data['waterAccount'] as WaterAccount?;
+
+    if (waterAccount == null) {
+      return const DisplayNoData();
+    }
 
     final reversedTicketList = waterAccount.ticket.reversed.toList();
 
@@ -55,7 +60,11 @@ class TicketPage extends ConsumerWidget {
                     onPressed: () {
                       context.push(
                         '/ticket/ticketcontent',
-                        extra: {'ticket': reversedTicketList[index]},
+                        extra: {
+                          'ticketNumber':
+                              reversedTicketList[index].ticketNumber,
+                          'waterAccount': waterAccount,
+                        },
                       );
                     },
                     child: Row(

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:myapp/data-class/deprecated-class/news_information.dart';
+import 'package:myapp/data-class/news.dart';
 import 'package:myapp/data-class/ticket.dart';
 import 'package:myapp/data-class/user_account.dart';
 import 'package:myapp/pages/00-How-to/get_started_page.dart';
@@ -165,9 +165,9 @@ final _router = GoRouter(
     GoRoute(
       path: '/newscontent',
       builder: (context, state) {
-        final data = state.extra as NewsInformation?;
+        final data = state.extra as News?;
 
-        return NewsContentPage(newsInformation: data);
+        return NewsContentPage(news: data);
       },
     ),
 

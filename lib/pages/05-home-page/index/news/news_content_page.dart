@@ -1,28 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:myapp/custom-widgets/display_no_data.dart';
 import 'package:myapp/custom-widgets/news_bullet.dart';
 import 'package:myapp/custom-widgets/news_headline.dart';
-import 'package:myapp/data-class/deprecated-class/news_information.dart';
 import 'package:myapp/custom-widgets/news_header.dart';
+import 'package:myapp/data-class/news.dart';
 import 'package:myapp/services/news_content_page_service.dart';
 
-class NewsContentPage extends StatefulWidget {
-  const NewsContentPage({super.key, this.newsInformation});
+class NewsContentPage extends ConsumerStatefulWidget {
+  const NewsContentPage({super.key, this.news});
 
-  final NewsInformation? newsInformation;
+  final News? news;
 
   @override
-  State<NewsContentPage> createState() => _NewsContentPageState();
+  ConsumerState<NewsContentPage> createState() => _NewsContentPageState();
 }
 
-class _NewsContentPageState extends State<NewsContentPage> {
+class _NewsContentPageState extends ConsumerState<NewsContentPage> {
   //service
   final NewsContentPageService _newsContentPage = NewsContentPageService();
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final data = widget.newsInformation;
+    final ThemeData theme = Theme.of(context);
+
+    final data = widget.news;
+
     if (data == null) {
       return DisplayNoData();
     }
@@ -60,7 +63,7 @@ class _NewsContentPageState extends State<NewsContentPage> {
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         children: [
           //News Header
-          NewsHeader(data: data),
+          NewsHeader(news: data),
 
           const SizedBox(height: 10),
 
@@ -73,7 +76,7 @@ class _NewsContentPageState extends State<NewsContentPage> {
 
           Text(
             _newsContentPage.formatList(
-              items: data.paragraph1,
+              items: data.paragraph,
               bulletFormat: false,
             ),
             style: theme.textTheme.bodyLarge,
@@ -90,26 +93,23 @@ class _NewsContentPageState extends State<NewsContentPage> {
 
           const SizedBox(height: 20),
 
-          if (data.headLine1 != null) NewsHeadline(data: data.headLine1!),
-
+          NewsHeadline(headline: data.headline1, subheadline: data.subline1),
           const SizedBox(height: 10),
 
-          if (data.bulletList1 != null)
-            NewsBullet(bulletList: data.bulletList1!, bulletFormat: true),
-
-          if (data.headLine2 != null) NewsHeadline(data: data.headLine2!),
+          NewsBullet(bulletList: data.firstList, bulletFormat: true),
           const SizedBox(height: 10),
 
-          if (data.bulletList2 != null)
-            NewsBullet(bulletList: data.bulletList2!, bulletFormat: true),
-
+          NewsHeadline(headline: data.headline2, subheadline: data.subline2),
           const SizedBox(height: 10),
 
-          if (data.headLine3 != null) NewsHeadline(data: data.headLine3!),
+          NewsBullet(bulletList: data.secondList, bulletFormat: true),
           const SizedBox(height: 10),
 
-          if (data.bulletList3 != null)
-            NewsBullet(bulletList: data.bulletList3!, bulletFormat: true),
+          NewsHeadline(headline: data.headline3, subheadline: data.subline3),
+          const SizedBox(height: 10),
+
+          NewsBullet(bulletList: data.thirdList, bulletFormat: true),
+          const SizedBox(height: 10),
         ],
       ),
     );

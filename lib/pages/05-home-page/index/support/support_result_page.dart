@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:myapp/custom-shapes/support-page-shapes/support_shape1.dart';
 import 'package:myapp/custom-shapes/support-page-shapes/support_shape2.dart';
 import 'package:myapp/custom-shapes/support-page-shapes/support_shape3.dart';
@@ -110,16 +111,16 @@ class _MyWidgetState extends State<SupportResultPage>
                           TextSpan(
                             style: theme.textTheme.bodyLarge,
                             children: [
-                              TextSpan(text: 'A new Ticket'),
-                              TextSpan(text: ' '),
+                              const TextSpan(text: 'A new Ticket'),
+                              const TextSpan(text: ' '),
                               TextSpan(
                                 text: '#${data.ticketNumber}',
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
-                              TextSpan(text: ' '),
-                              TextSpan(text: 'is now active '),
-                              TextSpan(text: ' '),
-                              TextSpan(
+                              const TextSpan(text: ' '),
+                              const TextSpan(text: 'is now active '),
+                              const TextSpan(text: ' '),
+                              const TextSpan(
                                 text:
                                     'You can view your ticket status on the Account page.',
                               ),
@@ -145,16 +146,16 @@ class _MyWidgetState extends State<SupportResultPage>
       child: FadeTransition(
         opacity: _opacityAnimation,
         child: GestureDetector(
-          onTap: () => Navigator.pop(context),
+          onTap: () => context.pop(),
           child: Container(
-            padding: EdgeInsets.all(10.0),
-            decoration: BoxDecoration(
+            padding: const EdgeInsets.all(10.0),
+            decoration: const BoxDecoration(
               // color: Colors.teal,
               shape: BoxShape.circle,
             ),
             child: Column(
               children: [
-                Icon(Icons.close),
+                const Icon(Icons.close),
                 Text('Close', style: theme.textTheme.labelLarge),
               ],
             ),

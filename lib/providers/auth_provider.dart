@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:myapp/data-class/constants/chat_role_enum.dart';
 import 'package:myapp/data-class/constants/gender_enum.dart';
 import 'package:myapp/data-class/user_account.dart';
 import 'package:myapp/data-class/water_account.dart';
@@ -8,13 +9,14 @@ class AuthNotifier extends Notifier<UserAccount?> {
   @override
   UserAccount? build() {
     return UserAccount(
-      'Zy',
-      09151234567,
-      Gender.male,
-      'zy@email.com',
-      '1234567890',
-      639151234567,
-      [],
+      nickname: 'Zy',
+      phoneNumber: 09151234567,
+      gender: Gender.male,
+      email: 'zyrus@example.com',
+      password: '1234567890',
+      ewallet: 639123456789,
+      chatRole: ChatRole.client,
+      linkedAccounts: [],
     );
     // return null;
   }

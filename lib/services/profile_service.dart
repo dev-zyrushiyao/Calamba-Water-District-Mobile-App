@@ -137,6 +137,9 @@ class ProfileService {
     }
   }
 
+  @Deprecated(
+    'Used only for OOP version , use setInputTypeFrom() instead for Provider version',
+  )
   void saveForm({
     required Enum textSection,
     required String? textFieldValue,
@@ -147,24 +150,24 @@ class ProfileService {
       switch (textSection) {
         case TextSection.nickname:
           loggedUser.nickname = textFieldValue;
-          // account.nickname = textFieldValue;
+
           break;
         case TextSection.phoneNumber:
           loggedUser.phoneNumber =
               int.tryParse(textFieldValue) ?? loggedUser.phoneNumber;
-          // account.phoneNumber = int.tryParse(textFieldValue) ?? 0;
+
           break;
         case TextSection.email:
           loggedUser.email = textFieldValue;
-          // account.email = textFieldValue;
+
           break;
         case TextSection.password:
           loggedUser.password = textFieldValue;
-          // account.password = textFieldValue;
+
           break;
         case TextSection.eWallet:
           loggedUser.ewallet = int.tryParse(textFieldValue) ?? 0;
-          // account.ewallet = int.tryParse(textFieldValue) ?? 0;
+
           break;
         default:
           null;
@@ -174,15 +177,8 @@ class ProfileService {
     if (dropdownValue != null) {
       switch (textSection) {
         case TextSection.gender:
-          debugPrint(
-            'PROFILE SERVICE: BEFORE LOGGED USER GENDER : ${loggedUser.gender}',
-          );
           loggedUser.gender = dropdownValue;
 
-          debugPrint(
-            'PROFILE SERVICE: AFTER LOGGED USER GENDER : ${loggedUser.gender}',
-          );
-          // account.gender = dropdownValue;
           break;
       }
     }

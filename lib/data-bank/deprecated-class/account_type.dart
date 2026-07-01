@@ -1,3 +1,4 @@
+import 'package:myapp/data-class/constants/chat_role_enum.dart';
 import 'package:myapp/data-class/user_account.dart';
 import 'package:myapp/data-class/constants/gender_enum.dart';
 
@@ -13,12 +14,13 @@ class AccountType {
 
   //placeholder
   UserAccount owner = UserAccount(
-    'ZyrusHiyao',
-    09123456789,
-    Gender.female,
-    'myemail@email.com',
-    'password1234',
-    639123456789,
-    [],
+    nickname: 'ZyrusHiyao',
+    phoneNumber: 09123456789,
+    gender: Gender.female,
+    email: 'myemail@email.com',
+    password: 'password1234',
+    ewallet: 639123456789,
+    linkedAccounts: [],
+    chatRole: ChatRole.client,
   );
 }

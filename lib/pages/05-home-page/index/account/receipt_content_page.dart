@@ -50,40 +50,45 @@ class _MyWidgetState extends ConsumerState<ReceiptContentPage> {
           ),
         ),
       ),
-      body: ListView(
-        padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
-        children: [
-          const SizedBox(height: 93),
-          SizedBox(
-            child: Column(
-              spacing: 9.0,
-              children: [
-                Text(
-                  'Calamba Water District',
-                  style: theme.textTheme.headlineSmall,
-                ),
-                Text('Official Receipt', style: theme.textTheme.headlineMedium),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              child: Column(
+                spacing: 9.0,
+                children: [
+                  Text(
+                    'Calamba Water District',
+                    style: theme.textTheme.headlineSmall,
+                  ),
+                  Text(
+                    'Official Receipt',
+                    style: theme.textTheme.headlineMedium,
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 35),
+            ReceiptContainer(
+              copyButton: CircularCopyButton(
+                targetTextToCopy: receipt.transactionNumber,
+              ),
+              actions: [
+                {'Transaction No.': receipt.transactionNumber},
+                {'Biller:': receipt.billerName},
+                {'Amount:': receipt.amount.toStringAsFixed(2)},
+                {
+                  'Date:': _userInterfaceService.convertReceiptDateFormat(
+                    date: receipt.date,
+                  ),
+                },
+                {'Payment Method:': receipt.paymentMethod},
               ],
             ),
-          ),
-          const SizedBox(height: 35),
-          ReceiptContainer(
-            copyButton: CircularCopyButton(
-              targetTextToCopy: receipt.transactionNumber,
-            ),
-            actions: [
-              {'Transaction No.': receipt.transactionNumber},
-              {'Biller:': receipt.billerName},
-              {'Amount:': receipt.amount.toStringAsFixed(2)},
-              {
-                'Date:': _userInterfaceService.convertReceiptDateFormat(
-                  date: receipt.date,
-                ),
-              },
-              {'Payment Method:': receipt.paymentMethod},
-            ],
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
