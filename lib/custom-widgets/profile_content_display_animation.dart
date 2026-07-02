@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/data-class/user_account.dart';
+import 'package:myapp/models/user_account.dart';
 
 class ProfileContentDisplayAnimation extends StatefulWidget {
   const ProfileContentDisplayAnimation({

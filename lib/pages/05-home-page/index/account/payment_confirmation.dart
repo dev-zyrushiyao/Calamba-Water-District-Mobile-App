@@ -4,11 +4,11 @@ import 'package:go_router/go_router.dart';
 import 'package:myapp/custom-widgets/display_no_data.dart';
 import 'package:myapp/custom-widgets/primary_button.dart';
 
-import 'package:myapp/data-class/receipt.dart';
-import 'package:myapp/data-class/constants/biller_enum.dart';
-import 'package:myapp/data-class/constants/payment_method_enum.dart';
+import 'package:myapp/models/receipt.dart';
+import 'package:myapp/models/constants/biller_enum.dart';
+import 'package:myapp/models/constants/payment_method_enum.dart';
 
-import 'package:myapp/data-class/water_account.dart';
+import 'package:myapp/models/water_account.dart';
 import 'package:myapp/providers/auth_provider.dart';
 import 'package:myapp/services/payment_service.dart';
 
@@ -19,7 +19,7 @@ class PaymentConfirmation extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final loggedUser = ref.watch(authNotifierProvider);
+    final loggedUser = ref.watch(authProvider);
 
     if (loggedUser == null) {
       return DisplayNoData();
@@ -130,7 +130,7 @@ class PaymentConfirmation extends ConsumerWidget {
                                     paymentMethod: PaymentMethod.gCash,
                                   );
                               ref
-                                  .read(authNotifierProvider.notifier)
+                                  .read(authProvider.notifier)
                                   .updateLinkedAccount(updatedWaterAccount);
 
                               //after creating the receipt , search the linkedAccount generated transaction number

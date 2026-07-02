@@ -10,9 +10,9 @@ import 'package:myapp/custom-widgets/page_logo.dart';
 import 'package:myapp/custom-widgets/separation_divider.dart';
 import 'package:myapp/custom-widgets/silver_dotted_border.dart';
 import 'package:myapp/custom-widgets/status_indicator.dart';
-import 'package:myapp/data-class/constants/custom_action_enum.dart';
+import 'package:myapp/models/constants/custom_action_enum.dart';
 
-import 'package:myapp/data-class/water_account.dart';
+import 'package:myapp/models/water_account.dart';
 
 import 'package:myapp/providers/auth_provider.dart';
 
@@ -66,7 +66,7 @@ class _AccountIndexState extends ConsumerState<AccountIndex>
     //add sliding controller of linked accounts
     //create the controller only when user visit the AccountIndex
 
-    final loggedUser = ref.read(authNotifierProvider);
+    final loggedUser = ref.read(authProvider);
 
     if (loggedUser == null) {
       throw ArgumentError.notNull('loggedUser');
@@ -106,7 +106,7 @@ class _AccountIndexState extends ConsumerState<AccountIndex>
     debugPrint('Unlink Triggered');
     //reference only for debugPrinting
     final removedAccount = ref
-        .read(authNotifierProvider)
+        .read(authProvider)
         ?.linkedAccounts[targetIndex];
 
     //after it successfully removed the item from the list and dipose the controller
@@ -127,7 +127,7 @@ class _AccountIndexState extends ConsumerState<AccountIndex>
       );
 
       //remove the linked account and update the authenticated logged account and the simulated database
-      ref.read(authNotifierProvider.notifier).removeAccountAtIndex(targetIndex);
+      ref.read(authProvider.notifier).removeAccountAtIndex(targetIndex);
     });
   }
 
@@ -198,7 +198,7 @@ class _AccountIndexState extends ConsumerState<AccountIndex>
                         if (value == null || value.trim().isEmpty) return;
 
                         ref
-                            .read(authNotifierProvider.notifier)
+                            .read(authProvider.notifier)
                             .updateLinkedAccountNameAtIndex(index, value);
                       },
                       onChanged: (value) {
@@ -268,7 +268,7 @@ class _AccountIndexState extends ConsumerState<AccountIndex>
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
 
-    final loggedUser = ref.watch(authNotifierProvider);
+    final loggedUser = ref.watch(authProvider);
 
     if (loggedUser == null) {
       return DisplayNoData();

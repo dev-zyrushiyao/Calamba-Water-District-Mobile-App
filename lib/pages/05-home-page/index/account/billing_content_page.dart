@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:myapp/custom-widgets/appbar_custom_header.dart';
 import 'package:myapp/custom-widgets/display_no_data.dart';
-import 'package:myapp/data-class/bill.dart';
+import 'package:myapp/models/bill.dart';
 import 'package:myapp/providers/auth_provider.dart';
 
 class BillingContentPage extends ConsumerStatefulWidget {
@@ -21,7 +21,7 @@ class BillingContenttState extends ConsumerState<BillingContentPage> {
 
     final data = widget.billData;
 
-    final _ = ref.watch(authNotifierProvider);
+    final _ = ref.watch(authProvider);
 
     if (data == null) {
       return DisplayNoData();

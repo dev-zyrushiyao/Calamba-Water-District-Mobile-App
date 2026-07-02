@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:myapp/custom-widgets/display_no_data.dart';
 import 'package:myapp/custom-widgets/headline.dart';
-import 'package:myapp/data-class/water_account.dart';
+import 'package:myapp/models/water_account.dart';
 import 'package:myapp/providers/auth_provider.dart';
 
 class TicketPage extends ConsumerWidget {
@@ -14,7 +14,7 @@ class TicketPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     //provider
-    final _ = ref.watch(authNotifierProvider);
+    final _ = ref.watch(authProvider);
     final data = ticketData;
 
     final ThemeData theme = Theme.of(context);

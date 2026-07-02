@@ -5,9 +5,9 @@ import 'package:go_router/go_router.dart';
 import 'package:myapp/custom-widgets/headline.dart';
 import 'package:myapp/custom-widgets/primary_button.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:myapp/data-class/constants/chat_role_enum.dart';
-import 'package:myapp/data-class/constants/gender_enum.dart';
-import 'package:myapp/data-class/user_account.dart';
+import 'package:myapp/models/constants/chat_role_enum.dart';
+import 'package:myapp/models/constants/gender_enum.dart';
+import 'package:myapp/models/user_account.dart';
 import 'package:myapp/providers/account_provider.dart';
 
 import 'package:myapp/services/validator_service.dart';
@@ -114,7 +114,7 @@ class _SignupPageState extends ConsumerState<SignupPage> {
                       //search email input from the Provider set and when found retrieve the account
                       //else return null
                       final user = ref
-                          .read(accountNotifierProvider.notifier)
+                          .read(accountProvider.notifier)
                           .searchEmail(value);
 
                       //if the user is not null declare declare boolean as true

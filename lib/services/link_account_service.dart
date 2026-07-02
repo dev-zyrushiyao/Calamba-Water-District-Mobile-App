@@ -1,9 +1,9 @@
 import 'dart:math';
 
-import 'package:myapp/data-class/bill.dart';
-import 'package:myapp/data-class/constants/month_enum.dart';
-import 'package:myapp/data-class/constants/water_account_status_enum.dart';
-import 'package:myapp/data-class/water_account.dart' show WaterAccount;
+import 'package:myapp/models/bill.dart';
+import 'package:myapp/models/constants/month_enum.dart';
+import 'package:myapp/models/constants/water_account_status_enum.dart';
+import 'package:myapp/models/water_account.dart' show WaterAccount;
 
 class LinkAccountService {
   //method to generate number using Generic Type

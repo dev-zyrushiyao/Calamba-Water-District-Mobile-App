@@ -3,11 +3,11 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:myapp/custom-widgets/display_no_data.dart';
 import 'package:myapp/custom-widgets/separation_divider.dart';
-import 'package:myapp/data-class/chat_support.dart';
-import 'package:myapp/data-class/constants/chat_role_enum.dart';
-import 'package:myapp/data-class/ticket.dart';
-import 'package:myapp/data-class/user_account.dart';
-import 'package:myapp/data-class/water_account.dart';
+import 'package:myapp/models/chat_support.dart';
+import 'package:myapp/models/constants/chat_role_enum.dart';
+import 'package:myapp/models/ticket.dart';
+import 'package:myapp/models/user_account.dart';
+import 'package:myapp/models/water_account.dart';
 import 'package:myapp/providers/auth_provider.dart';
 import 'package:myapp/services/user_interface_service.dart';
 
@@ -58,7 +58,7 @@ class _TicketContentState extends ConsumerState<TicketContent> {
     final ThemeData theme = Theme.of(context);
 
     //provider
-    final loggedUser = ref.watch(authNotifierProvider);
+    final loggedUser = ref.watch(authProvider);
     final data = widget.ticketData;
 
     if (loggedUser == null || data == null) {
@@ -245,7 +245,7 @@ class _TicketContentState extends ConsumerState<TicketContent> {
               );
 
               ref
-                  .read(authNotifierProvider.notifier)
+                  .read(authProvider.notifier)
                   .updateLinkedAccount(updatedWaterAccount);
 
               FocusScope.of(context).unfocus();

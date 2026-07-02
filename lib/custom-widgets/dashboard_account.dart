@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/custom-widgets/primary_button.dart';
 import 'package:myapp/custom-widgets/status_indicator.dart';
-import 'package:myapp/data-class/constants/water_account_status_enum.dart';
-import 'package:myapp/data-class/water_account.dart';
+import 'package:myapp/models/constants/water_account_status_enum.dart';
+import 'package:myapp/models/water_account.dart';
 import 'package:myapp/services/masking_service.dart';
 
 class DashboardDisplay extends StatelessWidget {

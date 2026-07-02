@@ -6,8 +6,8 @@ import 'package:myapp/custom-widgets/display_no_data.dart';
 import 'package:myapp/custom-widgets/headline.dart';
 import 'package:myapp/custom-widgets/primary_button.dart';
 import 'package:myapp/custom-widgets/receipt_container.dart';
-import 'package:myapp/data-class/receipt.dart';
-import 'package:myapp/data-class/water_account.dart';
+import 'package:myapp/models/receipt.dart';
+import 'package:myapp/models/water_account.dart';
 import 'package:myapp/providers/auth_provider.dart';
 
 import 'package:myapp/services/user_interface_service.dart';
@@ -21,7 +21,7 @@ class PaymentResultPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     ThemeData theme = Theme.of(context);
 
-    final _ = ref.watch(authNotifierProvider);
+    final _ = ref.watch(authProvider);
     final data = receiptData;
 
     if (data == null) {
@@ -88,7 +88,7 @@ class PaymentResultPage extends ConsumerWidget {
               label: 'Return to Account Page',
               width: double.infinity,
               onPressed: () {
-                final loggedAccount = ref.read(authNotifierProvider);
+                final loggedAccount = ref.read(authProvider);
                 if (loggedAccount == null) return;
 
                 //looks for WaterAccount from the state

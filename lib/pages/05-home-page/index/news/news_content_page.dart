@@ -4,7 +4,7 @@ import 'package:myapp/custom-widgets/display_no_data.dart';
 import 'package:myapp/custom-widgets/news_bullet.dart';
 import 'package:myapp/custom-widgets/news_headline.dart';
 import 'package:myapp/custom-widgets/news_header.dart';
-import 'package:myapp/data-class/news.dart';
+import 'package:myapp/models/news.dart';
 import 'package:myapp/services/news_content_page_service.dart';
 
 class NewsContentPage extends ConsumerStatefulWidget {

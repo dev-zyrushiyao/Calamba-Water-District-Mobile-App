@@ -7,7 +7,7 @@ import 'package:myapp/custom-widgets/headline.dart';
 import 'package:myapp/custom-widgets/page_logo.dart';
 import 'package:myapp/custom-widgets/primary_button.dart';
 import 'package:myapp/custom-widgets/silver_dotted_border.dart';
-import 'package:myapp/data-class/constants/custom_action_enum.dart';
+import 'package:myapp/models/constants/custom_action_enum.dart';
 import 'package:myapp/providers/auth_provider.dart';
 
 class HomeIndex extends ConsumerStatefulWidget {
@@ -27,7 +27,7 @@ class _HomeIndexState extends ConsumerState<HomeIndex> {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
 
-    final loggedUser = ref.watch(authNotifierProvider);
+    final loggedUser = ref.watch(authProvider);
 
     if (loggedUser == null) {
       return DisplayNoData();
@@ -89,7 +89,7 @@ class _HomeIndexState extends ConsumerState<HomeIndex> {
                           //if the condition is met this will delete the current linked account on the list
                           if (result == CustomAction.delete) {
                             ref
-                                .read(authNotifierProvider.notifier)
+                                .read(authProvider.notifier)
                                 .removeAccountAtIndex(index);
                           }
                         },

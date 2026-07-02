@@ -1,8 +1,13 @@
-import 'package:myapp/data-class/constants/chat_role_enum.dart';
-import 'package:myapp/data-class/user_account.dart';
-import 'package:myapp/data-class/constants/gender_enum.dart';
+import 'package:myapp/models/constants/chat_role_enum.dart';
+import 'package:myapp/models/user_account.dart';
+import 'package:myapp/models/constants/gender_enum.dart';
 
+@Deprecated(
+  'This class is deprecated and will be removed in future versions.  only used in OOP version 1.0.',
+)
 class AccountType {
+  //Singleton Authentication class
+
   //private constructor
   AccountType._internal();
 

@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:myapp/custom-widgets/display_no_data.dart';
 import 'package:myapp/custom-widgets/headline.dart';
-import 'package:myapp/data-class/water_account.dart';
+import 'package:myapp/models/water_account.dart';
 import 'package:myapp/providers/auth_provider.dart';
 import 'package:myapp/services/user_interface_service.dart';
 
@@ -14,7 +14,7 @@ class ReceiptPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final _ = ref.watch(authNotifierProvider);
+    final _ = ref.watch(authProvider);
 
     //service
     final UserInterfaceService userInterfaceService = UserInterfaceService();

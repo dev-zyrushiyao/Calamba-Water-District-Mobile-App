@@ -142,7 +142,7 @@ class _LinkAccountPageState extends ConsumerState<LinkAccountPage>
   }
 
   void _accountDuplicationChecker() {
-    final loggedUser = ref.read(authNotifierProvider);
+    final loggedUser = ref.read(authProvider);
 
     if (loggedUser == null) {
       throw ArgumentError.notNull('loggedUser');
@@ -160,7 +160,7 @@ class _LinkAccountPageState extends ConsumerState<LinkAccountPage>
   }
 
   void _accountMaxLimitChecker() {
-    final loggedUser = ref.read(authNotifierProvider);
+    final loggedUser = ref.read(authProvider);
 
     if (loggedUser == null) {
       throw ArgumentError.notNull('loggedUser');
@@ -183,7 +183,7 @@ class _LinkAccountPageState extends ConsumerState<LinkAccountPage>
   Future<void> _startLinkingProcess() async {
     if (!mounted) return;
 
-    final loggedUser = ref.read(authNotifierProvider);
+    final loggedUser = ref.read(authProvider);
 
     if (loggedUser == null) {
       throw ArgumentError.notNull('loggedUser');
@@ -224,9 +224,7 @@ class _LinkAccountPageState extends ConsumerState<LinkAccountPage>
               _linkedAccountForm,
             );
 
-            ref
-                .read(authNotifierProvider.notifier)
-                .addLinkedAccount(newLinkedAccount);
+            ref.read(authProvider.notifier).addLinkedAccount(newLinkedAccount);
 
             debugPrint('Linking process is finished!');
           } else {
@@ -284,7 +282,7 @@ class _LinkAccountPageState extends ConsumerState<LinkAccountPage>
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
 
-    final _ = ref.watch(authNotifierProvider);
+    final _ = ref.watch(authProvider);
 
     return Scaffold(
       resizeToAvoidBottomInset: false,

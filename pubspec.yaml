@@ -47,6 +47,7 @@ dependencies:
   collection: ^1.19.1
   flutter_riverpod: ^3.3.2
   go_router: ^17.3.0
+  riverpod_annotation: ^4.0.3
 
 dev_dependencies:
   flutter_test:
@@ -58,9 +59,10 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^6.0.0 
+  riverpod_generator: ^4.0.4
+  build_runner: ^2.15.0
 
-plugins:
-  riverpod_lint: <latest version from https://pub.dev/packages/riverpod_lint>
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

@@ -7,11 +7,11 @@ import 'package:myapp/custom-widgets/form_editable_textfield.dart';
 import 'package:myapp/custom-widgets/primary_button.dart';
 import 'package:myapp/custom-widgets/profile_content_display_animation.dart';
 
-import 'package:myapp/data-class/constants/gender_enum.dart';
+import 'package:myapp/models/constants/gender_enum.dart';
 
 import 'package:flutter/services.dart';
-import 'package:myapp/data-class/constants/text_section_enum.dart';
-import 'package:myapp/data-class/user_account.dart';
+import 'package:myapp/models/constants/text_section_enum.dart';
+import 'package:myapp/models/user_account.dart';
 import 'package:myapp/providers/account_provider.dart';
 import 'package:myapp/providers/auth_provider.dart';
 import 'package:myapp/services/masking_service.dart';
@@ -80,7 +80,7 @@ class _ProfileIndexState extends ConsumerState<ProfileIndex> {
     _initializeDropdownItem();
     _initializeTextSection();
 
-    final loggedUser = ref.watch(authNotifierProvider);
+    final loggedUser = ref.watch(authProvider);
     if (loggedUser != null) {
       createUserDisplayValue(loggedUser);
       createTextControllers(loggedUser);
@@ -179,7 +179,7 @@ class _ProfileIndexState extends ConsumerState<ProfileIndex> {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
 
-    final loggedUser = ref.watch(authNotifierProvider);
+    final loggedUser = ref.watch(authProvider);
 
     if (loggedUser == null) {
       return DisplayNoData();
@@ -436,7 +436,7 @@ class _ProfileIndexState extends ConsumerState<ProfileIndex> {
         bool? isAccountExist;
         if (value != null) {
           isAccountExist = ref
-              .read(accountNotifierProvider.notifier)
+              .read(accountProvider.notifier)
               .isAccountExist(value);
         }
 
@@ -578,7 +578,7 @@ class _ProfileIndexState extends ConsumerState<ProfileIndex> {
 
             //create a copy of the current user with the new values from the form
             final updatedUser = ref
-                .read(authNotifierProvider)
+                .read(authProvider)
                 ?.copyWith(
                   nickname: loggedUserValues[TextSection.nickname],
                   phoneNumber: int.parse(
@@ -593,7 +593,7 @@ class _ProfileIndexState extends ConsumerState<ProfileIndex> {
             //if the updatedUser is not null, update the Auth and the simulation Database with the new object user
             if (updatedUser != null) {
               ref
-                  .read(authNotifierProvider.notifier)
+                  .read(authProvider.notifier)
                   .updateAccountFromSession(updatedUser);
             }
 
@@ -639,9 +639,9 @@ class _ProfileIndexState extends ConsumerState<ProfileIndex> {
       child: FilledButton.icon(
         icon: _isEditing ? SizedBox.shrink() : Icon(Icons.logout),
         onPressed: () {
-          ref.read(authNotifierProvider.notifier).logout();
+          ref.read(authProvider.notifier).logout();
 
-          final currentUser = ref.read(authNotifierProvider);
+          final currentUser = ref.read(authProvider);
 
           if (currentUser == null) {
             context.go('/');

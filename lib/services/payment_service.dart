@@ -1,10 +1,10 @@
 import 'dart:math';
 import 'package:collection/collection.dart';
 
-import 'package:myapp/data-class/receipt.dart';
-import 'package:myapp/data-class/constants/biller_enum.dart';
-import 'package:myapp/data-class/constants/payment_method_enum.dart';
-import 'package:myapp/data-class/water_account.dart';
+import 'package:myapp/models/receipt.dart';
+import 'package:myapp/models/constants/biller_enum.dart';
+import 'package:myapp/models/constants/payment_method_enum.dart';
+import 'package:myapp/models/water_account.dart';
 import 'package:myapp/services/user_interface_service.dart';
 
 class PaymentService {

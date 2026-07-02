@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:myapp/data-class/deprecated-class/news_information.dart';
+import 'package:myapp/models/deprecated-class/news_information.dart';
 
 class NewsListTitle extends StatefulWidget {
   const NewsListTitle({

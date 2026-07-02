@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:myapp/data-class/user_account.dart';
+import 'package:myapp/models/user_account.dart';
 
 class AccountIndexService {
   @Deprecated(

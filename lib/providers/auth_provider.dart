@@ -1,11 +1,14 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:myapp/data-class/constants/chat_role_enum.dart';
-import 'package:myapp/data-class/constants/gender_enum.dart';
-import 'package:myapp/data-class/user_account.dart';
-import 'package:myapp/data-class/water_account.dart';
+import 'package:myapp/models/constants/chat_role_enum.dart';
+import 'package:myapp/models/constants/gender_enum.dart';
+import 'package:myapp/models/user_account.dart';
+import 'package:myapp/models/water_account.dart';
 import 'package:myapp/providers/account_provider.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-class AuthNotifier extends Notifier<UserAccount?> {
+part 'auth_provider.g.dart';
+
+@Riverpod(keepAlive: true)
+class AuthNotifier extends _$AuthNotifier {
   @override
   UserAccount? build() {
     return UserAccount(
@@ -23,7 +26,7 @@ class AuthNotifier extends Notifier<UserAccount?> {
 
   bool login(String email, String password) {
     final user = ref
-        .read(accountNotifierProvider.notifier)
+        .read(accountProvider.notifier)
         .verifyCredentials(email, password);
 
     if (user != null) {
@@ -109,12 +112,6 @@ class AuthNotifier extends Notifier<UserAccount?> {
     if (state == null) return;
     state = updatedUser;
 
-    ref
-        .read(accountNotifierProvider.notifier)
-        .updateAccountFromDatabase(updatedUser);
+    ref.read(accountProvider.notifier).updateAccountFromDatabase(updatedUser);
   }
 }
-
-final authNotifierProvider = NotifierProvider<AuthNotifier, UserAccount?>(
-  () => AuthNotifier(),
-);

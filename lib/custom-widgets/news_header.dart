@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/data-class/news.dart';
+import 'package:myapp/models/news.dart';
 
 class NewsHeader extends StatelessWidget {
   const NewsHeader({super.key, this.news});

@@ -1,3 +1,6 @@
+@Deprecated(
+  'This class is deprecated and will be removed in future versions.  only used in OOP version 1.0.',
+)
 class NewsInformation {
   final String? dateNum;
   final String? dateWord;

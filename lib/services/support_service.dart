@@ -1,11 +1,11 @@
 import 'dart:math';
 
-import 'package:myapp/data-class/chat_support.dart';
-import 'package:myapp/data-class/constants/chat_role_enum.dart';
-import 'package:myapp/data-class/constants/report_status_enum.dart';
-import 'package:myapp/data-class/report.dart';
-import 'package:myapp/data-class/ticket.dart';
-import 'package:myapp/data-class/user_account.dart';
+import 'package:myapp/models/chat_support.dart';
+import 'package:myapp/models/constants/chat_role_enum.dart';
+import 'package:myapp/models/constants/report_status_enum.dart';
+import 'package:myapp/models/report.dart';
+import 'package:myapp/models/ticket.dart';
+import 'package:myapp/models/user_account.dart';
 
 class SupportService {
   int generateTicketNumber() {

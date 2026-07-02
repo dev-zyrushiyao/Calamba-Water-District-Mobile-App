@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:myapp/custom-widgets/headline.dart';
 import 'package:myapp/custom-widgets/primary_button.dart';
-import 'package:myapp/data-class/user_account.dart';
+import 'package:myapp/models/user_account.dart';
 import 'package:myapp/providers/account_provider.dart';
 
 import 'package:myapp/services/validator_service.dart';
@@ -128,9 +128,7 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
         ),
       ),
       validator: (value) {
-        searchedUser = ref
-            .read(accountNotifierProvider.notifier)
-            .searchEmail(value);
+        searchedUser = ref.read(accountProvider.notifier).searchEmail(value);
 
         //if the user is not null declare declare boolean as true
         //else return null

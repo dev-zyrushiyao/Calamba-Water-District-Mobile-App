@@ -7,8 +7,8 @@ import 'package:myapp/custom-widgets/primary_button.dart';
 import 'package:myapp/custom-widgets/secondary_button.dart';
 import 'package:myapp/custom-widgets/secondary_button_outlined.dart';
 import 'package:myapp/custom-widgets/status_indicator.dart';
-import 'package:myapp/data-class/constants/custom_action_enum.dart';
-import 'package:myapp/data-class/water_account.dart';
+import 'package:myapp/models/constants/custom_action_enum.dart';
+import 'package:myapp/models/water_account.dart';
 
 import 'package:myapp/providers/auth_provider.dart';
 import 'package:myapp/services/masking_service.dart';
@@ -57,7 +57,7 @@ class AccountInformationPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     //provider
-    final _ = ref.watch(authNotifierProvider);
+    final _ = ref.watch(authProvider);
 
     final MaskingService maskingService = MaskingService();
 

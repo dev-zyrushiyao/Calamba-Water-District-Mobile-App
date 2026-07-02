@@ -6,7 +6,7 @@ import 'package:myapp/custom-widgets/headline.dart';
 import 'package:myapp/custom-widgets/primary_button.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
-import 'package:myapp/data-class/user_account.dart';
+import 'package:myapp/models/user_account.dart';
 import 'package:myapp/providers/account_provider.dart';
 
 class AccountVerificationPage extends ConsumerStatefulWidget {
@@ -168,7 +168,7 @@ class _AccountVerificationPageState
                           FocusScope.of(context).unfocus();
                           //save the account
                           await ref
-                              .read(accountNotifierProvider.notifier)
+                              .read(accountProvider.notifier)
                               .registerUser(data);
 
                           if (!context.mounted) return;

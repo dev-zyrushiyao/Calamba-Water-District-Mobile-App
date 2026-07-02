@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:myapp/custom-widgets/colored_container.dart';
 import 'package:myapp/custom-widgets/display_no_data.dart';
 import 'package:myapp/custom-widgets/headline.dart';
-import 'package:myapp/data-class/water_account.dart';
+import 'package:myapp/models/water_account.dart';
 import 'package:myapp/providers/auth_provider.dart';
 import 'package:myapp/services/masking_service.dart';
 
@@ -16,7 +16,7 @@ class BillingPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final _ = ref.watch(authNotifierProvider);
+    final _ = ref.watch(authProvider);
     final MaskingService maskingService = MaskingService();
     final ThemeData theme = Theme.of(context);
 

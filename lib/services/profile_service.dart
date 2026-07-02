@@ -1,7 +1,7 @@
 import 'package:myapp/data-bank/deprecated-class/account_collection.dart';
-import 'package:myapp/data-class/constants/gender_enum.dart';
-import 'package:myapp/data-class/constants/text_section_enum.dart';
-import 'package:myapp/data-class/user_account.dart';
+import 'package:myapp/models/constants/gender_enum.dart';
+import 'package:myapp/models/constants/text_section_enum.dart';
+import 'package:myapp/models/user_account.dart';
 import 'package:flutter/material.dart';
 
 class ProfileService {

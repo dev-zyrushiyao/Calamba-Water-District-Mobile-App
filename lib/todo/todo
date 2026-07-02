@@ -22,7 +22,7 @@ DONE - Update the result == delete from the _buildSlider use the context.pop(tru
 DONE - Pay linkedAccounts using Provider account
 DONE - Fixed a bug about Page Transition from Payment to AccountInformation
 DONE - fix bug on Gesture Detector of Slider routing to AccounIndex to AccountInformationPage
-Done - check Receipt and Bills using Provider account
+DONE - check Receipt and Bills using Provider account
 DONE - Create a ticket using Provider account
 DONE - Finish the Nested Route of GoRouter
 DONE - add WidgetState the code from the unlink and gesture detector (account index)
@@ -44,9 +44,10 @@ DONE - Fix UI overflow on Paymentmethod at AccountInformation -> PaymentPage
 DONE - fix support chat display bug
 DONE - fix profile Display BUG
 DONE - fix the profile update using riverpod
-- rename the DataBanks to models
+DONE - rename the DataBanks to models
 - Check Go Router Stateful nested navigation / ShellRoute for HomePage (Bottom Navigation)
-- add riverpod generated to the providers
+DONE - add riverpod generated to the providers
+DONE - learn how to make a privder design system but not implement it in the UI (learning only)
 
 
 continue reading : https://pub.dev/documentation/go_router/latest/topics/Configuration-topic.html
@@ -79,15 +80,15 @@ ERR-A1000 - [AccountProvider] Email Registration Error : The email a user trying
 //DONE - Create a separate saving mode for Account Issue and App Bug (Support Index) 
 //DONE -App Report Class to UI
 //DONE - make a getter or function to make get color of isActive of WaterAccount 
-//Done - REFRESH THE AMOUNT on the dashboard when its reload
+//DONE - REFRESH THE AMOUNT on the dashboard when its reload
 //DONE - Create a textbox and add message to chatlog
 //DONE - Fix the the Positioned element on Payment Page (Web)
-//Done - Add a copy the transaction number from receipt
-//Done- Work on the Creation of User Account
-//Done - Add a gender drop down on Signup and refactor the saving method of signup (add value of gender)
+//DONE - Add a copy the transaction number from receipt
+//DONE- Work on the Creation of User Account
+//DONE - Add a gender drop down on Signup and refactor the saving method of signup (add value of gender)
 //DONE - refactor forgotpassword button
-//Done - refactor boarding page
-//Done - refactor custom widgets 
+//DONE - refactor boarding page
+//DONE - refactor custom widgets 
 //DONE - refactor classes (add const / reconstruct) -> SignupPage etc
 //DONE - Add a email checker if exist for both Signup and ProfileIndex
 //DONE - separate the validator service

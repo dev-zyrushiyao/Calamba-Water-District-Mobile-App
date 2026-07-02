@@ -1,7 +1,7 @@
 import 'dart:ui';
 
-import 'package:myapp/data-class/constants/report_status_enum.dart';
-import 'package:myapp/data-class/report.dart';
+import 'package:myapp/models/constants/report_status_enum.dart';
+import 'package:myapp/models/report.dart';
 
 class Ticket {
   final int ticketNumber;

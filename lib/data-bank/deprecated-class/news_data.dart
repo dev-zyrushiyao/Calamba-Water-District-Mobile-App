@@ -1,7 +1,11 @@
-import 'package:myapp/data-class/constants/news_status_enum.dart';
-import 'package:myapp/data-class/deprecated-class/news_information.dart';
+import 'package:myapp/models/constants/news_status_enum.dart';
+import 'package:myapp/models/deprecated-class/news_information.dart';
 
+@Deprecated(
+  'This class is deprecated and will be removed in future versions.  only used in OOP version 1.0.',
+)
 class NewsData {
+  //Data sample of news information
   final List<NewsInformation> _listOfNews = [];
 
   List<NewsInformation> _generateNewsPlaceholder() {

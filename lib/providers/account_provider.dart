@@ -1,11 +1,14 @@
 import 'package:collection/collection.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:myapp/data-class/user_account.dart';
+import 'package:myapp/models/user_account.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-class AccountNotifier extends Notifier<Set<UserAccount>> {
+part 'account_provider.g.dart';
+
+@Riverpod(keepAlive: true)
+class AccountNotifier extends _$AccountNotifier {
   @override
   Set<UserAccount> build() {
-    return {};
+    return const {};
   }
 
   //search email if exist on SignUp and ForgotPassword page
@@ -48,8 +51,3 @@ class AccountNotifier extends Notifier<Set<UserAccount>> {
     }
   }
 }
-
-final accountNotifierProvider =
-    NotifierProvider<AccountNotifier, Set<UserAccount>>(() {
-      return AccountNotifier();
-    });

@@ -6,10 +6,10 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:myapp/custom-widgets/secondary_button.dart';
 import 'package:myapp/data-bank/deprecated-class/account_type.dart';
-import 'package:myapp/data-class/user_account.dart';
+import 'package:myapp/models/user_account.dart';
 import 'package:myapp/providers/account_provider.dart';
 import 'package:myapp/providers/auth_provider.dart';
-import '../../design-system/design_system.dart'; //home-widget
+import '../../design/design_system.dart'; //home-widget
 
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
@@ -62,7 +62,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
     final deviceWidth = MediaQuery.sizeOf(context).width;
 
-    final _ = ref.watch(accountNotifierProvider);
+    final _ = ref.watch(accountProvider);
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -128,7 +128,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                         final password = _passwordController.text;
 
                         _loginResult = ref
-                            .read(authNotifierProvider.notifier)
+                            .read(authProvider.notifier)
                             .login(email, password);
 
                         if (_loginResult == true) {

@@ -1,5 +1,5 @@
-import 'package:myapp/data-class/chat_support.dart';
-import 'package:myapp/data-class/constants/support_category_enum.dart';
+import 'package:myapp/models/chat_support.dart';
+import 'package:myapp/models/constants/support_category_enum.dart';
 
 class Report {
   final SupportCategory supportCategory;

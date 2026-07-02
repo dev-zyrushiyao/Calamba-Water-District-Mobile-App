@@ -4,8 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:myapp/custom-widgets/display_no_data.dart';
 import 'package:myapp/custom-widgets/headline.dart';
 import 'package:myapp/custom-widgets/page_logo.dart';
-import 'package:myapp/data-class/constants/year_enum.dart';
-import 'package:myapp/data-class/news.dart';
+import 'package:myapp/models/constants/year_enum.dart';
+import 'package:myapp/models/news.dart';
 import 'package:myapp/providers/news_provider.dart';
 
 class NewsIndex extends ConsumerStatefulWidget {
@@ -37,7 +37,7 @@ class _NewsIndexState extends ConsumerState<NewsIndex> {
   }
 
   List<News?> displayNews(Year year) {
-    final newsList = ref.read(newsProviderNotifier);
+    final newsList = ref.read(newsProvider);
 
     //filter list item by year
     final listToDisplay = newsList.where((news) => news.year == year).toList();
@@ -52,7 +52,7 @@ class _NewsIndexState extends ConsumerState<NewsIndex> {
 
   @override
   Widget build(BuildContext context) {
-    final news = ref.watch(newsProviderNotifier);
+    final news = ref.watch(newsProvider);
 
     if (news.isEmpty) {
       return DisplayNoData();

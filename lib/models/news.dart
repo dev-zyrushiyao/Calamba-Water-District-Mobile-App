@@ -1,6 +1,6 @@
-import 'package:myapp/data-class/constants/month_enum.dart';
-import 'package:myapp/data-class/constants/news_status_enum.dart';
-import 'package:myapp/data-class/constants/year_enum.dart';
+import 'package:myapp/models/constants/month_enum.dart';
+import 'package:myapp/models/constants/news_status_enum.dart';
+import 'package:myapp/models/constants/year_enum.dart';
 
 class News {
   final int primaryKey;

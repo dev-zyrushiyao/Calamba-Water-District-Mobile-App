@@ -5,8 +5,8 @@ import 'package:myapp/custom-widgets/display_no_data.dart';
 import 'package:myapp/custom-widgets/headline.dart';
 import 'package:myapp/custom-widgets/page_logo.dart';
 import 'package:myapp/custom-widgets/primary_button.dart';
-import 'package:myapp/data-class/constants/support_category_enum.dart';
-import 'package:myapp/data-class/water_account.dart';
+import 'package:myapp/models/constants/support_category_enum.dart';
+import 'package:myapp/models/water_account.dart';
 import 'package:myapp/providers/auth_provider.dart';
 import 'package:myapp/services/masking_service.dart';
 import 'package:myapp/services/support_service.dart';
@@ -60,7 +60,7 @@ class _SupportIndexState extends ConsumerState<SupportIndex> {
   }
 
   void _addDropdownItems() {
-    final loggedUser = ref.read(authNotifierProvider);
+    final loggedUser = ref.read(authProvider);
     if (loggedUser == null) return;
 
     for (var category in SupportCategory.values) {
@@ -105,7 +105,7 @@ class _SupportIndexState extends ConsumerState<SupportIndex> {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
 
-    final loggedUser = ref.watch(authNotifierProvider);
+    final loggedUser = ref.watch(authProvider);
 
     if (loggedUser == null) {
       return DisplayNoData();
@@ -253,7 +253,7 @@ class _SupportIndexState extends ConsumerState<SupportIndex> {
 
                                     //save the changes to the provider
                                     ref
-                                        .read(authNotifierProvider.notifier)
+                                        .read(authProvider.notifier)
                                         .updateLinkedAccount(targetAccount);
 
                                     // //guard clause

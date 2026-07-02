@@ -4,9 +4,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:myapp/custom-widgets/display_no_data.dart';
 import 'package:myapp/custom-widgets/primary_button.dart';
-import 'package:myapp/data-class/constants/payment_method_enum.dart';
-import 'package:myapp/data-class/user_account.dart';
-import 'package:myapp/data-class/water_account.dart';
+import 'package:myapp/models/constants/payment_method_enum.dart';
+import 'package:myapp/models/user_account.dart';
+import 'package:myapp/models/water_account.dart';
 import 'package:myapp/providers/auth_provider.dart';
 
 class PaymentPage extends ConsumerStatefulWidget {
@@ -64,7 +64,7 @@ class _MyWidgetState extends ConsumerState<PaymentPage> {
 
   @override
   Widget build(BuildContext context) {
-    final loggedUser = ref.watch(authNotifierProvider);
+    final loggedUser = ref.watch(authProvider);
 
     //Data passed through Account Index to Account InformationPage
     final data = widget.linkedAccountData;
